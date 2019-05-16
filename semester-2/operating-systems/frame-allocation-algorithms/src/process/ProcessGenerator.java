@@ -14,7 +14,7 @@ public class ProcessGenerator {
             pageRanges.add(prevRangeEnd);
             prevRangeEnd = newRangeEnd;
         }
-        
+
         ArrayList<Process> result = new ArrayList<>();
         for (int i = 0; i < processNum; i++) {
             Process newProc = null;
