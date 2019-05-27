@@ -7,7 +7,6 @@ public class Request {
         this.page = page;
     }
 
-
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

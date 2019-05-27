@@ -1,11 +1,18 @@
+import process.Process;
+import process.ProcessGenerator;
+
+import java.util.ArrayList;
+
 public class Main {
-    int processesNum = 10,
+    static int
+        processesNum = 10,
         maxPage = 100,
-        memorySize = 10,
+        totalMemorySize = 10,
         maxReqSeqLen = 1000;
 
 
     public static void main(String[] args) {
-        
+        ArrayList<Process> proc = ProcessGenerator.generate(processesNum, maxPage, maxReqSeqLen);
+        System.out.println();
     }
 }

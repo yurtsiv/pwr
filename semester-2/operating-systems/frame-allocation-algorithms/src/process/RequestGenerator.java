@@ -9,12 +9,12 @@ public class RequestGenerator {
         ArrayList<Integer> seq = RandomNums.getSequnce(seqLen, minPageNum, maxPageNum);
 
         ArrayList<Request> allPossibleRequests = new ArrayList<>();
-        for (int i = 1; i <= 5; i++) {
-            allPossibleRequests.add(new Request(i));
+        for (int i = 0; i < seqLen; i++) {
+            allPossibleRequests.add(new Request(minPageNum + i));
         }
 
         for (int nextPage : seq) {
-            result.add(allPossibleRequests.get(nextPage-1));
+            result.add(allPossibleRequests.get(nextPage));
         }
 
         return result;
