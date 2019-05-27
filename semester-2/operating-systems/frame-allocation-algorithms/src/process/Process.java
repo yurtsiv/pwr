@@ -28,6 +28,10 @@ public class Process {
         this.memorySize = memorySize;
     }
 
+    public ArrayList<Request> getMemory() {
+        return memory;
+    }
+
     public Process clone() {
         ArrayList<Request> clonedRequests = new ArrayList<>();
         for (Request req : requests) {
