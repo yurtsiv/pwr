@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 // Least Recently Used
-public class LRU implements Algorithm {
+public class LRU implements PageReplaceAlgorithm {
     @Override
     public void replacePage(ArrayList<Request> memory, ArrayList<Request> requests, Request currentRequest) {
         Request leastRecentlyUsed = memory
