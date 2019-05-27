@@ -1,14 +1,15 @@
 package process;
 
+import algorithms.pageReplacement.LRU;
 import utils.RandomNums;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Process {
     private ArrayList<Request> requests;
-    private int minPage, maxPage, memorySize = 0;
-    private ArrayList<Request> memory;
+    private int minPage, maxPage, memorySize = 0, pageReplacements = 0, time = 0;
+    private ArrayList<Request> memory = new ArrayList<>();
+    private LRU lru = new LRU();
 
     public Process(ArrayList<Request> requests, int minPage, int maxPage) {
         this.requests = requests;
@@ -45,8 +46,35 @@ public class Process {
         return requests;
     }
 
-    public void serveNextRequest() {
+    private boolean isMemoryFull() {
+        return memory.size() == memorySize;
+    }
 
+    public void serveNextRequest() {
+        if (requests.size() == 0) {
+            return;
+        }
+
+        Request currReq = requests.get(requests.size() - 1);
+        Request reqCopy = currReq.clone();
+        requests.remove(requests.size() - 1);
+
+        int indexOfMemoryPage = memory.indexOf(reqCopy);
+        boolean pagePresent = indexOfMemoryPage != -1;
+        if (!isMemoryFull() && !pagePresent) {
+            reqCopy.setLastUsed(time);
+            memory.add(reqCopy);
+            pageReplacements++;
+        } else if (pagePresent) {
+            Request memoryPage = memory.get(indexOfMemoryPage);
+            memoryPage.setLastUsed(time);
+        } else {
+            reqCopy.setLastUsed(time);
+            lru.replacePage(memory, requests, reqCopy);
+            pageReplacements++;
+        }
+
+        time++;
     }
 
     public Process clone() {
