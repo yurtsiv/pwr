@@ -1,6 +1,6 @@
 package process;
 
-public class Request {
+public class Request implements Comparable<Request> {
     private int page, lastUsed;
 
     public Request(int page) {
@@ -33,5 +33,10 @@ public class Request {
         Request res = new Request(page);
         res.setLastUsed(lastUsed);
         return res;
+    }
+
+    @Override
+    public int compareTo(Request req) {
+       return page - req.page;
     }
 }

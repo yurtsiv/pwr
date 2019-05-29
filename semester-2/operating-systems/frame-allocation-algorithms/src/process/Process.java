@@ -1,9 +1,12 @@
 package process;
 
 import algorithms.pageReplacement.LRU;
+import simulation.SimulationConfig;
 import utils.RandomNums;
 
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Process {
     private ArrayList<Request> requests;
@@ -11,11 +14,13 @@ public class Process {
         minPage,
         maxPage,
         pageReplacements = 0,
-        time = 0;
+        timeWindowCounter = 0,
+        localTime = 0;
 
     private double pageFaultFreq = 0;
 
     private ArrayList<Request> memory = new ArrayList<>();
+    private TreeSet<Request> workingSet = new TreeSet<>();
     private LRU lru = new LRU();
 
     public Process(ArrayList<Request> requests, int minPage, int maxPage) {
@@ -55,7 +60,9 @@ public class Process {
     }
 
     public void decrementMemSize() {
-        setMemorySize(memory.size() - 1);
+        if (memory.size() > 1) {
+            setMemorySize(memory.size() - 1);
+        }
     }
 
     public ArrayList<Request> getMemory() {
@@ -83,10 +90,22 @@ public class Process {
     }
 
     private void updatePageFaultFreq() {
-        pageFaultFreq = (double)pageReplacements / (double)time;
+        pageFaultFreq = (double)pageReplacements / (double) localTime;
     }
 
-    public void serveNextRequest() {
+    public void incrementTimeWindowCounter() {
+        timeWindowCounter++;
+    }
+
+    public int getTimeWindowCounter() {
+        return timeWindowCounter;
+    }
+
+    public int getWorkingSetSize() {
+        return workingSet.size();
+    }
+
+    public void serveNextRequest(SimulationConfig config) {
         if (requests.size() == 0) {
             return;
         }
@@ -98,20 +117,30 @@ public class Process {
         int indexOfMemoryPage = memory.indexOf(reqCopy);
         boolean pagePresent = indexOfMemoryPage != -1;
 
+        if (timeWindowCounter > config.timeWindowSize) {
+            System.out.println(workingSet.size());
+            workingSet = new TreeSet<>();
+            timeWindowCounter = 0;
+        } else {
+            workingSet.add(currReq);
+        }
+
+
         if (!isMemoryFull() && !pagePresent) {
-            reqCopy.setLastUsed(time);
+            reqCopy.setLastUsed(localTime);
             memory.set(getLastPageIndex(), reqCopy);
             pageReplacements++;
         } else if (pagePresent) {
             Request memoryPage = memory.get(indexOfMemoryPage);
-            memoryPage.setLastUsed(time);
+            memoryPage.setLastUsed(localTime);
         } else {
-            reqCopy.setLastUsed(time);
+            reqCopy.setLastUsed(localTime);
             lru.replacePage(memory, requests, reqCopy);
             pageReplacements++;
         }
 
-        time++;
+        localTime++;
+        timeWindowCounter++;
         updatePageFaultFreq();
     }
 
