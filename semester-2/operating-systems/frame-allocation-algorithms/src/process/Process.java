@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Process {
     private ArrayList<Request> requests;
-    private int minPage, maxPage, memorySize = 0, pageReplacements = 0, time = 0;
+    private int minPage, maxPage, pageReplacements = 0, time = 0;
     private ArrayList<Request> memory = new ArrayList<>();
     private LRU lru = new LRU();
 
@@ -15,13 +15,11 @@ public class Process {
         this.requests = requests;
         this.minPage = minPage;
         this.maxPage = maxPage;
-        this.memorySize = memorySize;
     }
 
     public Process(int minPage, int maxPage, int maxReqSeqLen) {
         this.minPage = minPage;
         this.maxPage = maxPage;
-        this.memorySize = memorySize;
         int seqLen = RandomNums.randomInt(maxReqSeqLen / 2, maxReqSeqLen);
         this.requests = RequestGenerator.generate(seqLen, minPage, maxPage);
     }
@@ -31,11 +29,18 @@ public class Process {
             throw new IllegalArgumentException("Memory size should be at least 1");
         }
 
-        if (newSize < this.memorySize) {
+        if (newSize < memory.size()) {
             memory = new ArrayList<>(memory.subList(0, newSize));
+        } else {
+            ArrayList<Request> newMemory = new ArrayList<>();
+            for (Request memPage : memory) {
+                newMemory.add(memPage);
+            }
+            for (int i = 0; i < newSize - memory.size(); i++) {
+                newMemory.add(null);
+            }
+            this.memory = newMemory;
         }
-
-        this.memorySize = newSize;
     }
 
     public ArrayList<Request> getMemory() {
@@ -47,7 +52,15 @@ public class Process {
     }
 
     private boolean isMemoryFull() {
-        return memory.size() == memorySize;
+        return memory.get(memory.size() - 1) != null;
+    }
+
+    public int getLastPageIndex() {
+        return memory.indexOf(null);
+    }
+
+    public int getUniqPagesNum() {
+        return maxPage - minPage;
     }
 
     public void serveNextRequest() {
@@ -61,9 +74,10 @@ public class Process {
 
         int indexOfMemoryPage = memory.indexOf(reqCopy);
         boolean pagePresent = indexOfMemoryPage != -1;
+
         if (!isMemoryFull() && !pagePresent) {
             reqCopy.setLastUsed(time);
-            memory.add(reqCopy);
+            memory.set(getLastPageIndex(), reqCopy);
             pageReplacements++;
         } else if (pagePresent) {
             Request memoryPage = memory.get(indexOfMemoryPage);
