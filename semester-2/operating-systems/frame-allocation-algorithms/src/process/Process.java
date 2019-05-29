@@ -7,7 +7,14 @@ import java.util.ArrayList;
 
 public class Process {
     private ArrayList<Request> requests;
-    private int minPage, maxPage, pageReplacements = 0, time = 0;
+    private int
+        minPage,
+        maxPage,
+        pageReplacements = 0,
+        time = 0;
+
+    private double pageFaultFreq = 0;
+
     private ArrayList<Request> memory = new ArrayList<>();
     private LRU lru = new LRU();
 
@@ -32,7 +39,7 @@ public class Process {
         if (newSize < memory.size()) {
             memory = new ArrayList<>(memory.subList(0, newSize));
         } else {
-            ArrayList<Request> newMemory = new ArrayList<>();
+            ArrayList<Request> newMemory = new ArrayList<>(newSize);
             for (Request memPage : memory) {
                 newMemory.add(memPage);
             }
@@ -41,6 +48,14 @@ public class Process {
             }
             this.memory = newMemory;
         }
+    }
+
+    public void incrementMemSize() {
+        setMemorySize(memory.size() + 1);
+    }
+
+    public void decrementMemSize() {
+        setMemorySize(memory.size() - 1);
     }
 
     public ArrayList<Request> getMemory() {
@@ -61,6 +76,14 @@ public class Process {
 
     public int getUniqPagesNum() {
         return maxPage - minPage;
+    }
+
+    public double getPageFaultFreq() {
+        return pageFaultFreq;
+    }
+
+    private void updatePageFaultFreq() {
+        pageFaultFreq = (double)pageReplacements / (double)time;
     }
 
     public void serveNextRequest() {
@@ -89,6 +112,7 @@ public class Process {
         }
 
         time++;
+        updatePageFaultFreq();
     }
 
     public Process clone() {
