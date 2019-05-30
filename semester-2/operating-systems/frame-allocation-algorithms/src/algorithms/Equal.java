@@ -12,5 +12,16 @@ public class Equal implements FrameAllocAlgorithm {
         for (Process proc : processes) {
             proc.setMemorySize(pagesForProcess);
         }
+
+        int filledMemory = pagesForProcess * processes.size();
+        while(filledMemory != config.memorySize) {
+            for (Process proc : processes) {
+                proc.incrementMemSize();
+                filledMemory++;
+                if (filledMemory == config.memorySize) {
+                    return;
+                }
+            }
+        }
     }
 }

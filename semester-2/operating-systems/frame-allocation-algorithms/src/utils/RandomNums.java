@@ -22,7 +22,7 @@ public class RandomNums {
         for (int region = 0; region < localityRegions; region++) {
             for (int i = 0; i < numsPerRegion; i++) {
                 int from = Math.min(minNum + region, minNum + (maxNum - minNum) / 2);
-                int to = Math.min(minNum + numsPerRegion + region, maxNum);
+                int to = Math.min(minNum + numsPerRegion + region, maxNum - 1);
                 int num = randomInt(from ,to);
                 result.add(num);
             }

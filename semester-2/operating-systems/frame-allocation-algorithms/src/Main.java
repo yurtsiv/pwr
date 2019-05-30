@@ -4,6 +4,7 @@ import algorithms.Proportional;
 import algorithms.WorkingSet;
 import process.Process;
 import process.ProcessGenerator;
+import simulation.ResultsAnalyzer;
 import simulation.Simulation;
 import simulation.SimulationConfig;
 
@@ -11,21 +12,21 @@ import java.util.ArrayList;
 
 public class Main {
     static int
-        processesNum = 5,
+        processesNum = 10,
         maxPage = 100,
         totalMemorySize = 20,
-        timeWindowSize = 20,
-        maxReqSeqLen = 1000;
-
-    static double
-        minPageFaultFreqThreshold = 0.2,
-        maxPageFaultFreqThreshold = 0.8;
+        pageFaultFreqTimeWindow = 5,
+        minPageFaultFreqThreshold = 1,
+        maxPageFaultFreqThreshold = 3,
+        workingSetTimeWindow = 10,
+        maxReqSeqLen = 10000;
 
     public static void main(String[] args) {
         ArrayList<Process> procs = ProcessGenerator.generate(processesNum, maxPage, maxReqSeqLen);
         SimulationConfig simulationConfig = new SimulationConfig(
             totalMemorySize,
-            timeWindowSize,
+            workingSetTimeWindow,
+            pageFaultFreqTimeWindow,
             minPageFaultFreqThreshold,
             maxPageFaultFreqThreshold
         );
@@ -35,6 +36,9 @@ public class Main {
         ArrayList<Process> pageFaultContRes = Simulation.run(new PageFaultFrequencyControl(), procs, simulationConfig);
         ArrayList<Process> workingSetRes = Simulation.run(new WorkingSet(), procs, simulationConfig);
 
-        System.out.println();
+        ResultsAnalyzer.printResults("Equal", equalRes);
+        ResultsAnalyzer.printResults("Proportional", proportinalRes);
+        ResultsAnalyzer.printResults("Page fault frequency control", pageFaultContRes);
+        ResultsAnalyzer.printResults("Working set", workingSetRes);
     }
 }

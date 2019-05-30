@@ -5,7 +5,6 @@ import simulation.SimulationConfig;
 import utils.RandomNums;
 
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.TreeSet;
 
 public class Process {
@@ -14,10 +13,11 @@ public class Process {
         minPage,
         maxPage,
         pageReplacements = 0,
+        // since last time window (freq control)
+        recentPageReplacements = 0,
         timeWindowCounter = 0,
-        localTime = 0;
-
-    private double pageFaultFreq = 0;
+        localTime = 0,
+        orignalReqSeqLen = 0;
 
     private ArrayList<Request> memory = new ArrayList<>();
     private TreeSet<Request> workingSet = new TreeSet<>();
@@ -25,6 +25,7 @@ public class Process {
 
     public Process(ArrayList<Request> requests, int minPage, int maxPage) {
         this.requests = requests;
+        this.orignalReqSeqLen = requests.size();
         this.minPage = minPage;
         this.maxPage = maxPage;
     }
@@ -34,6 +35,11 @@ public class Process {
         this.maxPage = maxPage;
         int seqLen = RandomNums.randomInt(maxReqSeqLen / 2, maxReqSeqLen);
         this.requests = RequestGenerator.generate(seqLen, minPage, maxPage);
+        this.orignalReqSeqLen = seqLen;
+    }
+
+    public int getOrignalReqSeqLen() {
+        return orignalReqSeqLen;
     }
 
     public void setMemorySize(int newSize) {
@@ -44,10 +50,11 @@ public class Process {
         if (newSize < memory.size()) {
             memory = new ArrayList<>(memory.subList(0, newSize));
         } else {
-            ArrayList<Request> newMemory = new ArrayList<>(newSize);
+            ArrayList<Request> newMemory = new ArrayList<>();
             for (Request memPage : memory) {
                 newMemory.add(memPage);
             }
+
             for (int i = 0; i < newSize - memory.size(); i++) {
                 newMemory.add(null);
             }
@@ -73,6 +80,10 @@ public class Process {
         return requests;
     }
 
+    public int getPageReplacements() {
+        return pageReplacements;
+    }
+
     private boolean isMemoryFull() {
         return memory.get(memory.size() - 1) != null;
     }
@@ -85,13 +96,6 @@ public class Process {
         return maxPage - minPage;
     }
 
-    public double getPageFaultFreq() {
-        return pageFaultFreq;
-    }
-
-    private void updatePageFaultFreq() {
-        pageFaultFreq = (double)pageReplacements / (double) localTime;
-    }
 
     public void incrementTimeWindowCounter() {
         timeWindowCounter++;
@@ -103,6 +107,10 @@ public class Process {
 
     public int getWorkingSetSize() {
         return workingSet.size();
+    }
+
+    public int getRecentPageReplacements() {
+        return recentPageReplacements;
     }
 
     public void serveNextRequest(SimulationConfig config) {
@@ -117,8 +125,7 @@ public class Process {
         int indexOfMemoryPage = memory.indexOf(reqCopy);
         boolean pagePresent = indexOfMemoryPage != -1;
 
-        if (timeWindowCounter > config.timeWindowSize) {
-            System.out.println(workingSet.size());
+        if (timeWindowCounter > config.workingSetTimeWindow) {
             workingSet = new TreeSet<>();
             timeWindowCounter = 0;
         } else {
@@ -129,6 +136,7 @@ public class Process {
         if (!isMemoryFull() && !pagePresent) {
             reqCopy.setLastUsed(localTime);
             memory.set(getLastPageIndex(), reqCopy);
+            recentPageReplacements++;
             pageReplacements++;
         } else if (pagePresent) {
             Request memoryPage = memory.get(indexOfMemoryPage);
@@ -136,12 +144,19 @@ public class Process {
         } else {
             reqCopy.setLastUsed(localTime);
             lru.replacePage(memory, requests, reqCopy);
+            recentPageReplacements++;
             pageReplacements++;
         }
 
         localTime++;
         timeWindowCounter++;
-        updatePageFaultFreq();
+        if (localTime > config.pageFaultFreqTimeWindow && localTime % config.pageFaultFreqTimeWindow == 1) {
+            recentPageReplacements = 0;
+        }
+    }
+
+    public int getLocalTime() {
+        return localTime;
     }
 
     public Process clone() {
@@ -151,5 +166,13 @@ public class Process {
         }
 
        return new Process(clonedRequests, minPage, maxPage);
+    }
+
+    public int getMaxPage() {
+        return maxPage;
+    }
+
+    public int getMinPage() {
+        return minPage;
     }
 }

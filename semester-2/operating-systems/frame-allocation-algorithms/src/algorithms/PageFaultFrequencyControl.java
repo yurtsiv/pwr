@@ -10,7 +10,7 @@ public class PageFaultFrequencyControl implements FrameAllocAlgorithm {
     private Process getMaxPageFaultFreqProc(ArrayList<Process> processes) {
         return processes
             .stream()
-            .max(Comparator.comparing(Process::getPageFaultFreq))
+            .max(Comparator.comparing(Process::getRecentPageReplacements))
             .get();
     }
 
@@ -18,14 +18,10 @@ public class PageFaultFrequencyControl implements FrameAllocAlgorithm {
         return processes
             .stream()
             .min((proc1, proc2) -> {
-                if (proc1.getMemory().size() == 1) {
-                    return 1;
-                } if (proc2.getMemory().size() == 1) {
-                    return -1;
-                } else if (proc1.getPageFaultFreq() - proc2.getPageFaultFreq() < 0) {
+                if (proc2.getMemory().size() == 1) {
                     return -1;
                 }
-                return 1;
+                return proc1.getRecentPageReplacements() - proc2.getRecentPageReplacements();
             })
             .get();
     }
@@ -33,16 +29,25 @@ public class PageFaultFrequencyControl implements FrameAllocAlgorithm {
     @Override
     public void assignMemorySizes(ArrayList<Process> processes, SimulationConfig config) {
         for (Process proc : processes) {
-            double procFaultFreq = proc.getPageFaultFreq();
+            if (
+                proc.getLocalTime() < config.pageFaultFreqTimeWindow ||
+                proc.getLocalTime() % config.pageFaultFreqTimeWindow != 0
+            ) {
+                return;
+            }
+
+            int procFaultFreq = proc.getRecentPageReplacements();
             if (procFaultFreq != 1 && procFaultFreq > config.maxPageFaultFreqThreshold) {
                 proc.incrementMemSize();
-                getMinPageFaultFreqProc(processes).decrementMemSize();
+                Process min = getMinPageFaultFreqProc(processes);
+                min.decrementMemSize();
             }
 
             if (procFaultFreq < config.minPageFaultFreqThreshold) {
                 if (proc.getMemory().size() > 1) {
                     proc.decrementMemSize();
-                    getMaxPageFaultFreqProc(processes).incrementMemSize();
+                    Process max = getMaxPageFaultFreqProc(processes);
+                    max.incrementMemSize();
                 }
             }
         }
