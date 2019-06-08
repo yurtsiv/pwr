@@ -1,5 +1,6 @@
 package algorithms;
 
+import simulation.Process;
 import simulation.Processor;
 import simulation.SimulationConfig;
 
