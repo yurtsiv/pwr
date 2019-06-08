@@ -3,15 +3,10 @@ package simulation;
 import algorithms.Algorithm;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Simulation {
-    int time = 0;
-
-    public ArrayList<Processor> run(
-        ArrayList<Process> processes,
-        SimulationConfig config,
-        Algorithm algorithm
-    ) {
+    public ArrayList<Processor> run(ArrayList<Process> processes, SimulationConfig config, Algorithm algorithm) {
        ArrayList<Processor> processors = new ArrayList<>();
        for (int i = 0; i < config.n; i++) {
            processors.add(new Processor());
@@ -23,12 +18,9 @@ public class Simulation {
        }
 
        for (Process process : clonnedProcesses) {
-           time++;
+          Collections.shuffle(processors);
           algorithm.serveNewProcess(process, processors, config);
-
-          for (Processor processor : processors) {
-              processor.tick();
-          }
+          processors.forEach(Processor::tick);
        }
 
        return processors;

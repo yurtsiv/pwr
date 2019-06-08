@@ -3,26 +3,26 @@ package algorithms;
 import simulation.Process;
 import simulation.Processor;
 import simulation.SimulationConfig;
-import utils.RandomNums;
 
 import java.util.ArrayList;
 
 public class Algorithm2 implements Algorithm {
     @Override
     public void serveNewProcess(Process process, ArrayList<Processor> processors, SimulationConfig config) {
-        int initialProcessorIndex = RandomNums.getInt(0, processors.size() - 1);
-        Processor initialProcessor = processors.get(initialProcessorIndex);
+        Processor initialProcessor = processors.get(0);
 
         if (initialProcessor.getLoad() <= config.p) {
             initialProcessor.addProcess(process);
             return;
         }
 
-        Processor processor = initialProcessor;
-        while (processor.getLoad() > config.p) {
-            int processorIndex = RandomNums.getInt(0, processors.size() - 1);
-            processor = processors.get(processorIndex);
+        for (Processor processor : processors) {
+            if (processor.getLoad() <= config.p) {
+                processor.addProcess(process);
+                return;
+            }
         }
-        processor.addProcess(process);
+
+        throw new RuntimeException("Algorithm2: Every processor is overloaded");
     }
 }
