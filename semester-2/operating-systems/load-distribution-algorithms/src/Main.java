@@ -1,5 +1,6 @@
 import algorithms.Algorithm1;
 import algorithms.Algorithm2;
+import algorithms.Algorithm3;
 import simulation.*;
 import simulation.Process;
 
@@ -21,6 +22,7 @@ public class Main {
 
         ArrayList<Processor> alg1Result = simulation.run(processes, config, new Algorithm1());
         ArrayList<Processor> alg2Result = simulation.run(processes, config, new Algorithm2());
+        ArrayList<Processor> alg3Result = simulation.run(processes, config, new Algorithm3());
         System.out.println();
     }
 }

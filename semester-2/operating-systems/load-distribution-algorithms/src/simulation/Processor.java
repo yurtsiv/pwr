@@ -19,6 +19,13 @@ public class Processor {
         processes.add(process);
     }
 
+    public Process popProcess() {
+        int lastIndex = processes.size() - 1;
+        Process res = processes.get(lastIndex);
+        processes.remove(lastIndex);
+        return res;
+    }
+
     public int getLoad() {
         return processes
                 .stream()
