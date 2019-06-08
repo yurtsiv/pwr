@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 public class Processor {
     private ArrayList<Integer> loadHistory = new ArrayList<>();
     private ArrayList<Process> processes = new ArrayList<>();
+    private int servedProcs = 0;
 
     public void addProcess(Process process) {
         int currentLoad = getLoad();
@@ -14,6 +15,7 @@ public class Processor {
             throw new IllegalArgumentException("Unable to add another process (overload)");
         }
 
+        servedProcs++;
         processes.add(process);
     }
 

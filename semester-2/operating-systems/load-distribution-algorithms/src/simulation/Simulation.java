@@ -5,6 +5,8 @@ import algorithms.Algorithm;
 import java.util.ArrayList;
 
 public class Simulation {
+    int time = 0;
+
     public ArrayList<Processor> run(
         ArrayList<Process> processes,
         SimulationConfig config,
@@ -17,10 +19,11 @@ public class Simulation {
 
        ArrayList<Process> clonnedProcesses = new ArrayList<>();
        for (Process proc : processes) {
-           processes.add(proc.clone());
+           clonnedProcesses.add(proc.clone());
        }
 
        for (Process process : clonnedProcesses) {
+           time++;
           algorithm.serveNewProcess(process, processors, config);
 
           for (Processor processor : processors) {
