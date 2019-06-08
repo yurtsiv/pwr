@@ -1,37 +1,40 @@
 package simulation;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Processor {
-    private int load = 0;
-    private ArrayList<Process> activeProcs = new ArrayList<>();
-    private ArrayList<Processor> allProcs = new ArrayList<>();
-    private SimulationConfig config;
-
+    private ArrayList<Integer> loadHistory = new ArrayList<>();
+    private ArrayList<Process> processes = new ArrayList<>();
 
     public void addProcess(Process process) {
+        int currentLoad = getLoad();
         int procLoad = process.getLoad();
-        if (load + procLoad > 100) {
+        if (currentLoad + procLoad > 100) {
             throw new IllegalArgumentException("Unable to add another process (overload)");
         }
 
-        activeProcs.add(process);
-        load += procLoad;
-    }
-
-    public void addProcessByAlgorithm(Process process, SimulationConfig config) {
-
-    }
-
-    public void setAllProcs(ArrayList<Processor> procs) {
-        allProcs = procs;
-    }
-
-    public void setSimulationConfig(SimulationConfig config) {
-        this.config = config;
+        processes.add(process);
     }
 
     public int getLoad() {
-        return load;
+        return processes
+                .stream()
+                .map(proc -> proc.getLoad())
+                .reduce(0, Integer::sum);
+    }
+
+    public Processor clone() {
+        return new Processor();
+    }
+
+    public void tick() {
+        processes.forEach(process -> process.decrementRemainingTime());
+        processes = processes
+                .stream()
+                .filter(process -> process.getRemainingTime() != 0)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        loadHistory.add(getLoad());
     }
 }

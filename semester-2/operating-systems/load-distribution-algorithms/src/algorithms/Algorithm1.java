@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class Algorithm1 implements Algorithm {
     @Override
-    public void putNewProcess(Process process, ArrayList<Processor> processors, SimulationConfig config) {
+    public void serveNewProcess(Process process, ArrayList<Processor> processors, SimulationConfig config) {
         int initialProcessorIndex = RandomNums.getInt(0, processors.size() - 1);
         Processor initialProcessor = processors.get(initialProcessorIndex);
 

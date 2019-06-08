@@ -19,4 +19,8 @@ public class Process {
     public void decrementRemainingTime() {
         remainingTime--;
     }
+
+    public Process clone() {
+        return new Process(load, remainingTime);
+    }
 }
