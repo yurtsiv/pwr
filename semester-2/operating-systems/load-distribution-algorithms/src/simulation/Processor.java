@@ -6,7 +6,11 @@ import java.util.stream.Collectors;
 public class Processor {
     private ArrayList<Integer> loadHistory = new ArrayList<>();
     private ArrayList<Process> processes = new ArrayList<>();
-    private int migrations = 0, loadStateRequests = 0;
+    private int migrations = 0, loadStateRequests = 0, prevLoad = 0, procsServed = 0;
+
+    public ArrayList<Process> getProcesses() {
+        return processes;
+    }
 
     public void addProcess(Process process) {
         int currentLoad = getLoad();
@@ -16,6 +20,11 @@ public class Processor {
         }
 
         processes.add(process);
+        procsServed++;
+    }
+
+    public void incerementMigrations() {
+        migrations++;
     }
 
     public Process popProcess() {
@@ -26,7 +35,7 @@ public class Processor {
 
         Process res = processes.get(lastIndex);
         processes.remove(lastIndex);
-        migrations++;
+        procsServed--;
         return res;
     }
 
@@ -49,7 +58,11 @@ public class Processor {
                 .filter(process -> process.getRemainingTime() != 0)
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        loadHistory.add(getLoad());
+        int currentLoad = getLoad();
+        if (currentLoad != prevLoad && currentLoad != 0) {
+            loadHistory.add(getLoad());
+            prevLoad = currentLoad;
+        }
     }
 
     public ArrayList<Integer> getLoadHistory() {

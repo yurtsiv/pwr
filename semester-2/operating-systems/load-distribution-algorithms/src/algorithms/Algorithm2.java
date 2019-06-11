@@ -19,6 +19,7 @@ public class Algorithm2 implements Algorithm {
         for (Processor processor : processors) {
             if (processor.getLoad() <= config.p) {
                 processor.addProcess(process);
+                processor.incerementMigrations();
                 return;
             }
         }

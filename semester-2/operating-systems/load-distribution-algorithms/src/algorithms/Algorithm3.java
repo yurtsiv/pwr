@@ -12,19 +12,26 @@ public class Algorithm3 implements Algorithm {
     public void serveNewProcess(Process process, ArrayList<Processor> processors, SimulationConfig config) {
         alg2.serveNewProcess(process, processors, config);
 
-        processors
-            .stream()
-            .filter(processor -> processor.getLoad() < config.r)
-            .forEach(notLoadedProc -> {
-                Processor loadedProc = processors
-                    .stream()
-                    .filter(proc -> proc.getLoad() > config.p)
-                    .findFirst()
-                    .orElse(null);
+        ArrayList<Processor> lowLoadedProcessors = new ArrayList<>();
+        ArrayList<Processor> highLoadedProcessors = new ArrayList<>();
 
-                if (loadedProc != null) {
-                    notLoadedProc.addProcess(loadedProc.popProcess());
-                }
-            });
+        for (Processor processor : processors) {
+            int load = processor.getLoad();
+            if (load < config.r) {
+                lowLoadedProcessors.add(processor);
+            }
+            if (load > config.p) {
+                highLoadedProcessors.add(processor);
+            }
+        }
+
+        for (Processor lowLoadedProcessor : lowLoadedProcessors) {
+            if (highLoadedProcessors.size() != 0) {
+                Processor highLoadedProcessor = highLoadedProcessors.get(0);
+                lowLoadedProcessor.addProcess(highLoadedProcessor.popProcess());
+                lowLoadedProcessor.incerementMigrations();
+                highLoadedProcessors.remove(0);
+            }
+        }
     }
 }

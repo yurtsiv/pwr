@@ -7,8 +7,7 @@ public class ResultsAnalyzer {
         return processor
             .getLoadHistory()
             .stream()
-            .distinct()
-            .mapToInt((x) -> x)
+            .mapToDouble((x) -> x)
             .average()
             .orElse(0);
     }

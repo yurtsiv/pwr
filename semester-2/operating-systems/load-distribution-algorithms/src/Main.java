@@ -8,10 +8,10 @@ import java.util.ArrayList;
 
 public class Main {
     static int
-        p = 70,
+        p = 50,
         r = 10,
         z = 3,
-        n = 10,
+        n = 50,
         processNum = 10000;
 
     public static void main(String[] args) {

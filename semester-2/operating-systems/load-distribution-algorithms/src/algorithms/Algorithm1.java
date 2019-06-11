@@ -15,6 +15,7 @@ public class Algorithm1 implements Algorithm {
             Processor processorToAsk = processors.get(i);
             if (processorToAsk.getLoad() < config.p) {
                 processorToAsk.addProcess(process);
+                processorToAsk.incerementMigrations();
                 return;
             }
         }
