@@ -1,5 +1,8 @@
 #include <string>
 
+#define defaultName "CTable"
+#define defaultSize 10
+
 using namespace std;
 
 class CTable {
@@ -13,7 +16,6 @@ class CTable {
     bool bSetNewSize(int iTableLen);
     int getLen();
     string getName();
-
 
 	private:
     string s_name;
