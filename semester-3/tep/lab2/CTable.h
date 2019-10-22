@@ -3,22 +3,20 @@
 #define defaultName "CTable"
 #define defaultSize 10
 
-using namespace std;
-
 class CTable {
 	public:
 		CTable();
-		CTable(string sName, int iTableLen);
+		CTable(std::string sName, int iTableLen);
 		CTable(const CTable &pcOther);
     ~CTable();
     CTable* pcClone();
-    void vSetName(string sName);
+    void vSetName(std::string sName);
     bool bSetNewSize(int iTableLen);
     int getLen();
-    string getName();
+    std::string getName();
 
 	private:
-    string s_name;
+    std::string s_name;
     int* array_p;
     int length;
 };

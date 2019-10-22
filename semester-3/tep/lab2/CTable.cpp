@@ -3,40 +3,38 @@
 #include <cstring>
 #include "CTable.h"
 
-using namespace std;
-
 CTable::CTable() {
   s_name = defaultName;
   length = defaultSize;
   array_p = new int[defaultSize];
-  cout << "bezp: " << s_name << endl;
+  std::cout << "bezp: " << s_name << std::endl;
 }
 
-CTable::CTable(string sName, int iTableLen) {
+CTable::CTable(std::string sName, int iTableLen) {
   s_name = sName;
   length = iTableLen;
   array_p = new int[iTableLen];
-  cout << "parametr sName: " << sName << endl;
-  cout << "parametr iTableLen: " << iTableLen << endl;
+  std::cout << "parametr sName: " << sName << std::endl;
+  std::cout << "parametr iTableLen: " << iTableLen << std::endl;
 }
 
 CTable::CTable(const CTable& pcOther):
   s_name(pcOther.s_name + "_copy"), length(pcOther.length)
 {
-  cout << "Cloning" << endl;
+  std::cout << "Cloning constructor: " << pcOther.s_name << std::endl;
   array_p = new int[pcOther.length];
   memcpy(array_p, pcOther.array_p, pcOther.length);
 }
 
 CTable::~CTable() {
-  cout << "usuwam: " << s_name << endl;
+  std::cout << "usuwam: " << s_name << std::endl;
 }
 
 CTable* CTable::pcClone() {
   return new CTable(*this);
 }
 
-void CTable::vSetName(string sName) {
+void CTable::vSetName(std::string sName) {
   s_name = sName;
 }
 
@@ -58,6 +56,6 @@ int CTable::getLen() {
   return length;
 }
 
-string CTable::getName() {
+std::string CTable::getName() {
   return s_name;
 }
