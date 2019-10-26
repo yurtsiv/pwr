@@ -3,7 +3,7 @@ let rec count_occur_of elem xs n =
   | [] -> n
   | hd::tail ->
     let next_n = if hd = elem then (n + 1) else n
-    in count_elem elem tail next_n
+    in count_occur_of elem tail next_n
 
 let rec contains elem xs =
   match xs with
@@ -27,15 +27,22 @@ let count_occur_of_each xs =
   and uniq_elems = uniq xs
   in count_occur_help uniq_elems xs
 
-let divide xs = ([List.hd xs], List.tl xs)
+let divide xs =
+  let rec divide_help remaining_list l1 l2 =
+    match remaining_list with
+    | [] -> (l1, l2)
+    | hd::tail ->
+      divide_help tail l2 (hd::l1)
+  in divide_help xs [] []
+
 
 let rec merge comp xs1 xs2 =
   match xs1, xs2 with
   | [], _ -> xs2
   | _, [] -> xs1
-  | hd1::tail1, hd2::tail2 ->
-    if comp hd1 hd2 then hd1::(merge comp tail1 (hd2::tail2))
-    else hd2::(merge comp (hd1::tail1) tail2)
+  | hd1::tail1, hd2::tail2 -> 
+    if comp hd1 hd2 then hd1::(merge comp tail1 xs2)
+    else hd2::(merge comp xs1 tail2)
 
 let rec merge_sort comp xs =
   match xs with
@@ -48,8 +55,8 @@ let rec merge_sort comp xs =
 
 "Task #1";;
 "Function count_occur";;
-count_elem 1 [1;2;3;1;1] 0;;
-count_elem "a" ["a";"b";"c";"a"] 0;;
+count_occur_of 1 [1;2;3;1;1] 0;;
+count_occur_of "a" ["a";"b";"c";"a"] 0;;
 
 "Function uniq";;
 uniq [1;2;2;3;4;3;3;4;1];;
@@ -57,8 +64,8 @@ uniq ["a";"a";"b";"c";"d";"c";"b"];;
 
 
 "Function count_occur_of_each";;
-count_elems [1;2;3;1;3;3;3;4];;
-count_elems ["d";"a";"b";"c";"a";"d"];;
+count_occur_of_each [1;2;3;1;3;3;3;4];;
+count_occur_of_each ["d";"a";"b";"c";"a";"d"];;
 
 "Task #2 Merge sort";;
 "Function merge";;
