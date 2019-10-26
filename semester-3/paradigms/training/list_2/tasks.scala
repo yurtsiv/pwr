@@ -32,6 +32,15 @@ object Tasks {
 
     root3Help(initX)
   }
+
+  def initSegment[A](xs1: List[A], xs2: List[A]): Boolean =
+    (xs1, xs2) match {
+      case (Nil, _) => true
+      case (_, Nil) => false
+      case (hd1::tail1, hd2::tail2) =>
+        if (hd1 != hd2) false
+        else initSegment(tail1, tail2)
+    }
 }
 
 // Task 4

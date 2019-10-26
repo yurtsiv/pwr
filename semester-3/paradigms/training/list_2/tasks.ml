@@ -30,4 +30,13 @@ let root3 num =
   root3_help initial_x
  
 let [_; _; x; _; _] = [-2;-1;0;1;2]
-let [(_, _); (x, _)] = [(1,2); (0, 1)];
+let [(_, _); (x, _)] = [(1,2); (0, 1)]
+
+
+let rec initSegment xs1 xs2 =
+  match xs1, xs2 with
+  | [], _ -> true
+  | _, [] -> false
+  | hd1::tail1, hd2::tail2 ->
+    if hd1 != hd2 then false
+    else initSegment tail1 tail2
