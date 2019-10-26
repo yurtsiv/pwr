@@ -33,3 +33,7 @@ object Tasks {
     root3Help(initX)
   }
 }
+
+// Task 4
+val List(_, _, x, _, _) = List(-2, -1, 0, 1, 2)
+val List((_, _), (x, _)) = List((1,2), (0, 1))

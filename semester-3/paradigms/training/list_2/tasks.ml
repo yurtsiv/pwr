@@ -29,3 +29,5 @@ let root3 num =
  
   root3_help initial_x
  
+let [_; _; x; _; _] = [-2;-1;0;1;2]
+let [(_, _); (x, _)] = [(1,2); (0, 1)];
