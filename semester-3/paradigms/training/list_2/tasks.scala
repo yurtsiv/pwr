@@ -33,14 +33,23 @@ object Tasks {
     root3Help(initX)
   }
 
-  def initSegment[A](xs1: List[A], xs2: List[A]): Boolean =
-    (xs1, xs2) match {
+  def initSegment[A](xs: List[A], ys: List[A]): Boolean =
+    (xs, ys) match {
       case (Nil, _) => true
       case (_, Nil) => false
       case (hd1::tail1, hd2::tail2) =>
         if (hd1 != hd2) false
         else initSegment(tail1, tail2)
     }
+  
+  def replaceNth[A](xs: List[A], index: Int, elem: A): List[A] =
+    xs match {
+      case Nil => Nil
+      case hd::tail =>
+        if (index < 0) xs
+        else if (index == 0) elem::tail
+        else hd::replaceNth(tail, index - 1, elem)
+    } 
 }
 
 // Task 4

@@ -33,10 +33,18 @@ let [_; _; x; _; _] = [-2;-1;0;1;2]
 let [(_, _); (x, _)] = [(1,2); (0, 1)]
 
 
-let rec initSegment xs1 xs2 =
-  match xs1, xs2 with
+let rec initSegment xs ys =
+  match xs, ys with
   | [], _ -> true
   | _, [] -> false
   | hd1::tail1, hd2::tail2 ->
     if hd1 != hd2 then false
     else initSegment tail1 tail2
+
+let rec replaceNth xs index elem =
+  match xs with
+  | [] -> []
+  | hd::tail  ->
+    if index < 0 then xs
+    else if index = 0 then elem::tail
+    else hd::(replaceNth tail (index - 1) elem)
