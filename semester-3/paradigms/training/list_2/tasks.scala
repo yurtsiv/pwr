@@ -14,4 +14,22 @@ object Tasks {
 
     fibHelp(0, 1, n)
   }
+
+  def isPreciseEnough(x: Double, a: Double): Boolean = {
+    val epsilon = 1e-55
+    Math.abs(Math.pow(x, 3) - a) <= epsilon * Math.abs(a)
+  }
+
+  def root3(num: Double): Double = {
+    def root3Help(prevX: Double): Double =
+      if (isPreciseEnough(prevX, num)) prevX
+      else {
+        val nextX = prevX + (num / (prevX * prevX) - prevX) / 3
+        root3Help(nextX)
+      }
+    
+    val initX = if (num <= 1) num else num / 3
+
+    root3Help(initX)
+  }
 }
