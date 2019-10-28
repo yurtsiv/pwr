@@ -1,39 +1,28 @@
-let rec flatten = function
-  | [] -> []
-  | hd :: tail -> List.append hd (flatten tail)
+let rec flatten xs =
+  if xs = [] then []
+  else List.append (List.hd xs) (flatten (List.tl xs))
 
-let rec count (elem, list) =
-  match list with
-  | [] -> 0
-  | hd :: tail ->
-    if hd = elem then 1 + count (elem, tail)
-    else count (elem, tail)
-
+let rec count (elem, xs) =
+  if xs = [] then 0
+  else (if (List.hd) xs = elem then 0 else 1) + count (elem, List.tl xs)
 
 let rec replicate (elem, count) =
   if count = 1 then [elem]
-  else elem :: replicate (elem, count - 1)
+  else elem::replicate (elem, count - 1)
 
+let rec sqrList xs =
+  if xs = [] then []
+  else ((List.hd xs) * List.hd(xs))::sqrList (List.tl xs)
 
-let rec sqrList list =
-  match list with
-  | [] -> []
-  | hd :: tail ->
-    let squared = (float_of_int hd) ** 2. |> int_of_float
-    in squared :: sqrList tail
-
-
-let reverse list =
-  let rec aux acc = function
-    | [] -> acc 
-    | hd::tail -> aux (hd::acc) tail in
-  aux [] list
-
+let reverse xs =
+  let rec reverse_help acc list =
+    if list = [] then acc
+    else reverse_help ((List.hd list)::acc) (List.tl list)
+  in reverse_help [] xs
 
 let palindrome list =
   list = reverse list
 
-let rec listLength = function
-  | [] -> 0
-  | hd :: tail -> 1 + listLength tail
-
+let rec listLength xs =
+  if xs = [] then 0
+  else 1 + listLength (List.tl xs)
