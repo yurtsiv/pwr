@@ -7,7 +7,7 @@ let iterate pred func =
 
 (* Task 2 a*)
 let init func n =
-  iterate (fun i -> i < n) (fun i -> (func i))
+  iterate (fun i -> i < n) func
 
 let sum l = List.fold_left (+.) 0. l
 
@@ -29,8 +29,9 @@ init (fun i -> i + 1) 0;;
 init (fun i -> i + 1) (-10);;
 
 "Task 2 B (integral)";;
-integral (fun x -> x) 0 4;;
-integral (fun x -> x) 4 0;;
-integral (fun x -> x) 0 0;;
-integral (fun x -> x) (-2) 0;;
+let quadratic x = x ** 2.;;
+
+integral quadratic 0 4;;
+integral quadratic 0 0;;
+integral quadratic (-2) 0;;
 

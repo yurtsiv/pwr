@@ -10,11 +10,11 @@ def iterate[A](pred: (Int) => Boolean, func: (Int) => A): List[A] = {
 
 // Task 2 A
 def init[A](func: (Int) => A, n: Int): List[A] =
-  iterate(i => i < n, i => func(i))
+  iterate(i => i < n, func)
 
 
 // Task 2 B
-def integral(func: (Int) => Double, a: Int, b: Int) = {
+def integral(func: (Double) => Double, a: Int, b: Int) = {
   def calc_area(x1: Int, x2: Int): Double =
     (func(x1) + func(x2)) / 2
 
@@ -34,8 +34,8 @@ init(i => i + 1, 0)
 init(i => i + 1, -10)
 
 println("Task #2 B (integral)")
-integral(x => x, 0, 4)
-integral(x => x, 4, 0)
-integral(x => x, 0, 0)
-integral(x => x, -2, 0)
+val quadratic = (x: Double) => x * x
+integral(quadratic, 0, 4)
+integral(quadratic, 0, 0)
+integral(quadratic, -2, 0)
 
