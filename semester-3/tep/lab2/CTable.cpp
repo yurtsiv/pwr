@@ -28,6 +28,7 @@ CTable::CTable(const CTable& pcOther):
 
 CTable::~CTable() {
   std::cout << "usuwam: " << s_name << std::endl;
+  delete[] array_p;
 }
 
 CTable* CTable::pcClone() {
