@@ -89,7 +89,7 @@ CTable CTable::operator+(const CTable& pcNewTable) {
   int greater_len = std::max(length, pcNewTable.length);
   int smaller_len = std::min(length, pcNewTable.length);
   int* greater_table = length > pcNewTable.length ? array_p : pcNewTable.array_p;
-  int* smaller_table = length < pcNewTable.length ? array_p : pcNewTable.array_p;
+  int* smaller_table = length <= pcNewTable.length ? array_p : pcNewTable.array_p;
 
   result.length = greater_len;
   result.array_p = new int[greater_len];
