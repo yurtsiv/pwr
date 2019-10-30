@@ -83,16 +83,22 @@ std::string CTable::getName() {
   return s_name;
 }
 
-CTable CTable::operator+(CTable& pcNewTable) {
+CTable CTable::operator+(const CTable& pcNewTable) {
   CTable result;
 
-  int new_len = length + pcNewTable.length;
+  int greater_len = std::max(length, pcNewTable.length);
+  int smaller_len = std::min(length, pcNewTable.length);
+  int* greater_table = length > pcNewTable.length ? array_p : pcNewTable.array_p;
+  int* smaller_table = length < pcNewTable.length ? array_p : pcNewTable.array_p;
 
-  result.length = new_len;
-  result.array_p = new int[new_len];
+  result.length = greater_len;
+  result.array_p = new int[greater_len];
 
-  memcpy(result.array_p, array_p, length * sizeof(int));
-  memcpy(result.array_p + length, pcNewTable.array_p, pcNewTable.length * sizeof(int));
+  memcpy(result.array_p, greater_table, greater_len * sizeof(int));
+
+  for (int i = 0; i < smaller_len; i++) {
+    result.array_p[i] += smaller_table[i];
+  }
 
   return result;
 }

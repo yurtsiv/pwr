@@ -16,7 +16,7 @@ class CTable {
     void vPrint();
     int getLen();
     std::string getName();
-    CTable operator+(CTable& pcNewTable);
+    CTable operator+(const CTable& pcNewTable);
 
 	private:
     std::string s_name;
