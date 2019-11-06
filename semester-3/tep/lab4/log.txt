@@ -1,0 +1,3 @@
+Hello from CFileLastError
+Hello from CFileErrCode
+Hello from CFileThrowEx

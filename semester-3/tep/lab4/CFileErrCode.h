@@ -1,4 +1,3 @@
-#include <string>
 #include <vector>
 
 using namespace std;
@@ -10,11 +9,11 @@ class CFileErrCode
 
   public:
     CFileErrCode();
-    CFileErrCode(string sFileName);
+    CFileErrCode(char* sFileName);
     ~CFileErrCode();
   
-    bool bOpenFile(string sFileName);
+    bool bOpenFile(char* sFileName);
     bool bCloseFile();
-    bool bPrintLine(string sText);
-    bool bPrintManyLines(vector<string> sText);
+    bool bPrintLine(char* sText);
+    bool bPrintManyLines(vector<char*> sText);
 };

@@ -11,11 +11,11 @@ class CFileThrowEx
   
   public:
     CFileThrowEx();
-    CFileThrowEx(string sFileName);
+    CFileThrowEx(char* sFileName);
     ~CFileThrowEx();
   
-    void vOpenFile(string sFileName);
+    void vOpenFile(char* sFileName);
     void vCloseFile();
-    void vPrintLine(string sText);
-    void vPrintManyLines(vector<string> sText);
+    void vPrintLine(char* sText);
+    void vPrintManyLines(vector<char*> sText);
 };

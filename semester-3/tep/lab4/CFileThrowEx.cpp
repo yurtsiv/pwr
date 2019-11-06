@@ -7,7 +7,7 @@ using namespace std;
 
 CFileThrowEx::CFileThrowEx() {}
 
-CFileThrowEx::CFileThrowEx(string sFileName) {
+CFileThrowEx::CFileThrowEx(char* sFileName) {
   vOpenFile(sFileName);
 }
 
@@ -21,10 +21,10 @@ void CFileThrowEx::checkFileOpened() {
   }
 }
 
-void CFileThrowEx::vOpenFile(string sFileName) {
+void CFileThrowEx::vOpenFile(char* sFileName) {
   if (pf_file != NULL) throw 1;
 
-  pf_file = fopen((char*)&sFileName, "w+");
+  pf_file = fopen(sFileName, "a+");
   checkFileOpened();
 }
 
@@ -32,16 +32,16 @@ void CFileThrowEx::vCloseFile() {
   fclose(pf_file);
 }
 
-void CFileThrowEx::vPrintLine(string sText) {
+void CFileThrowEx::vPrintLine(char* sText) {
   checkFileOpened();
 
-  fprintf(pf_file, (char*)&sText);
+  fprintf(pf_file, sText);
 }
 
-void CFileThrowEx::vPrintManyLines(vector<string> sText) {
+void CFileThrowEx::vPrintManyLines(vector<char*> sText) {
   checkFileOpened();
 
   for (int i = 0; i < sText.size(); i++) {
-    fprintf(pf_file, (char*)&sText[i]);
+    fprintf(pf_file, sText[i]);
   }
 }

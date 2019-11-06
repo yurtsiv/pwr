@@ -10,7 +10,7 @@ bool CFileLastError::b_last_error = false;
 
 CFileLastError::CFileLastError() {}
 
-CFileLastError::CFileLastError(string sFileName) {
+CFileLastError::CFileLastError(char* sFileName) {
   vOpenFile(sFileName);
 }
 
@@ -24,13 +24,13 @@ bool CFileLastError::checkFileOpened() {
   return file_opened;
 }
 
-void CFileLastError::vOpenFile(string sFileName) {
+void CFileLastError::vOpenFile(char* sFileName) {
   if (pf_file != NULL) {
     b_last_error = true;
     return;
   }
 
-  pf_file = fopen((char *)&sFileName, "w+");
+  pf_file = fopen(sFileName, "a+");
 
   checkFileOpened();
 }
@@ -41,16 +41,16 @@ void CFileLastError::vCloseFile() {
   pf_file = NULL;
 }
 
-void CFileLastError::vPrintLine(string sText) {
+void CFileLastError::vPrintLine(char* sText) {
   if (!checkFileOpened()) return;
 
-  fprintf(pf_file, (char *)&sText);
+  fprintf(pf_file, sText);
 }
 
-void CFileLastError::vPrintManyLines(vector<string> sText) {
+void CFileLastError::vPrintManyLines(vector<char*> sText) {
   if (!checkFileOpened()) return;
 
   for (int i = 0; i < sText.size(); i++) {
-    fprintf(pf_file, (char *)&sText[i]);
+    fprintf(pf_file, sText[i]);
   }
 }
