@@ -10,16 +10,15 @@ class CFileLastError
     FILE *pf_file = NULL;
     bool checkFileOpened();
 
-  
   public:
     static bool bGetLastError() { return (b_last_error); }
 
     CFileLastError();
-    CFileLastError(string sFileName);
+    CFileLastError(char* sFileName);
     ~CFileLastError();
   
-    void vOpenFile(string sFileName);
+    void vOpenFile(char* sFileName);
     void vCloseFile();
-    void vPrintLine(string sText);
-    void vPrintManyLines(vector<string> sText);
+    void vPrintLine(char* sText);
+    void vPrintManyLines(vector<char*> sText);
 };

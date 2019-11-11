@@ -1,6 +1,4 @@
-#include <iostream>
 #include<stdio.h>
-#include <string>
 #include <vector>
 #include "CFileErrCode.h"
 
@@ -8,7 +6,7 @@ using namespace std;
 
 CFileErrCode::CFileErrCode() {}
 
-CFileErrCode::CFileErrCode(string sFileName) {
+CFileErrCode::CFileErrCode(char* sFileName) {
   bOpenFile(sFileName);
 }
 
@@ -16,10 +14,10 @@ CFileErrCode::~CFileErrCode() {
   fclose(pf_file);
 }
 
-bool CFileErrCode::bOpenFile(string sFileName) {
+bool CFileErrCode::bOpenFile(char* sFileName) {
   if (pf_file != NULL) return false;
 
-  pf_file = fopen((char*)&sFileName, "w+");
+  pf_file = fopen(sFileName, "a+");
 
   return pf_file != NULL;
 }
@@ -31,18 +29,18 @@ bool CFileErrCode::bCloseFile() {
   return true;
 }
 
-bool CFileErrCode::bPrintLine(string sText) {
+bool CFileErrCode::bPrintLine(char* sText) {
   if (pf_file == NULL) return false;
 
-  fprintf(pf_file, (char*)&sText);
+  fprintf(pf_file, sText);
   return true;
 }
 
-bool CFileErrCode::bPrintManyLines(vector<string> sText) {
+bool CFileErrCode::bPrintManyLines(vector<char*> sText) {
   if (pf_file == NULL) return false;
 
   for (int i = 0; i < sText.size(); i++) {
-    fprintf(pf_file, (char*)&sText[i]);
+    fprintf(pf_file, sText[i]);
   }
 
   return true;
