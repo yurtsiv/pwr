@@ -54,9 +54,10 @@ let rec merge comp xs ys =
     if comp hd2 hd1 then hd1::(merge comp tail1 ys)
     else hd2::(merge comp xs tail2)
 
-let rec mergesort comp = function
+let rec mergesort comp xs =
+  match xs with
   | [] -> []
-  | [a] -> [a]
-  | xs ->
+  | [_] -> xs
+  | _ ->
     let (first_half, second_half) = divide xs
     in merge comp (mergesort comp first_half) (mergesort comp second_half)
