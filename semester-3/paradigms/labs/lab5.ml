@@ -1,6 +1,25 @@
 (* Task 1 *)
 type 'a llist = LNil | LCons of 'a * (unit -> 'a llist)
 
+let lsplit lxs =
+  let rec get_odd = function
+    LNil -> LNil
+  | LCons(_, tail_f) ->
+    match (tail_f ()) with
+      LNil -> LNil 
+    | LCons(hd, next_tail_f) ->
+        LCons(hd, function () -> get_odd (next_tail_f ())) in
+
+  let rec get_even = function
+    LNil -> LNil
+  | LCons(hd, tail_f) ->
+    match (tail_f ()) with
+      LNil -> LCons(hd, function () -> LNil)
+    | LCons(_, next_tail_f) ->
+        LCons(hd, function() -> get_even (next_tail_f ()))
+
+  in (get_even lxs, get_odd lxs)
+
 let rec lfrom k = LCons (k, function () -> lfrom (k+1))
 
 let rec ltake lxs =
@@ -8,24 +27,11 @@ let rec ltake lxs =
     (0, _) -> []
   | (_, LNil) -> []
   | (n, LCons(x,xf)) -> x::ltake(n-1, xf())
-  
-let l = lfrom 10
+;;
 
-let lappend elem list =
-  match list with
-    LNil -> LCons(elem, function () -> LNil)
-  | LCons(hd, tailf) ->
-      LCons(elem, function () -> LCons(hd, tailf))
+"Task 1";;
+let (odd, even) = lsplit (lfrom 1);;
+ltake (10, odd);;
+ltake (10, even);;
 
-let al = lappend 100 l
-
-
-let lsplit lxs =
-  let rec help (even_i, odd_i) i = function
-      LNil -> (even_i, odd_i)
-    | LCons(hd, tailf) -> 
-      if i mod 2 = 0 then help ((lappend hd even_i), odd_i) (i + 1) (tailf ())
-      else help (even_i, (lappend hd odd_i)) (i + 1) (tailf ())
-  in help (LNil, LNil) 0 lxs
-
-
+lsplit LNil;;
