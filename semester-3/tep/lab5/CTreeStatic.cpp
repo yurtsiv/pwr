@@ -1,13 +1,20 @@
 #include "CTreeStatic.h"
-#include "CNodeStatic.h"
 
 CTreeStatic::CTreeStatic() {
-  CNodeStatic root;
-  c_root = root;
+    CNodeStatic root;
+    c_root = root;
 }
 
-CTreeStatic::~CTreeStatic() {}
-
 void CTreeStatic::vPrintTree() {
-  c_root.vPrintAllBelow();
+    c_root.vPrintAllBelow();
+}
+
+bool CTreeStatic::bMoveSubtree(CNodeStatic* pcParentNode, CNodeStatic* pcNewChildNode) {
+    if (pcParentNode->getAbsoluteRoot() != &c_root) return false;
+
+    pcNewChildNode->changeParent(pcParentNode);
+
+    pcParentNode->vAddNewChild(pcNewChildNode);
+
+    return true;
 }

@@ -1,24 +1,29 @@
 #include <iostream>
 #include <vector>
 
-class CNodeStatic
-{
-  public:
-    CNodeStatic(): i_val(0), pc_parent_node(NULL) {}
-    ~CNodeStatic();
+using namespace std;
 
-    void vSetValue(int iNewVal) { i_val = iNewVal; }
+class CNodeStatic {
+    public:
+        CNodeStatic(): i_val(0), pc_parent_node(NULL) {}
 
-    int iGetChildrenNumber() { return v_children.size(); }
-    void vAddNewChild(int iChildVal);
-    CNodeStatic* pcGetChild(int iChildOffset);
+        void vSetValue(int iNewVal) { i_val = iNewVal; }
 
-    void vPrint() { cout << " " << i_val; };
-    void vPrintAllBelow();
-    void vPrintUp();
-  
-  private:
-    vector<CNodeStatic> v_children;
-    CNodeStatic *pc_parent_node;
-    int i_val;
+        int iGetChildrenNumber() { return v_children.size(); }
+        void vAddNewChild(int iChildVal);
+        void vAddNewChild(CNodeStatic* child);
+        CNodeStatic* pcGetChild(int iChildOffset);
+        CNodeStatic* getAbsoluteRoot();
+        void changeParent(CNodeStatic* newParent);
+
+        void vPrint() { cout << " " << i_val; };
+        void vPrintAllBelow();
+        void vPrintUp();
+
+    private:
+        vector<CNodeStatic> v_children;
+        CNodeStatic *pc_parent_node;
+        int i_val;
 };
+
+
