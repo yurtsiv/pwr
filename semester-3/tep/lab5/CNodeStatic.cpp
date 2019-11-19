@@ -1,15 +1,9 @@
 #include "CNodeStatic.h"
 
-
-CNodeStatic::~CNodeStatic() {
-  for (int i = 0; i < iGetChildrenNumber(); i++)
-    delete v_children.at(i);
-}
-
 void CNodeStatic::vAddNewChild(int iChildVal) {
-  CNodeStatic* child = new CNodeStatic;
-  child->vSetValue(iChildVal);
-  child->pc_parent_node = this;
+  CNodeStatic child;
+  child.vSetValue(iChildVal);
+  child.pc_parent_node = this;
   v_children.push_back(child);
 }
 
@@ -18,14 +12,14 @@ CNodeStatic* CNodeStatic::pcGetChild(int iChildOffset) {
     return NULL;
   }
 
-  return v_children.at(iChildOffset);
+  return &v_children.at(iChildOffset);
 }
 
 void CNodeStatic::vPrintAllBelow() {
   vPrint();
 
   for (int i = 0; i < iGetChildrenNumber(); i++)
-    v_children.at(i)->vPrintAllBelow();
+    v_children.at(i).vPrintAllBelow();
 }
 
 void CNodeStatic::vPrintUp() {
