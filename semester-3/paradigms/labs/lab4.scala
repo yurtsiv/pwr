@@ -68,3 +68,6 @@ evaluate(List(Val(1), Val(4), Val(5), Sum))
 
 println("+ -")
 evaluate(List(Sum, Diff))
+
+println("")
+evaluate(List(Val(5), Val(7), Val(3), Sum, Div))

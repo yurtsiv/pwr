@@ -3,10 +3,9 @@ type 'a bt = Empty | Node of 'a * 'a bt * 'a bt;;
 let rec treeFoldL func base tree =
   match tree with
   | Empty -> base
-  | Node(root, Empty, Empty) -> func root base
   | Node(root, left, right) ->
     let acc1 = treeFoldL func base left in
-    let acc2 = func root acc1 in
+    let acc2 = func acc1 root in
     treeFoldL func acc2 right 
 ;;
 
@@ -40,6 +39,6 @@ let tt = Node(1,
               )
           );;
 
-treeFoldL (fun node acc -> acc ^ " " ^ (string_of_int node)) "" tt;;
+treeFoldL (fun acc node -> acc ^ " " ^ (string_of_int node)) "" tt;;
 
 treeFoldL (+) 0 Empty;;

@@ -2,23 +2,18 @@
 type 'a llist = LNil | LCons of 'a * (unit -> 'a llist)
 
 let lsplit lxs =
-  let rec get_odd = function
-    LNil -> LNil
-  | LCons(_, tail_f) ->
-    match (tail_f ()) with
-      LNil -> LNil 
-    | LCons(hd, next_tail_f) ->
-        LCons(hd, function () -> get_odd (next_tail_f ())) in
-
   let rec get_even = function
     LNil -> LNil
   | LCons(hd, tail_f) ->
     match (tail_f ()) with
       LNil -> LCons(hd, function () -> LNil)
     | LCons(_, next_tail_f) ->
-        LCons(hd, function() -> get_even (next_tail_f ()))
+        LCons(hd, function() -> get_even (next_tail_f ())) in
 
-  in (get_even lxs, get_odd lxs)
+  match lxs with
+    LNil -> (LNil, LNil)
+  | LCons(hd, tailf) ->
+    (get_even lxs, get_even (tailf ()))
 
 let rec lfrom k = LCons (k, function () -> lfrom (k+1))
 

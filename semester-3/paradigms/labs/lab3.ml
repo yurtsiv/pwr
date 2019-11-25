@@ -26,7 +26,7 @@ let integral f a b n =
   sum areas;;
 
 "Task 1 (iterate)";;
-iterate 0 (fun n -> n < 10) (fun n -> n + 1);;
+iterate 5 (fun n -> n < 10) (fun n -> n + 1);;
 iterate 0 (fun n -> n > 10) (fun n -> n + 1);;
 
 "Task 2 A (init)";;
@@ -39,5 +39,4 @@ init (fun i -> i + 10) (-10);;
 integral (fun x -> x) 0. 1. 10;;
 integral (fun x -> x) 1. 0. 10;;
 integral (fun x -> x) 0. 0. 10;;
-
 integral sin 0. 3.14 1000;;
