@@ -32,6 +32,6 @@ let lBreadth ltree =
 let rec lTree n =
   LNode(
     n,
-    (function () -> lTree (int_of_float (2. ** (float_of_int n)))),
-    (function () -> lTree (int_of_float (2. ** (float_of_int n) +. 1.)))
+    (function () -> lTree (2* n)),
+    (function () -> lTree (2 * n + 1))
   )

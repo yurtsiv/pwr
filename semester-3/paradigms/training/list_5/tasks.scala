@@ -42,6 +42,6 @@ def lBreadth[A](ltree: lBT[A]): LazyList[A] = {
 def lTree(n: Int): lBT[Int] =
   LNode(
     n,
-    () => lTree(Math.pow(2, n).intValue),
-    () => lTree(Math.pow(2, n).intValue + 1)
+    () => lTree(2 * n),
+    () => lTree(2 * n + 1)
   )
