@@ -7,6 +7,7 @@ class CTreeDynamic {
         ~CTreeDynamic();
         CNodeDynamic<T> *pcGetRoot() {return(pc_root);}
         void vPrintTree();
+        void vPrintPretty();
         bool bMoveSubtree(CNodeDynamic<T> *pcParentNode, CNodeDynamic<T> *pcNewChild);
 
     private:
@@ -26,6 +27,11 @@ CTreeDynamic<T>::~CTreeDynamic() {
 template<typename T>
 void CTreeDynamic<T>::vPrintTree() {
     pc_root->vPrintAllBelow();
+}
+
+template<typename T>
+void CTreeDynamic<T>::vPrintPretty() {
+    pc_root->vPrintSubtreePretty(1);
 }
 
 template<typename T>

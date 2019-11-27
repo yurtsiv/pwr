@@ -6,7 +6,7 @@ using namespace std;
 template<typename T>
 class CNodeDynamic {
     public:
-        CNodeDynamic(): i_val(0), pc_parent_node(NULL) {}
+        CNodeDynamic(): pc_parent_node(NULL) {}
         ~CNodeDynamic();
 
         void vSetValue(T iNewVal) { i_val = iNewVal; }
@@ -21,6 +21,7 @@ class CNodeDynamic {
         void vPrint() { cout << " " << i_val; };
         void vPrintAllBelow();
         void vPrintUp();
+        void vPrintSubtreePretty(int depth);
 
     private:
         vector<CNodeDynamic<T>*> v_children;
@@ -55,6 +56,29 @@ CNodeDynamic<T>* CNodeDynamic<T>::pcGetChild(int iChildOffset) {
     }
 
     return v_children.at(iChildOffset);
+}
+
+void printSpacecs(int times) {
+    for (int i = 0; i < times; i++) {
+        cout << " ";
+    }
+}
+
+template<typename T>
+void CNodeDynamic<T>::vPrintSubtreePretty(int depth) {
+    if (v_children.size() == 0) {
+        printSpacecs(depth * 10);
+        cout << i_val << endl;
+    } else {
+        for (int i = 0; i < v_children.size(); i++) {
+            if (i == v_children.size() / 2) {
+                printSpacecs(depth * 10);
+                cout << i_val << endl;
+            }
+
+            v_children.at(i)->vPrintSubtreePretty(depth+1);
+        }
+    }
 }
 
 template<typename T>
