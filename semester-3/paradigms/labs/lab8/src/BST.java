@@ -1,25 +1,26 @@
 import java.util.Comparator;
 
-class Node<T> {
-    T value;
-    Node<T> left;
-    Node<T> right;
-
-    public Node(T value, Node left, Node right) {
-        this.value = value;
-        this.left = left;
-        this.right = right;
-    }
-
-    @Override
-    public String toString() {
-        String leftStr = left == null ? "Empty" : left.toString();
-        String rightStr = right == null ? "Empty" : right.toString();
-        return "Node(" + value + ", " + leftStr + ", " + rightStr + ")";
-    }
-}
 
 public class BST<T> implements ITree<T> {
+    private class Node<T> {
+        T value;
+        Node<T> left;
+        Node<T> right;
+
+        public Node(T value, Node left, Node right) {
+            this.value = value;
+            this.left = left;
+            this.right = right;
+        }
+
+        @Override
+        public String toString() {
+            String leftStr = left == null ? "Empty" : left.toString();
+            String rightStr = right == null ? "Empty" : right.toString();
+            return "Node(" + value + ", " + leftStr + ", " + rightStr + ")";
+        }
+    }
+
     private Comparator<T> cmp;
     private Node<T> root;
 
@@ -35,8 +36,7 @@ public class BST<T> implements ITree<T> {
             return;
         }
 
-        boolean inserted = false;
-        while(!inserted) {
+        while(true) {
             int cmpWithCurr = cmp.compare(element, currentNode.value);
 
             if (cmpWithCurr == 0) throw new TreeInsertionException("Element " + element + " already exist");
@@ -44,17 +44,17 @@ public class BST<T> implements ITree<T> {
             if (cmpWithCurr == -1) {
                 if (currentNode.left == null) {
                    currentNode.left = new Node(element, null, null);
-                   inserted = true;
-                } else {
-                   currentNode = currentNode.left;
+                   return;
                 }
+
+                currentNode = currentNode.left;
             } else {
                 if (currentNode.right == null) {
                     currentNode.right = new Node(element, null, null);
-                    inserted = true;
-                } else {
-                    currentNode = currentNode.right;
+                    return;
                 }
+
+                currentNode = currentNode.right;
             }
         }
     }
