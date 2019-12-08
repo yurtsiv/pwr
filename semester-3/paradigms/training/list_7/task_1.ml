@@ -10,54 +10,49 @@ sig
 end;;
 
 (* Task 1 a *)
-module QueueNaive =
+module QueueNaive: QUEUE_FUN =
 struct
-  type 'a t = EmptyQueue | Queue of 'a list
+  type 'a t = 'a list
   exception Empty of string
 
-  let empty () = EmptyQueue
+  let empty () = []
 
-  let enqueue = function
-      (elem, EmptyQueue) -> Queue ([elem])
-    | (elem, (Queue q)) -> Queue (q @ [elem])
+  let enqueue (elem, q) = q @ [elem]
 
-  let dequeue = function
-    | EmptyQueue | Queue ([_]) -> EmptyQueue
-    | Queue (_::tail) -> Queue tail
+  let isEmpty q = q = []
 
-  let first = function
-      EmptyQueue -> raise (Empty "Cannot call 'first' on an empty queue")
-    | Queue (hd::_) -> hd
+  let dequeue q =
+    if isEmpty q then []
+    else List.tl q
 
-  let isEmpty = function
-      EmptyQueue -> true
-    | _ -> false
+  let first q =
+    if isEmpty q then raise (Empty "Cannot call 'first' on an empty queue")
+    else List.hd q
 end;;
 
 
+
 (* Task 1 b *)
-module QueueOptimal =
+module QueueOptimal: QUEUE_FUN =
 struct
-  type 'a t = EmptyQueue | Queue of 'a list * 'a list
+  type 'a t = 'a list * 'a list
   exception Empty of string
 
-  let empty () = EmptyQueue
+  let empty () = ([], [])
 
-  let enqueue = function
-      (elem, EmptyQueue) -> Queue ([], [elem])
-    | (elem, Queue (q_init, q_tail)) -> Queue (q_init, (elem::q_tail)) 
+  let enqueue (elem, (q_init, q_tail)) = (q_init, (elem::q_tail)) 
 
-  let dequeue = function
-    | EmptyQueue | Queue ([], [_]) | Queue ([_], [])  -> EmptyQueue
-    | Queue ([], _::tail) -> Queue ((List.rev tail, []))
-    | Queue (_::init, tail) -> Queue (init, tail) 
+  let isEmpty q = q = ([], [])
 
-  let first = function
-      EmptyQueue -> raise (Empty "Cannot call 'first' on an empty queue")
-    | Queue ([], tail) -> List.hd (List.rev tail) 
-    | Queue (hd::_, _) -> hd
+  let dequeue q =
+    if isEmpty q then q
+    else match q with
+      | ([], _::tail) -> (List.rev tail, [])
+      | (_::init, tail) -> (init, tail) 
 
-  let isEmpty = function
-      EmptyQueue -> true
-    | _ -> false
+  let first q =
+    if isEmpty q then raise (Empty "Cannot call 'first' on an empty queue")
+    else match q with
+      | ([], tail) -> List.hd (List.rev tail) 
+      | (hd::_, _) -> hd
 end;;
