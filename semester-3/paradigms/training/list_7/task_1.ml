@@ -12,47 +12,52 @@ end;;
 (* Task 1 a *)
 module QueueNaive =
 struct
-  type 'a t = 'a list
+  type 'a t = EmptyQueue | Queue of 'a list
   exception Empty of string
 
-  let empty () = []
+  let empty () = EmptyQueue
 
-  let enqueue (elem, q) = q @ [elem]
+  let enqueue = function
+      (elem, EmptyQueue) -> Queue ([elem])
+    | (elem, (Queue q)) -> Queue (q @ [elem])
 
   let dequeue = function
-      [] -> []
-    | _::q -> q
+    | EmptyQueue | Queue ([_]) -> EmptyQueue
+    | Queue (_::tail) -> Queue tail
 
   let first = function
-      [] -> raise (Empty "Cannot call 'first' on an empty queue")
-    | hd::_ -> hd
+      EmptyQueue -> raise (Empty "Cannot call 'first' on an empty queue")
+    | Queue (hd::_) -> hd
 
   let isEmpty = function
-      [] -> true
+      EmptyQueue -> true
     | _ -> false
 end;;
+
 
 (* Task 1 b *)
 module QueueOptimal =
 struct
-  type 'a t = 'a list * 'a list
+  type 'a t = EmptyQueue | Queue of 'a list * 'a list
   exception Empty of string
 
-  let empty () = ([], [])
+  let empty () = EmptyQueue
 
-  let enqueue (elem, (q_init, q_tail)) = (q_init, (elem::q_tail)) 
+  let enqueue = function
+      (elem, EmptyQueue) -> Queue ([], [elem])
+    | (elem, Queue (q_init, q_tail)) -> Queue (q_init, (elem::q_tail)) 
 
   let dequeue = function
-      ([], []) as q -> q
-    | ([], _::tail) -> (List.rev tail, [])
-    | (_::init, tail) -> (init, tail) 
+    | EmptyQueue | Queue ([], [_]) | Queue ([_], [])  -> EmptyQueue
+    | Queue ([], _::tail) -> Queue ((List.rev tail, []))
+    | Queue (_::init, tail) -> Queue (init, tail) 
 
   let first = function
-      ([], []) -> raise (Empty "Cannot call 'first' on an empty queue")
-    | ([], tail) -> List.hd (List.rev tail) 
-    | (hd::_, _) -> hd
+      EmptyQueue -> raise (Empty "Cannot call 'first' on an empty queue")
+    | Queue ([], tail) -> List.hd (List.rev tail) 
+    | Queue (hd::_, _) -> hd
 
   let isEmpty = function
-      ([], []) -> true
+      EmptyQueue -> true
     | _ -> false
 end;;
