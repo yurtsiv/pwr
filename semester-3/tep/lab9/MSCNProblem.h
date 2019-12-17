@@ -1,36 +1,73 @@
+#include <iostream>
+#include <string>
+#include <stdio.h>
 
-class MSCNProblem
-{
-  private:
-    int D, F, M, S;
-    double** cd;
-    double** cf;
-    double** cm;
-    double* sd;
-    double* sf;
-    double* sm;
-    double* ss;
-    double* ud;
-    double* uf;
-    double* um;
-  
-  public:
-    MSCNProblem();
+using namespace std;
 
-    void vSetD(int d); 
-    void vSetF(int f);
-    void vSetM(int m);
-    void vSetS(int s);
+class MSCNProblem{
+private:
+	int D;
+	int F;
+	int M;
+	int S;
+	double* sd;
+	double* sf;
+	double* sm;
+	double* ss;
 
-    void vSetToCd(int x, int y, double val);
-    void vSetToCf(int x, int y, double val);
-    void vSetToCm(int x, int y, double val);
+	double** cd;
+	double** cf;
+	double** cm;
 
-    double dGetQuality(double** pdSolution); 
+	double* ud;
+	double* uf;
+	double* um;
+	double* p;
 
-    bool bConstraintsSatisfied(double** pdSolution);
+	double** xdminmax;
+	double** xfminmax;
+	double** xmminmax;
 
-    double** minimum();
-    double** maximum();
+	double** xd;
+	double** xf;
+	double** xm;
+
+public:
+	MSCNProblem();
+	~MSCNProblem();
+
+	bool bSetD(const int iVal);
+	bool bSetF(const int iVal);
+	bool bSetM(const int iVal);
+	bool bSetS(const int iVal);
+	
+	bool bSetValInCd(int iRow, int iColumn, double dVal);
+	bool bSetValInCf(int iRow, int iColumn, double dVal);
+	bool bSetValInCm(int iRow, int iColumn, double dVal);
+
+	bool bSetValInSd(int iIndex, double dVal);
+	bool bSetValInSf(int iIndex, double dVal);
+	bool bSetValInSm(int iIndex, double dVal);
+	bool bSetValInSs(int iIndex, double dVal);
+
+	bool bSetValInUd(int iIndex, double dVal);
+	bool bSetValInUf(int iIndex, double dVal);
+	bool bSetValInUm(int iIndex, double dVal);
+	
+	bool bSetValInP(int iIndex, double dVal);
+
+	bool bSetValInXdminmax(int iRow, int iColumn, double dVal);
+	bool bSetValInXfminmax(int iRow, int iColumn, double dVal);
+	bool bSetValInXmminmax(int iRow, int iColumn, double dVal);
+
+	double dGetMin(double* pdSolution, int iId);
+	double dGetMax(double* pdSolution, int iId);
+	double dCalculateTransportCost(); 
+	double dCalculateContractCost();
+	double dCalculateIncome();
+	double dCalculateProfit();
+
+	double dGetQuality(double *pdSolution, bool &isSuccess);
+	bool bConstraintsSatisfied(double *pdSolution);
+	bool bRead(string sFileName);
 };
-
