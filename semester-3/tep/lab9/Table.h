@@ -4,22 +4,22 @@
 
 #define defaultSize 10
 
+template<typename T>
 class Table {
 public:
     Table() {
         length = defaultSize;
-        array_pointer = new int[defaultSize];
+        array_pointer = new T[defaultSize];
     }
 
     Table(int tableLen) {
         length = tableLen;
-        array_pointer = new int[tableLen];
+        array_pointer = new T[tableLen];
     }
 
-    Table(const Table& other):
-            length(other.length)
-    {
-        array_pointer = new int[other.length];
+    Table(const Table& other) {
+        length = other.length;
+        array_pointer = new T[other.length];
         memcpy(array_pointer, other.array_pointer, other.length);
     }
 
@@ -33,8 +33,8 @@ public:
         }
 
         length = newSize;
-        int* prev_array_p = array_pointer;
-        array_pointer = new int[newSize];
+        T* prev_array_p = array_pointer;
+        array_pointer = new T[newSize];
 
         memcpy(array_pointer, prev_array_p, newSize);
 
@@ -43,7 +43,7 @@ public:
     }
 
 
-    void setValueAt(int offset, int newVal) {
+    void setValueAt(int offset, T newVal) {
         if (offset >= length) {
             return;
         }
@@ -51,20 +51,11 @@ public:
         array_pointer[offset] = newVal;
     }
 
-    void print() {
-        for (int i = 0; i < length; i++) {
-            std::cout << array_pointer[i] << " ";
-        }
-
-        std::cout << std::endl;
-    }
-
-
     int getLen() {
         return length;
     }
 
 private:
-    int* array_pointer;
+    T* array_pointer;
     int length;
 };
