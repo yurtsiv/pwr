@@ -63,6 +63,35 @@ bool MSCNProblem::constraintsSatisfied(double* solution, int len) {
     return true;
 }
 
+Table<Bounds>* MSCNProblem::getSolutionBounds() {
+    Table<Bounds>* res = new Table<Bounds>(getRequiredSolutionLen());
+
+    int res_index = 0;
+
+    for (int y = 0; y < xdMinMax.getHeight(); y++) {
+        for (int x = 0; x < xdMinMax.getWidth(); x++) {
+            res->set(res_index, xdMinMax.get(x, y));
+            res_index++;
+        }
+    }
+
+    for (int y = 0; y < xfMinMax.getHeight(); y++) {
+        for (int x = 0; x < xfMinMax.getWidth(); x++) {
+            res->set(res_index, xfMinMax.get(x, y));
+            res_index++;
+        }
+    }
+
+    for (int y = 0; y < xmMinMax.getHeight(); y++) {
+        for (int x = 0; x < xmMinMax.getWidth(); x++) {
+            res->set(res_index, xmMinMax.get(x, y));
+            res_index++;
+        }
+    }
+
+    return res;
+}
+
 bool MSCNProblem::setD(int d) {
     if (d < 0) return false;
 
@@ -268,13 +297,13 @@ double MSCNProblem::calcServiceUsageCost(Matrix<double> *xd, Matrix<double> *xf,
     double res = 0;
 
     for (int d = 0; d < D; d++)
-        if (xd->rowContainsNonZero(d)) res += ud.get(d);
+        if (xd->rowContainsPositiveNum(d)) res += ud.get(d);
 
     for (int f = 0; f < F; f++)
-        if (xf->rowContainsNonZero(f)) res += uf.get(f);
+        if (xf->rowContainsPositiveNum(f)) res += uf.get(f);
 
     for (int m = 0; m < M; m++)
-        if (xm->rowContainsNonZero(m)) res += um.get(m);
+        if (xm->rowContainsPositiveNum(m)) res += um.get(m);
 
     return res;
 }

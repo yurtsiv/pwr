@@ -17,6 +17,7 @@ public:
 
     double getQuality(double* solution, int len);
     bool constraintsSatisfied(double* solution, int len);
+    Table<Bounds>* getSolutionBounds();
 
     bool setD(int d);
     bool setF(int f);

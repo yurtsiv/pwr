@@ -23,6 +23,14 @@ int main() {
 
     problem.setInPs(0, 100);
 
+    struct Bounds xdMinMax = {0, 100};
+    struct Bounds xfMinMax = {0, 100};
+    struct Bounds xmMinMax = {0, 100};
+
+    problem.setInXdMinMax(0, 0, xdMinMax);
+    problem.setInXfMinMax(0, 0, xfMinMax);
+    problem.setInXmMinMax(0, 0, xmMinMax);
+
     cout << problem.getQuality(new double[3] { 1, 1, 1 }, 3);
     return 0;
 }

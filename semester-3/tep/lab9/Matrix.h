@@ -60,9 +60,9 @@ public:
         return res;
     }
 
-    bool rowContainsNonZero(int row) {
+    bool rowContainsPositiveNum(int row) {
         for (int i = 0; i < width; i++) {
-            if (get(i, row) != 0) return true;
+            if (get(i, row) > 0) return true;
         }
 
         return false;
