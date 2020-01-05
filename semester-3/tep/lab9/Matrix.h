@@ -60,6 +60,14 @@ public:
         return res;
     }
 
+    bool rowContainsNonZero(int row) {
+        for (int i = 0; i < width; i++) {
+            if (get(i, row) != 0) return true;
+        }
+
+        return false;
+    }
+
 private:
     Table<T> table;
     int width;

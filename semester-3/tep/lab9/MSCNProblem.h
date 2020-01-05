@@ -15,6 +15,7 @@ class MSCNProblem {
 public:
     MSCNProblem();
 
+    double getQuality(double* solution, int len);
     bool constraintsSatisfied(double* solution, int len);
 
     bool setD(int d);
@@ -77,4 +78,8 @@ private:
 
     Solution parseSolution(double* solution, int len);
     int getRequiredSolutionLen();
+
+    double calcIncome(Matrix<double>* xm);
+    double calcTransportCost(Matrix<double>* xd, Matrix<double>* xf, Matrix<double>* xm);
+    double calcServiceUsageCost(Matrix<double>* xd, Matrix<double>* xf, Matrix<double>* xm);
 };

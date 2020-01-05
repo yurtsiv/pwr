@@ -23,6 +23,14 @@ MSCNProblem::MSCNProblem() :
     setS(1);
 }
 
+double MSCNProblem::getQuality(double *solution, int len) {
+    if (!isSolutionCorrect(solution, len)) return 0;
+
+    Solution s = parseSolution(solution, len);
+
+    return calcIncome(s.xm) - calcTransportCost(s.xd, s.xf, s.xm) - calcServiceUsageCost(s.xd, s.xf, s.xm);
+}
+
 bool MSCNProblem::constraintsSatisfied(double* solution, int len) {
     if (!isSolutionCorrect(solution, len)) return false;
 
@@ -231,3 +239,42 @@ int MSCNProblem::getRequiredSolutionLen() {
     return D * F + F * M + M * S;
 }
 
+double MSCNProblem::calcIncome(Matrix<double> *xm) {
+    double res = 0;
+    for (int m = 0; m < M; m++)
+        for (int s = 0; s < S; s++)
+            res += ps.get(s) * xm->get(m, s);
+}
+
+double MSCNProblem::calcTransportCost(Matrix<double> *xd, Matrix<double> *xf, Matrix<double> *xm) {
+    double res = 0;
+
+    for (int d = 0; d < D; d++)
+        for (int f = 0; f < F; f++)
+            res += cd.get(d, f) * xd->get(d, f);
+
+    for (int f = 0; f < F; f++)
+        for (int m = 0; m < M; m++)
+            res += cf.get(f, m) * xf->get(f, m);
+
+    for (int m = 0; m < M; m++)
+        for (int s = 0; s < S; s++)
+            res += cm.get(m, s) * xm->get(m, s);
+
+    return res;
+}
+
+double MSCNProblem::calcServiceUsageCost(Matrix<double> *xd, Matrix<double> *xf, Matrix<double> *xm) {
+    double res = 0;
+
+    for (int d = 0; d < D; d++)
+        if (xd->rowContainsNonZero(d)) res += ud.get(d);
+
+    for (int f = 0; f < F; f++)
+        if (xf->rowContainsNonZero(f)) res += uf.get(f);
+
+    for (int m = 0; m < M; m++)
+        if (xm->rowContainsNonZero(m)) res += um.get(m);
+
+    return res;
+}

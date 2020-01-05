@@ -7,22 +7,22 @@ using namespace std;
 int main() {
     MSCNProblem problem;
 
-    problem.setInCd(0, 0, 10);
-    problem.setInCf(0, 0, 20);
-    problem.setInCm(0, 0, 25);
+    problem.setInCd(0, 0, 3);
+    problem.setInCf(0, 0, 4);
+    problem.setInCm(0, 0, 1);
 
     problem.setInUd(0, 10);
-    problem.setInUf(0, 15);
+    problem.setInUf(0, 10);
     problem.setInUm(0, 10);
 
     problem.setInSd(0, 100);
-    problem.setInSf(0, 100);
-    problem.setInSm(0, 100);
+    problem.setInSf(0, 50);
+    problem.setInSm(0, 10.5);
 
-    problem.setInSs(0, 200);
+    problem.setInSs(0, 100);
 
-    problem.setInPs(0, 10);
+    problem.setInPs(0, 100);
 
-    cout << problem.constraintsSatisfied(new double[3] { 90, 90, 90 }, 3);
+    cout << problem.getQuality(new double[3] { 1, 1, 1 }, 3);
     return 0;
 }
