@@ -1,7 +1,6 @@
 #include <iostream>
-#include "Matrix.h"
 #include "SmartPointer.h"
-#include "Table.h"
+#include "MSCNProblem.h"
 
 using namespace std;
 
