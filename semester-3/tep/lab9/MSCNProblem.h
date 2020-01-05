@@ -1,8 +1,23 @@
+#include <iostream>
+#include <fstream>
 #include "Matrix.h"
 
-struct Bounds {
+class Bounds {
+public:
     double min;
     double max;
+
+    Bounds(): min(0), max(0) {}
+
+    Bounds(double min, double max) {
+        this->min = min;
+        this->max = max;
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const Bounds& bounds) {
+        os << "(" << bounds.min << ", " << bounds.max << ") ";
+        return os;
+    }
 };
 
 struct Solution {
@@ -18,6 +33,9 @@ public:
     double getQuality(double* solution, int len);
     bool constraintsSatisfied(double* solution, int len);
     Table<Bounds>* getSolutionBounds();
+    void readFromStream(std::istream& is);
+    friend std::ostream &operator<< (std::ostream& os, const MSCNProblem& p);
+    void saveToFile(std::string const &path);
 
     bool setD(int d);
     bool setF(int f);

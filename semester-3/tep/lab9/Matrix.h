@@ -10,6 +10,15 @@ public:
         resize(width, height);
     }
 
+    Matrix(std::istream& is, int width, int height) {
+        resize(width, height);
+
+        for(int i = 0; i < height; i++) {
+            for(int j = 0; j < width; j++)
+                set(streamGet<T>(is), i, j);
+        }
+    }
+
     void resize(int width, int height) {
         this->width = width;
         this->height = height;
@@ -23,7 +32,7 @@ public:
         return true;
     }
 
-    T get(int x, int y) {
+    T get(int x, int y) const {
         return table.get(y * width + x);
     }
 
@@ -66,6 +75,17 @@ public:
         }
 
         return false;
+    }
+
+    friend std::ostream& operator<< (std::ostream& os, const Matrix& m) {
+        for (int i = 0; i < m.height; i++) {
+            if (i != 0) os << '\n';
+
+            for (int j = 0; j < m.width; j++)
+                os << m.get(i, j) << ' ';
+        }
+
+        return os;
     }
 
 private:

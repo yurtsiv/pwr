@@ -23,6 +23,7 @@ MSCNProblem::MSCNProblem() :
     setS(1);
 }
 
+
 double MSCNProblem::getQuality(double *solution, int len) {
     if (!isSolutionCorrect(solution, len)) return 0;
 
@@ -90,6 +91,121 @@ Table<Bounds>* MSCNProblem::getSolutionBounds() {
     }
 
     return res;
+}
+
+void MSCNProblem::readFromStream(std::istream &is) {
+    streamIgnoreChar(is, 1);
+    D = streamGet<int>(is);
+    streamIgnoreChar(is, 1);
+    F = streamGet<int>(is);
+    streamIgnoreChar(is, 1);
+    M = streamGet<int>(is);
+    streamIgnoreChar(is, 1);
+    S = streamGet<int>(is);
+
+    streamIgnoreChar(is, 2);
+    sd = Table<double>(is, D);
+    streamIgnoreChar(is, 2);
+    sf = Table<double>(is, F);
+    streamIgnoreChar(is, 2);
+    sm = Table<double>(is, M);
+    streamIgnoreChar(is, 2);
+    ss = Table<double>(is, S);
+
+    streamIgnoreChar(is, 2);
+    cd = Matrix<double>(is, F, D);
+    streamIgnoreChar(is, 2);
+    cf = Matrix<double>(is, M, F);
+    streamIgnoreChar(is, 2);
+    cm = Matrix<double>(is, S, M);
+
+    streamIgnoreChar(is, 2);
+    ud = Table<double>(is, D);
+    streamIgnoreChar(is, 2);
+    uf = Table<double>(is, F);
+    streamIgnoreChar(is, 2);
+    um = Table<double>(is, M);
+    streamIgnoreChar(is, 1);
+    ps = Table<double>(is, S);
+
+//    streamIgnoreChar(is, 8);
+//    specialRead(xdminmax, is, fCount, dCount);
+//    streamIgnoreChar(is, 8);
+//    specialRead(xfminmax, is, mCount, fCount);
+//    streamIgnoreChar(is, 8);
+//    specialRead(xmminmax, is, sCount, mCount);
+}
+
+std::ostream& operator<< (std::ostream& os, const MSCNProblem& p)
+{
+    os << 'D' << ' ' << p.D << '\n';
+    os << 'F' << ' ' << p.F << '\n';
+    os << 'M' << ' ' << p.M << '\n';
+    os << 'S' << ' ' << p.S << '\n';
+    os << "sd";
+    os << "\n";
+    os << p.sd;
+    os << "\n";
+    os << "sf";
+    os << "\n";
+    os << p.sf;
+    os << "\n";
+    os << "sm";
+    os << "\n";
+    os << p.sm;
+    os << "\n";
+    os << "ss";
+    os << "\n";
+    os << p.ss;
+    os << "\n";
+    os << "cd";
+    os << "\n";
+    os << p.cd;
+    os << "\n";
+    os << "cf";
+    os << "\n";
+    os << p.cf;
+    os << "\n";
+    os << "cm";
+    os << "\n";
+    os << p.cm;
+    os << "\n";
+    os << "ud";
+    os << "\n";
+    os << p.ud;
+    os << "\n";
+    os << "uf";
+    os << "\n";
+    os << p.uf;
+    os << "\n";
+    os << "um";
+    os << "\n";
+    os << p.um;
+    os << "\n";
+    os << "p";
+    os << "\n";
+    os << p.ps;
+    os << "\n";
+    os << "xdminmax";
+    os << "\n";
+    os << p.xdMinMax;
+    os << "\n";
+    os << "xfminmax";
+    os << "\n";
+    os << p.xfMinMax;
+    os << "\n";
+    os << "xmminmax";
+    os << "\n";
+    os << p.xmMinMax;
+    os << "\n";
+
+    return os;
+}
+
+void MSCNProblem::saveToFile(std::string const &path) {
+    std::ofstream file(path);
+    file << *this;
+    file.close();
 }
 
 bool MSCNProblem::setD(int d) {

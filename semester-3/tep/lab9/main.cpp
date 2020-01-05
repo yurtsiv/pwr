@@ -23,14 +23,20 @@ int main() {
 
     problem.setInPs(0, 100);
 
-    struct Bounds xdMinMax = {0, 100};
-    struct Bounds xfMinMax = {0, 100};
-    struct Bounds xmMinMax = {0, 100};
+    Bounds xdMinMax(0, 100);
+    Bounds xfMinMax(0, 100);
+    Bounds xmMinMax(0, 100);
 
     problem.setInXdMinMax(0, 0, xdMinMax);
     problem.setInXfMinMax(0, 0, xfMinMax);
     problem.setInXmMinMax(0, 0, xmMinMax);
 
+
+//    problem.saveToFile("problem1.txt");
+
+    MSCNProblem problem2;
+    std::ifstream file("problem1");
+//    problem2.readFromStream(file);
     cout << problem.getQuality(new double[3] { 1, 1, 1 }, 3);
     return 0;
 }

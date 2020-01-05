@@ -1,6 +1,7 @@
 #include <string>
 #include <cstring>
 #include <iostream>
+#include "StreamUtils.h"
 
 #define defaultSize 10
 
@@ -23,6 +24,13 @@ public:
         memcpy(array_pointer, other.array_pointer, other.length);
     }
 
+    Table(std::istream &is, int size) {
+        setNewSize(size);
+
+        for(int i = 0; i < size; i++)
+            set(streamGet<T>(is), i);
+    }
+
     ~Table() {
         delete[] array_pointer;
     }
@@ -31,7 +39,9 @@ public:
         return *array_pointer;
     }
 
-    T get(int i) { return array_pointer[i]; }
+    T get(int i) const {
+        return array_pointer[i];
+    }
 
     void set(int i, T val) { array_pointer[i] = val; }
 
@@ -71,6 +81,13 @@ public:
         }
 
         return res;
+    }
+
+    friend std::ostream& operator<< (std::ostream& os, const Table<T>& table) {
+        for (int i = 0; i < table.length; i++)
+            os << table.get(i) << ' ';
+
+        return os;
     }
 
 private:
