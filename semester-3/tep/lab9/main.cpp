@@ -1,21 +1,28 @@
 #include <iostream>
 #include "SmartPointer.h"
-#include "Matrix.h"
-//#include "MSCNProblem.h"
+#include "MSCNProblem.h"
 
 using namespace std;
 
 int main() {
-    SmartPointer<Matrix<int> > m(new Matrix<int>(2, 3));
+    MSCNProblem problem;
 
-    m->set(0, 0, 1);
-    m->set(1, 0, 2);
-    m->set(0, 1, 3);
-    m->set(1, 1, 4);
+    problem.setInCd(0, 0, 10);
+    problem.setInCf(0, 0, 20);
+    problem.setInCm(0, 0, 25);
 
-    m->resize(2, 2);
+    problem.setInUd(0, 10);
+    problem.setInUf(0, 15);
+    problem.setInUm(0, 10);
 
-    m->print();
+    problem.setInSd(0, 100);
+    problem.setInSf(0, 100);
+    problem.setInSm(0, 100);
 
+    problem.setInSs(0, 200);
+
+    problem.setInPs(0, 10);
+
+    cout << problem.constraintsSatisfied(new double[3] { 90, 90, 90 }, 3);
     return 0;
 }

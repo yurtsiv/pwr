@@ -27,9 +27,13 @@ public:
         delete[] array_pointer;
     }
 
-    T& operator [](int index) {
-        return array_pointer[index];
+    T operator *() {
+        return *array_pointer;
     }
+
+    T get(int i) { return array_pointer[i]; }
+
+    void set(int i, T val) { array_pointer[i] = val; }
 
     bool setNewSize(int newSize) {
         if (newSize < 0) {
@@ -49,6 +53,24 @@ public:
 
     int getLen() {
         return length;
+    }
+
+    void setArray(T* new_arr, int len) {
+        length = len;
+        array_pointer = new_arr;
+    }
+
+    Table<T>* slice(int from, int to) {
+        if (from < 0 || to < 0 || from > to) new Table<T>(0);
+
+        Table<T>* res = new Table<T>(to - from);
+        int res_count = 0;
+        for (int i = from; i < to; i++) {
+           res->set(res_count, array_pointer[i]);
+           res_count++;
+        }
+
+        return res;
     }
 
 private:

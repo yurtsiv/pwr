@@ -5,8 +5,18 @@ struct Bounds {
     double max;
 };
 
+struct Solution {
+    Matrix<double>* xd;
+    Matrix<double>* xf;
+    Matrix<double>* xm;
+};
+
 class MSCNProblem {
 public:
+    MSCNProblem();
+
+    bool constraintsSatisfied(double* solution, int len);
+
     bool setD(int d);
     bool setF(int f);
     bool setM(int m);
@@ -49,6 +59,8 @@ private:
     Table<double> sd;
     Table<double> sf;
     Table<double> sm;
+
+    // Market demand
     Table<double> ss;
 
     // Income from markets
@@ -58,7 +70,11 @@ private:
     Matrix<Bounds> xfMinMax;
     Matrix<Bounds> xmMinMax;
 
-    bool setInCostsMatrix(Matrix<double> m, int x, int y, double val);
-    bool setInTable(Table<double> t, int i, double val);
-    bool setInMinMaxMatrix(Matrix<Bounds> m, int x, int y, Bounds bounds);
+    bool setInCostsMatrix(Matrix<double>& m, int x, int y, double val);
+    bool setInTable(Table<double>& t, int i, double val);
+    bool setInMinMaxMatrix(Matrix<Bounds>& m, int x, int y, Bounds bounds);
+    bool isSolutionCorrect(double* solution, int len);
+
+    Solution parseSolution(double* solution, int len);
+    int getRequiredSolutionLen();
 };

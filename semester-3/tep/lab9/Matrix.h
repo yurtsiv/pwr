@@ -18,13 +18,20 @@ public:
 
     bool set(int x, int y, T val) {
         if (x < 0 || x >= width || y < 0 || y >= height) return false;
-        table[x * width + y] = val;
+        table.set(y * width + x, val);
 
         return true;
     }
 
     T get(int x, int y) {
-        return table[x * width + y];
+        return table.get(y * width + x);
+    }
+
+    void setInternalTable(SmartPointer<Table<T> >& new_table) {
+        if (new_table->getLen() != table.getLen()) return;
+
+        for (int i = 0; i < table.getLen(); i++)
+            table.set(i, new_table->get(i));
     }
 
     void print() {
@@ -38,6 +45,20 @@ public:
 
     int getWidth() { return width; }
     int getHeight() { return height; }
+
+    T sumRow(int row) {
+        int res = get(0, row);
+        for (int i = 1; i < width; i++)
+            res += get(i, row);
+        return res;
+    }
+
+    T sumColumn(int column) {
+        int res = get(column, 0);
+        for (int i = 1; i < height; i++)
+            res += get(column, i);
+        return res;
+    }
 
 private:
     Table<T> table;
