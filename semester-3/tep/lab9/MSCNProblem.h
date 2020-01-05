@@ -1,5 +1,4 @@
 #include "Matrix.h"
-#include "Table.h"
 
 struct Bounds {
     double min;
@@ -8,10 +7,10 @@ struct Bounds {
 
 class MSCNProblem {
 public:
-    bool setD(int d) { D = d; }
-    bool setF(int f) { F = f; }
-    bool setM(int m) { M = m; }
-    bool setS(int s) { S = s; }
+    bool setD(int d);
+    bool setF(int f);
+    bool setM(int m);
+    bool setS(int s);
 
     bool setInCd(int x, int y, double val);
     bool setInCf(int x, int y, double val);
@@ -57,5 +56,9 @@ private:
 
     Matrix<Bounds> xdMinMax;
     Matrix<Bounds> xfMinMax;
-    Matrix<Bounds> xmMinmax;
+    Matrix<Bounds> xmMinMax;
+
+    bool setInCostsMatrix(Matrix<double> m, int x, int y, double val);
+    bool setInTable(Table<double> t, int i, double val);
+    bool setInMinMaxMatrix(Matrix<Bounds> m, int x, int y, Bounds bounds);
 };

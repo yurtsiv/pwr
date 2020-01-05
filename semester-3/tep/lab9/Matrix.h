@@ -1,4 +1,5 @@
 #include <iostream>
+#include "Table.h"
 
 using namespace std;
 
@@ -9,18 +10,17 @@ public:
         resize(width, height);
     }
 
-    ~Matrix() {
-        delete[] table;
-    }
-
     void resize(int width, int height) {
         this->width = width;
         this->height = height;
-        table = new T[width * height];
+        table.setNewSize(width * height);
     }
 
-    void set(int x, int y, T val) {
+    bool set(int x, int y, T val) {
+        if (x < 0 || x >= width || y < 0 || y >= height) return false;
         table[x * width + y] = val;
+
+        return true;
     }
 
     T get(int x, int y) {
@@ -36,8 +36,11 @@ public:
         }
     }
 
+    int getWidth() { return width; }
+    int getHeight() { return height; }
+
 private:
-    T* table;
+    Table<T> table;
     int width;
     int height;
 };

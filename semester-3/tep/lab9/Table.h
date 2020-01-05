@@ -27,7 +27,7 @@ public:
         delete[] array_pointer;
     }
 
-    T operator [](int index) {
+    T& operator [](int index) {
         return array_pointer[index];
     }
 
@@ -40,7 +40,7 @@ public:
         T* prev_array_p = array_pointer;
         array_pointer = new T[newSize];
 
-        memcpy(array_pointer, prev_array_p, newSize);
+        memcpy(array_pointer, prev_array_p, (newSize + sizeof(prev_array_p[0])));
 
         delete[] prev_array_p;
         return true;

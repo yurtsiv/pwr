@@ -1,6 +1,7 @@
 #include <iostream>
 #include "SmartPointer.h"
-#include "MSCNProblem.h"
+#include "Matrix.h"
+//#include "MSCNProblem.h"
 
 using namespace std;
 
@@ -11,6 +12,8 @@ int main() {
     m->set(1, 0, 2);
     m->set(0, 1, 3);
     m->set(1, 1, 4);
+
+    m->resize(2, 2);
 
     m->print();
 
