@@ -1,3 +1,0 @@
-/home/stepy/Dev/pwr/semester-3/tep/lab9/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/stepy/Dev/pwr/semester-3/tep/lab9/cmake-build-debug/CMakeFiles/lab9.dir
-/home/stepy/Dev/pwr/semester-3/tep/lab9/cmake-build-debug/CMakeFiles/edit_cache.dir

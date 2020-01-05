@@ -27,6 +27,10 @@ public:
         delete[] array_pointer;
     }
 
+    T operator [](int index) {
+        return array_pointer[index];
+    }
+
     bool setNewSize(int newSize) {
         if (newSize < 0) {
             return false;
@@ -42,14 +46,6 @@ public:
         return true;
     }
 
-
-    void setValueAt(int offset, T newVal) {
-        if (offset >= length) {
-            return;
-        }
-
-        array_pointer[offset] = newVal;
-    }
 
     int getLen() {
         return length;

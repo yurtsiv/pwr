@@ -39,6 +39,10 @@ public:
 
     T& operator*() { return(*pointer); }
     T* operator->() { return(pointer); }
+    T&operator [](int i) {
+        if (!is_array) throw;
+        return pointer[i];
+    }
     SmartPointer<T>& operator=(const SmartPointer<T> &other) {
         if (other.pointer != pointer) {
             if (counter->dec() == 0) {
