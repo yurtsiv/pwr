@@ -4,6 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "/home/stepy/Dev/pwr/semester-3/tep/lab9/CTable.cpp" "/home/stepy/Dev/pwr/semester-3/tep/lab9/cmake-build-debug/CMakeFiles/lab9.dir/CTable.cpp.o"
   "/home/stepy/Dev/pwr/semester-3/tep/lab9/main.cpp" "/home/stepy/Dev/pwr/semester-3/tep/lab9/cmake-build-debug/CMakeFiles/lab9.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")

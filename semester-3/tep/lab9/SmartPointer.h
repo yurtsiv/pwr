@@ -14,10 +14,10 @@ private:
 };
 
 template<typename T>
-class MySmartPointer
+class SmartPointer
 {
 public:
-    MySmartPointer(T *p, bool isArray = false)
+    SmartPointer(T *p, bool isArray = false)
     {
         pointer = p;
         is_array = isArray;
@@ -25,21 +25,21 @@ public:
         counter->add();
     }
 
-    MySmartPointer(const MySmartPointer &pcOther)
+    SmartPointer(const SmartPointer &pcOther)
     {
         pointer = pcOther.pointer;
         counter = pcOther.counter;
         counter->add();
     }
 
-    ~MySmartPointer()
+    ~SmartPointer()
     {
         onDeconstruct();
     }
 
     T& operator*() { return(*pointer); }
     T* operator->() { return(pointer); }
-    MySmartPointer<T>& operator=(const MySmartPointer<T> &other) {
+    SmartPointer<T>& operator=(const SmartPointer<T> &other) {
         if (other.pointer != pointer) {
             if (counter->dec() == 0) {
                 delete pointer;

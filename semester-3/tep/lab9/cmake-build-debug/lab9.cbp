@@ -82,7 +82,13 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/stepy/Dev/pwr/semester-3/tep/lab9/CMySmartPointer.h">
+		<Unit filename="/home/stepy/Dev/pwr/semester-3/tep/lab9/CTable.cpp">
+			<Option target="lab9"/>
+		</Unit>
+		<Unit filename="/home/stepy/Dev/pwr/semester-3/tep/lab9/CTable.h">
+			<Option target="lab9"/>
+		</Unit>
+		<Unit filename="/home/stepy/Dev/pwr/semester-3/tep/lab9/SmartPointer.h">
 			<Option target="lab9"/>
 		</Unit>
 		<Unit filename="/home/stepy/Dev/pwr/semester-3/tep/lab9/main.cpp">

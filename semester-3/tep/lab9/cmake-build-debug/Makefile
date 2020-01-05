@@ -123,6 +123,33 @@ lab9/fast:
 	$(MAKE) -f CMakeFiles/lab9.dir/build.make CMakeFiles/lab9.dir/build
 .PHONY : lab9/fast
 
+CTable.o: CTable.cpp.o
+
+.PHONY : CTable.o
+
+# target to build an object file
+CTable.cpp.o:
+	$(MAKE) -f CMakeFiles/lab9.dir/build.make CMakeFiles/lab9.dir/CTable.cpp.o
+.PHONY : CTable.cpp.o
+
+CTable.i: CTable.cpp.i
+
+.PHONY : CTable.i
+
+# target to preprocess a source file
+CTable.cpp.i:
+	$(MAKE) -f CMakeFiles/lab9.dir/build.make CMakeFiles/lab9.dir/CTable.cpp.i
+.PHONY : CTable.cpp.i
+
+CTable.s: CTable.cpp.s
+
+.PHONY : CTable.s
+
+# target to generate assembly for a file
+CTable.cpp.s:
+	$(MAKE) -f CMakeFiles/lab9.dir/build.make CMakeFiles/lab9.dir/CTable.cpp.s
+.PHONY : CTable.cpp.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -159,6 +186,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... lab9"
 	@echo "... edit_cache"
+	@echo "... CTable.o"
+	@echo "... CTable.i"
+	@echo "... CTable.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
