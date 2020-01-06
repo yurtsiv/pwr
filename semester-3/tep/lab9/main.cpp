@@ -31,12 +31,14 @@ int main() {
     problem.setInXfMinMax(0, 0, xfMinMax);
     problem.setInXmMinMax(0, 0, xmMinMax);
 
+    problem.saveToFile("problem1.txt");
 
-//    problem.saveToFile("problem1.txt");
+    std::ifstream file("problem1.txt");
+    MSCNProblem problem1(file);
+    file.close();
 
-    MSCNProblem problem2;
-    std::ifstream file("problem1");
-//    problem2.readFromStream(file);
-    cout << problem.getQuality(new double[3] { 1, 1, 1 }, 3);
+//    cout << problem.getQuality(new double[3] { 1, 1, 1 }, 3);
+    cout << "Happy end" << endl;
+
     return 0;
 }

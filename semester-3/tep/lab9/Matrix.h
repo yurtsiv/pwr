@@ -6,6 +6,10 @@ using namespace std;
 template <typename T>
 class Matrix {
 public:
+    Matrix() {
+        resize(2, 2);
+    }
+
     Matrix(int width, int height) {
         resize(width, height);
     }

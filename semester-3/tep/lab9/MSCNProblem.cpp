@@ -15,12 +15,53 @@ MSCNProblem::MSCNProblem() :
     ps(1),
     xdMinMax(1, 1),
     xfMinMax(1, 1),
-    xmMinMax(1, 1)
-{
-    setD(1);
-    setF(1);
-    setM(1);
-    setS(1);
+    xmMinMax(1, 1),
+    D(1),
+    F(1),
+    M(1),
+    S(1) {}
+
+MSCNProblem::MSCNProblem(std::istream &is) {
+    streamIgnoreChar(is, 1);
+    D = streamGet<int>(is);
+    streamIgnoreChar(is, 1);
+    F = streamGet<int>(is);
+    streamIgnoreChar(is, 1);
+    M = streamGet<int>(is);
+    streamIgnoreChar(is, 1);
+    S = streamGet<int>(is);
+
+    streamIgnoreChar(is, 2);
+    sd = Table<double>(is, D);
+    streamIgnoreChar(is, 2);
+    sf = Table<double>(is, F);
+    streamIgnoreChar(is, 2);
+    sm = Table<double>(is, M);
+    streamIgnoreChar(is, 2);
+    ss = Table<double>(is, S);
+
+    streamIgnoreChar(is, 2);
+    cd = Matrix<double>(is, F, D);
+    streamIgnoreChar(is, 2);
+    cf = Matrix<double>(is, M, F);
+    streamIgnoreChar(is, 2);
+    cm = Matrix<double>(is, S, M);
+
+    streamIgnoreChar(is, 2);
+    ud = Table<double>(is, D);
+    streamIgnoreChar(is, 2);
+    uf = Table<double>(is, F);
+    streamIgnoreChar(is, 2);
+    um = Table<double>(is, M);
+    streamIgnoreChar(is, 1);
+    ps = Table<double>(is, S);
+
+//    streamIgnoreChar(is, 8);
+//    specialRead(xdMinMax, is, fCount, dCount);
+//    streamIgnoreChar(is, 8);
+//    specialRead(xfMinMax, is, mCount, fCount);
+//    streamIgnoreChar(is, 8);
+//    specialRead(xmMinMax, is, sCount, mCount);
 }
 
 
@@ -93,48 +134,6 @@ Table<Bounds>* MSCNProblem::getSolutionBounds() {
     return res;
 }
 
-void MSCNProblem::readFromStream(std::istream &is) {
-    streamIgnoreChar(is, 1);
-    D = streamGet<int>(is);
-    streamIgnoreChar(is, 1);
-    F = streamGet<int>(is);
-    streamIgnoreChar(is, 1);
-    M = streamGet<int>(is);
-    streamIgnoreChar(is, 1);
-    S = streamGet<int>(is);
-
-    streamIgnoreChar(is, 2);
-    sd = Table<double>(is, D);
-    streamIgnoreChar(is, 2);
-    sf = Table<double>(is, F);
-    streamIgnoreChar(is, 2);
-    sm = Table<double>(is, M);
-    streamIgnoreChar(is, 2);
-    ss = Table<double>(is, S);
-
-    streamIgnoreChar(is, 2);
-    cd = Matrix<double>(is, F, D);
-    streamIgnoreChar(is, 2);
-    cf = Matrix<double>(is, M, F);
-    streamIgnoreChar(is, 2);
-    cm = Matrix<double>(is, S, M);
-
-    streamIgnoreChar(is, 2);
-    ud = Table<double>(is, D);
-    streamIgnoreChar(is, 2);
-    uf = Table<double>(is, F);
-    streamIgnoreChar(is, 2);
-    um = Table<double>(is, M);
-    streamIgnoreChar(is, 1);
-    ps = Table<double>(is, S);
-
-//    streamIgnoreChar(is, 8);
-//    specialRead(xdminmax, is, fCount, dCount);
-//    streamIgnoreChar(is, 8);
-//    specialRead(xfminmax, is, mCount, fCount);
-//    streamIgnoreChar(is, 8);
-//    specialRead(xmminmax, is, sCount, mCount);
-}
 
 std::ostream& operator<< (std::ostream& os, const MSCNProblem& p)
 {
@@ -197,12 +196,12 @@ std::ostream& operator<< (std::ostream& os, const MSCNProblem& p)
     os << "xmminmax";
     os << "\n";
     os << p.xmMinMax;
-    os << "\n";
+    os << endl;
 
     return os;
 }
 
-void MSCNProblem::saveToFile(std::string const &path) {
+void MSCNProblem::saveToFile(std::string const& path) {
     std::ofstream file(path);
     file << *this;
     file.close();
@@ -389,6 +388,8 @@ double MSCNProblem::calcIncome(Matrix<double> *xm) {
     for (int m = 0; m < M; m++)
         for (int s = 0; s < S; s++)
             res += ps.get(s) * xm->get(m, s);
+
+    return res;
 }
 
 double MSCNProblem::calcTransportCost(Matrix<double> *xd, Matrix<double> *xf, Matrix<double> *xm) {

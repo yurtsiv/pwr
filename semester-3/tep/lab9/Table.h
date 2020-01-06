@@ -25,7 +25,8 @@ public:
     }
 
     Table(std::istream &is, int size) {
-        setNewSize(size);
+        array_pointer = new T[size];
+        length = size;
 
         for(int i = 0; i < size; i++)
             set(streamGet<T>(is), i);
