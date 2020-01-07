@@ -8,11 +8,6 @@
 template<typename T>
 class Table {
 public:
-    Table() {
-        length = defaultSize;
-        array_pointer = new T[defaultSize];
-    }
-
     Table(int tableLen) {
         length = tableLen;
         array_pointer = new T[tableLen];
@@ -24,12 +19,12 @@ public:
         memcpy(array_pointer, other.array_pointer, other.length);
     }
 
-    Table(std::istream &is, int size) {
+    Table(std::istream& is, int size) {
         array_pointer = new T[size];
         length = size;
 
         for(int i = 0; i < size; i++)
-            set(streamGet<T>(is), i);
+            set(i, streamGet<T>(is));
     }
 
     ~Table() {

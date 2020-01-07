@@ -4,41 +4,38 @@
 
 using namespace std;
 
-int main() {
-    MSCNProblem problem;
-
-    problem.setInCd(0, 0, 3);
-    problem.setInCf(0, 0, 4);
-    problem.setInCm(0, 0, 1);
-
-    problem.setInUd(0, 10);
-    problem.setInUf(0, 10);
-    problem.setInUm(0, 10);
-
-    problem.setInSd(0, 100);
-    problem.setInSf(0, 50);
-    problem.setInSm(0, 10.5);
-
-    problem.setInSs(0, 100);
-
-    problem.setInPs(0, 100);
-
-    Bounds xdMinMax(0, 100);
-    Bounds xfMinMax(0, 100);
-    Bounds xmMinMax(0, 100);
-
-    problem.setInXdMinMax(0, 0, xdMinMax);
-    problem.setInXfMinMax(0, 0, xfMinMax);
-    problem.setInXmMinMax(0, 0, xmMinMax);
-
-    problem.saveToFile("problem1.txt");
-
+void test1() {
     std::ifstream file("problem1.txt");
-    MSCNProblem problem1(file);
+    MSCNProblem problem(file);
     file.close();
 
-//    cout << problem.getQuality(new double[3] { 1, 1, 1 }, 3);
-    cout << "Happy end" << endl;
+    double* solution = new double[3] { 1, 1, 1 };
+
+    cout << "--- Test 1 ---" << endl;
+    cout << "Constraints satisfied: " << problem.constraintsSatisfied(solution, 3) << endl;
+    cout << "Quality: " << problem.getQuality(solution, 3) << endl;
+
+    delete[] solution;
+}
+
+void test2() {
+    std::ifstream file("problem2.txt");
+    MSCNProblem problem(file);
+    file.close();
+
+    double* solution = new double[8] { 36, 82, 32, 71, 4.2, 8.0, 54.7,  15.5 };
+
+    cout << "--- Test 2 ---" << endl;
+    cout << "Constraints satisfied: " << problem.constraintsSatisfied(solution, 3) << endl;
+
+    cout << "Quality: " << problem.getQuality(solution, 3) << endl;
+
+    delete[] solution;
+}
+
+int main() {
+    test1();
+    test2();
 
     return 0;
 }

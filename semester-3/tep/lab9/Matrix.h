@@ -6,45 +6,51 @@ using namespace std;
 template <typename T>
 class Matrix {
 public:
-    Matrix() {
-        resize(2, 2);
-    }
-
     Matrix(int width, int height) {
-        resize(width, height);
+        this->width = width;
+        this->height = height;
+        table = new Table<T>(width * height);
     }
 
     Matrix(std::istream& is, int width, int height) {
-        resize(width, height);
+        table = new Table<T>(width * height);
+        this->width = width;
+        this->height = height;
 
         for(int i = 0; i < height; i++) {
-            for(int j = 0; j < width; j++)
-                set(streamGet<T>(is), i, j);
+            for(int j = 0; j < width; j++) {
+                T val = streamGet<T>(is);
+                set(j, i, val);
+            }
         }
+    }
+
+    ~Matrix() {
+        delete table;
     }
 
     void resize(int width, int height) {
         this->width = width;
         this->height = height;
-        table.setNewSize(width * height);
+        table->setNewSize(width * height);
     }
 
     bool set(int x, int y, T val) {
         if (x < 0 || x >= width || y < 0 || y >= height) return false;
-        table.set(y * width + x, val);
+        table->set(y * width + x, val);
 
         return true;
     }
 
     T get(int x, int y) const {
-        return table.get(y * width + x);
+        return table->get(y * width + x);
     }
 
-    void setInternalTable(SmartPointer<Table<T> >& new_table) {
-        if (new_table->getLen() != table.getLen()) return;
+    void setInternalTable(Table<T>* new_table) {
+        if (new_table->getLen() != table->getLen()) return;
 
-        for (int i = 0; i < table.getLen(); i++)
-            table.set(i, new_table->get(i));
+        for (int i = 0; i < table->getLen(); i++)
+            table->set(i, new_table->get(i));
     }
 
     void print() {
@@ -75,7 +81,9 @@ public:
 
     bool rowContainsPositiveNum(int row) {
         for (int i = 0; i < width; i++) {
-            if (get(i, row) > 0) return true;
+            if (get(i, row) > 0) {
+                return true;
+            }
         }
 
         return false;
@@ -93,7 +101,7 @@ public:
     }
 
 private:
-    Table<T> table;
+    Table<T>* table;
     int width;
     int height;
 };

@@ -1,26 +1,7 @@
 #include "SmartPointer.h"
 #include "MSCNProblem.h"
 
-MSCNProblem::MSCNProblem() :
-    cd(1, 1),
-    cf(1, 1),
-    cm(1, 1),
-    ud(1),
-    uf(1),
-    um(1),
-    sd(1),
-    sf(1),
-    sm(1),
-    ss(1),
-    ps(1),
-    xdMinMax(1, 1),
-    xfMinMax(1, 1),
-    xmMinMax(1, 1),
-    D(1),
-    F(1),
-    M(1),
-    S(1) {}
-
+MSCNProblem::MSCNProblem() {}
 MSCNProblem::MSCNProblem(std::istream &is) {
     streamIgnoreChar(is, 1);
     D = streamGet<int>(is);
@@ -32,45 +13,63 @@ MSCNProblem::MSCNProblem(std::istream &is) {
     S = streamGet<int>(is);
 
     streamIgnoreChar(is, 2);
-    sd = Table<double>(is, D);
+    sd = new Table<double>(is, D);
     streamIgnoreChar(is, 2);
-    sf = Table<double>(is, F);
+    sf = new Table<double>(is, F);
     streamIgnoreChar(is, 2);
-    sm = Table<double>(is, M);
+    sm = new Table<double>(is, M);
     streamIgnoreChar(is, 2);
-    ss = Table<double>(is, S);
+    ss = new Table<double>(is, S);
 
     streamIgnoreChar(is, 2);
-    cd = Matrix<double>(is, F, D);
+    cd = new Matrix<double>(is, F, D);
     streamIgnoreChar(is, 2);
-    cf = Matrix<double>(is, M, F);
+    cf = new Matrix<double>(is, M, F);
     streamIgnoreChar(is, 2);
-    cm = Matrix<double>(is, S, M);
+    cm = new Matrix<double>(is, S, M);
 
     streamIgnoreChar(is, 2);
-    ud = Table<double>(is, D);
+    ud = new Table<double>(is, D);
     streamIgnoreChar(is, 2);
-    uf = Table<double>(is, F);
+    uf = new Table<double>(is, F);
     streamIgnoreChar(is, 2);
-    um = Table<double>(is, M);
+    um = new Table<double>(is, M);
     streamIgnoreChar(is, 1);
-    ps = Table<double>(is, S);
+    ps = new Table<double>(is, S);
 
-//    streamIgnoreChar(is, 8);
-//    specialRead(xdMinMax, is, fCount, dCount);
-//    streamIgnoreChar(is, 8);
-//    specialRead(xfMinMax, is, mCount, fCount);
-//    streamIgnoreChar(is, 8);
-//    specialRead(xmMinMax, is, sCount, mCount);
+    xdMinMax = new Matrix<Bounds>(F, D);
+    xfMinMax = new Matrix<Bounds>(M, F);
+    xmMinMax = new Matrix<Bounds>(S, M);
+}
+
+MSCNProblem::~MSCNProblem() {
+    delete cd;
+    delete cf;
+    delete cm;
+    delete ud;
+    delete uf;
+    delete um;
+    delete sd;
+    delete sf;
+    delete sm;
+    delete ss;
+    delete ps;
+
+    delete xdMinMax;
+    delete xfMinMax;
+    delete xmMinMax;
 }
 
 
-double MSCNProblem::getQuality(double *solution, int len) {
+double MSCNProblem::getQuality(double* solution, int len) {
     if (!isSolutionCorrect(solution, len)) return 0;
 
     Solution s = parseSolution(solution, len);
+    double i = calcIncome(s.xm);
+    double t = calcTransportCost(s.xd, s.xf, s.xm);
+    double u = calcServiceUsageCost(s.xd, s.xf, s.xm);
 
-    return calcIncome(s.xm) - calcTransportCost(s.xd, s.xf, s.xm) - calcServiceUsageCost(s.xd, s.xf, s.xm);
+    return i - t - u;
 }
 
 bool MSCNProblem::constraintsSatisfied(double* solution, int len) {
@@ -79,19 +78,19 @@ bool MSCNProblem::constraintsSatisfied(double* solution, int len) {
     Solution parsed_solution = parseSolution(solution, len);
 
     for (int i = 0; i < D; i++) {
-        if (parsed_solution.xd->sumRow(i) > sd.get(i)) return false;
+        if (parsed_solution.xd->sumRow(i) > sd->get(i)) return false;
     }
 
     for (int i = 0; i < F; i++) {
-        if (parsed_solution.xf->sumRow(i) > sf.get(i)) return false;
+        if (parsed_solution.xf->sumRow(i) > sf->get(i)) return false;
     }
 
     for (int i = 0; i < M; i++) {
-        if (parsed_solution.xm->sumRow(i) > sm.get(i)) return false;
+        if (parsed_solution.xm->sumRow(i) > sm->get(i)) return false;
     }
 
     for (int i = 0; i < S; i++) {
-        if (parsed_solution.xm->sumColumn(i) > ss.get(i)) return false;
+        if (parsed_solution.xm->sumColumn(i) > ss->get(i)) return false;
     }
 
     for (int i = 0; i < F; i++) {
@@ -110,23 +109,23 @@ Table<Bounds>* MSCNProblem::getSolutionBounds() {
 
     int res_index = 0;
 
-    for (int y = 0; y < xdMinMax.getHeight(); y++) {
-        for (int x = 0; x < xdMinMax.getWidth(); x++) {
-            res->set(res_index, xdMinMax.get(x, y));
+    for (int y = 0; y < xdMinMax->getHeight(); y++) {
+        for (int x = 0; x < xdMinMax->getWidth(); x++) {
+            res->set(res_index, xdMinMax->get(x, y));
             res_index++;
         }
     }
 
-    for (int y = 0; y < xfMinMax.getHeight(); y++) {
-        for (int x = 0; x < xfMinMax.getWidth(); x++) {
-            res->set(res_index, xfMinMax.get(x, y));
+    for (int y = 0; y < xfMinMax->getHeight(); y++) {
+        for (int x = 0; x < xfMinMax->getWidth(); x++) {
+            res->set(res_index, xfMinMax->get(x, y));
             res_index++;
         }
     }
 
-    for (int y = 0; y < xmMinMax.getHeight(); y++) {
-        for (int x = 0; x < xmMinMax.getWidth(); x++) {
-            res->set(res_index, xmMinMax.get(x, y));
+    for (int y = 0; y < xmMinMax->getHeight(); y++) {
+        for (int x = 0; x < xmMinMax->getWidth(); x++) {
+            res->set(res_index, xmMinMax->get(x, y));
             res_index++;
         }
     }
@@ -184,20 +183,6 @@ std::ostream& operator<< (std::ostream& os, const MSCNProblem& p)
     os << "p";
     os << "\n";
     os << p.ps;
-    os << "\n";
-    os << "xdminmax";
-    os << "\n";
-    os << p.xdMinMax;
-    os << "\n";
-    os << "xfminmax";
-    os << "\n";
-    os << p.xfMinMax;
-    os << "\n";
-    os << "xmminmax";
-    os << "\n";
-    os << p.xmMinMax;
-    os << endl;
-
     return os;
 }
 
@@ -212,10 +197,10 @@ bool MSCNProblem::setD(int d) {
 
     D = d;
 
-    cd.resize(F, D);
-    sd.setNewSize(D);
-    ud.setNewSize(D);
-    xdMinMax.resize(F, D);
+    cd->resize(F, D);
+    sd->setNewSize(D);
+    ud->setNewSize(D);
+    xdMinMax->resize(F, D);
 
     return true;
 }
@@ -225,14 +210,14 @@ bool MSCNProblem::setF(int f) {
 
     F = f;
 
-    cd.resize(F, D);
-    cf.resize(M, F);
+    cd->resize(F, D);
+    cf->resize(M, F);
 
-    sf.setNewSize(F);
-    uf.setNewSize(F);
+    sf->setNewSize(F);
+    uf->setNewSize(F);
 
-    xdMinMax.resize(F, D);
-    xfMinMax.resize(M, F);
+    xdMinMax->resize(F, D);
+    xfMinMax->resize(M, F);
 
     return true;
 }
@@ -242,14 +227,14 @@ bool MSCNProblem::setM(int m) {
 
     M = m;
 
-    cf.resize(M, F);
-    cm.resize(S, M);
+    cf->resize(M, F);
+    cm->resize(S, M);
 
-    sm.setNewSize(M);
-    um.setNewSize(M);
+    sm->setNewSize(M);
+    um->setNewSize(M);
 
-    xfMinMax.resize(M, F);
-    xmMinMax.resize(S, M);
+    xfMinMax->resize(M, F);
+    xmMinMax->resize(S, M);
 
     return true;
 }
@@ -259,12 +244,12 @@ bool MSCNProblem::setS(int s) {
 
     S = s;
 
-    cm.resize(S, M);
+    cm->resize(S, M);
 
-    ss.setNewSize(S);
-    ps.setNewSize(S);
+    ss->setNewSize(S);
+    ps->setNewSize(S);
 
-    xmMinMax.resize(S, M);
+    xmMinMax->resize(S, M);
 
     return true;
 }
@@ -325,27 +310,27 @@ bool MSCNProblem::setInXmMinMax(int x, int y, Bounds bounds) {
     return setInMinMaxMatrix(xmMinMax, x, y, bounds);
 }
 
-bool MSCNProblem::setInCostsMatrix(Matrix<double>& m, int x, int y, double val) {
+bool MSCNProblem::setInCostsMatrix(Matrix<double>* m, int x, int y, double val) {
     if (val < 0) return false;
 
-    return m.set(x, y, val);
+    return m->set(x, y, val);
 }
 
-bool MSCNProblem::setInTable(Table<double>& t, int i, double val) {
-    if (val < 0 || i < 0 || i >= t.getLen()) return false;
+bool MSCNProblem::setInTable(Table<double>* t, int i, double val) {
+    if (val < 0 || i < 0 || i >= t->getLen()) return false;
 
-    t.set(i, val);
+    t->set(i, val);
 
     return true;
 }
 
-bool MSCNProblem::setInMinMaxMatrix(Matrix<Bounds>& m, int x, int y, Bounds bounds) {
+bool MSCNProblem::setInMinMaxMatrix(Matrix<Bounds>* m, int x, int y, Bounds bounds) {
     if (bounds.min < 0 || bounds.max < 0 || bounds.max < bounds.min) return false;
 
-    return m.set(x, y, bounds);
+    return m->set(x, y, bounds);
 }
 
-bool MSCNProblem::isSolutionCorrect(double *solution, int len) {
+bool MSCNProblem::isSolutionCorrect(double* solution, int len) {
     if (solution == NULL) return false;
 
     if (len != getRequiredSolutionLen()) return false;
@@ -358,18 +343,18 @@ bool MSCNProblem::isSolutionCorrect(double *solution, int len) {
 }
 
 Solution MSCNProblem::parseSolution(double* solution, int len) {
-    Table<double> solution_table;
+    Table<double> solution_table(len);
     solution_table.setArray(solution, len);
 
     Matrix<double>* xd = new Matrix<double>(F, D);
     Matrix<double>* xf = new Matrix<double>(M, F);
     Matrix<double>* xm = new Matrix<double>(S, M);
 
-    SmartPointer<Table<double> > xdTable(solution_table.slice(0, F*D));
+    Table<double>* xdTable = solution_table.slice(0, F*D);
     int xfOffset = xdTable->getLen();
-    SmartPointer<Table<double> > xfTable(solution_table.slice(xfOffset, xfOffset + F * M));
+    Table<double>* xfTable = solution_table.slice(xfOffset, xfOffset + F * M);
     int xmOffset = xfOffset + xfTable->getLen();
-    SmartPointer<Table<double> > xmTable(solution_table.slice(xmOffset, xmOffset + M * S) );
+    Table<double>* xmTable = solution_table.slice(xmOffset, xmOffset + M * S);
 
 
     xd->setInternalTable(xdTable);
@@ -387,7 +372,7 @@ double MSCNProblem::calcIncome(Matrix<double> *xm) {
     double res = 0;
     for (int m = 0; m < M; m++)
         for (int s = 0; s < S; s++)
-            res += ps.get(s) * xm->get(m, s);
+            res += ps->get(s) * xm->get(m, s);
 
     return res;
 }
@@ -397,30 +382,36 @@ double MSCNProblem::calcTransportCost(Matrix<double> *xd, Matrix<double> *xf, Ma
 
     for (int d = 0; d < D; d++)
         for (int f = 0; f < F; f++)
-            res += cd.get(d, f) * xd->get(d, f);
+            res += cd->get(d, f) * xd->get(d, f);
 
     for (int f = 0; f < F; f++)
         for (int m = 0; m < M; m++)
-            res += cf.get(f, m) * xf->get(f, m);
+            res += cf->get(f, m) * xf->get(f, m);
 
     for (int m = 0; m < M; m++)
         for (int s = 0; s < S; s++)
-            res += cm.get(m, s) * xm->get(m, s);
+            res += cm->get(m, s) * xm->get(m, s);
 
     return res;
 }
 
-double MSCNProblem::calcServiceUsageCost(Matrix<double> *xd, Matrix<double> *xf, Matrix<double> *xm) {
+double MSCNProblem::calcServiceUsageCost(Matrix<double>* xd, Matrix<double>* xf, Matrix<double>* xm) {
     double res = 0;
 
     for (int d = 0; d < D; d++)
-        if (xd->rowContainsPositiveNum(d)) res += ud.get(d);
+        if (xd->rowContainsPositiveNum(d)) {
+            res += ud->get(d);
+        }
 
     for (int f = 0; f < F; f++)
-        if (xf->rowContainsPositiveNum(f)) res += uf.get(f);
+        if (xf->rowContainsPositiveNum(f)) {
+            res += ud->get(f);
+        }
 
     for (int m = 0; m < M; m++)
-        if (xm->rowContainsPositiveNum(m)) res += um.get(m);
+        if (xm->rowContainsPositiveNum(m)) {
+            res += um->get(m);
+        }
 
     return res;
 }

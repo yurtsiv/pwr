@@ -2,22 +2,9 @@
 #include <fstream>
 #include "Matrix.h"
 
-class Bounds {
-public:
+struct Bounds {
     double min;
     double max;
-
-    Bounds(): min(0), max(0) {}
-
-    Bounds(double min, double max) {
-        this->min = min;
-        this->max = max;
-    }
-
-    friend std::ostream& operator<<(std::ostream& os, const Bounds& bounds) {
-        os << "(" << bounds.min << ", " << bounds.max << ") ";
-        return os;
-    }
 };
 
 struct Solution {
@@ -30,6 +17,7 @@ class MSCNProblem {
 public:
     MSCNProblem();
     MSCNProblem(std::istream& is);
+    ~MSCNProblem();
 
     double getQuality(double* solution, int len);
     bool constraintsSatisfied(double* solution, int len);
@@ -67,33 +55,33 @@ private:
     int D, F, M, S;
 
     // Production/transport costs
-    Matrix<double> cd;
-    Matrix<double> cf;
-    Matrix<double> cm;
+    Matrix<double>* cd;
+    Matrix<double>* cf;
+    Matrix<double>* cm;
 
     // Costs of single operation
-    Table<double> ud;
-    Table<double> uf;
-    Table<double> um;
+    Table<double>* ud;
+    Table<double>* uf;
+    Table<double>* um;
 
     // Production powers
-    Table<double> sd;
-    Table<double> sf;
-    Table<double> sm;
+    Table<double>* sd;
+    Table<double>* sf;
+    Table<double>* sm;
 
     // Market demand
-    Table<double> ss;
+    Table<double>* ss;
 
     // Income from markets
-    Table<double> ps;
+    Table<double>* ps;
 
-    Matrix<Bounds> xdMinMax;
-    Matrix<Bounds> xfMinMax;
-    Matrix<Bounds> xmMinMax;
+    Matrix<Bounds>* xdMinMax;
+    Matrix<Bounds>* xfMinMax;
+    Matrix<Bounds>* xmMinMax;
 
-    bool setInCostsMatrix(Matrix<double>& m, int x, int y, double val);
-    bool setInTable(Table<double>& t, int i, double val);
-    bool setInMinMaxMatrix(Matrix<Bounds>& m, int x, int y, Bounds bounds);
+    bool setInCostsMatrix(Matrix<double>* m, int x, int y, double val);
+    bool setInTable(Table<double>* t, int i, double val);
+    bool setInMinMaxMatrix(Matrix<Bounds>* m, int x, int y, Bounds bounds);
     bool isSolutionCorrect(double* solution, int len);
 
     Solution parseSolution(double* solution, int len);
