@@ -1,4 +1,6 @@
 class Time(private var _hour: Int, private var _minute: Int) {
+  private var _minutes = _hour * 60 + _minute;
+
   checkHour(_hour)
   checkMinute(_minute)
 
@@ -8,15 +10,17 @@ class Time(private var _hour: Int, private var _minute: Int) {
   def hour_=(hour: Int) = {
     checkHour(hour)
     _hour = hour
+    _minutes += hour * 60
   }
 
   def minute_=(minute: Int) = {
     checkMinute(minute)
     _minute = minute
+    _minutes += minute
   }
 
   def before(other: Time) =
-    (_hour < other._hour) || (_hour == other._hour && _minute < other._minute)
+    _minutes < other._minutes
 
   private def checkHour(h: Int) =
     if (h < 0 || h > 23)
@@ -25,5 +29,4 @@ class Time(private var _hour: Int, private var _minute: Int) {
   private def checkMinute(m: Int) =
     if (m < 0 || m > 60)
       throw new IllegalArgumentException("Wrong minute value provided")
-
 }
