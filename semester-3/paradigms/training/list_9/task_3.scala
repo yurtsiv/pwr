@@ -1,0 +1,1 @@
+class Pojazd(val producent: String, val model: String, val rok: Int = -1, var numer: String = "")
