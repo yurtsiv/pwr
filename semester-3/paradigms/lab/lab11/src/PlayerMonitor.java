@@ -74,7 +74,7 @@ public class PlayerMonitor extends Thread {
     public void run() {
         while(true) {
             if (ballNum != -1) {
-                System.out.println("Player " + num + " has received the ball " + ballNum);
+                System.out.println("Player " + num + " has received the  ball " + ballNum);
                 sleepRandomTime();
                 passBallToRandomPlayer();
             }
