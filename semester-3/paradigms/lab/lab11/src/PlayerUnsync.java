@@ -1,14 +1,15 @@
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Player extends Thread {
-    private ArrayList<Player> players;
-    private int waitingTIme = 0, num;
+public class PlayerUnsync extends Thread {
+    private ArrayList<PlayerUnsync> players;
+    private int waitingTime = 0, num;
     private volatile int ballNum = -1;
 
-    public Player(ArrayList<Player> players, int num) {
+    public PlayerUnsync(ArrayList<PlayerUnsync> players, int num, int ballNum) {
         this.num = num;
         this.players = players;
+        this.ballNum = ballNum;
         players.add(this);
     }
 
@@ -18,26 +19,26 @@ public class Player extends Thread {
 
     private static int getRandomInt(int min, int max) {
         Random r = new Random();
-        return r.nextInt(max);
+        return r.nextInt(max - min) + min;
     }
 
     public int getWaitingTime() {
-        return waitingTIme;
+        return waitingTime;
     }
 
     public int getNum() {
         return num;
     }
 
-    private Player getRandomPlayer() {
+    private PlayerUnsync getRandomPlayer() {
         return players.get(getRandomInt(0, players.size()));
     }
 
     private void sleep(int time) {
-        waitingTIme = time;
+        waitingTime = time;
         try {
             Thread.sleep(time);
-            waitingTIme = 0;
+            waitingTime = 0;
         } catch (InterruptedException e) {
             System.err.println(e);
         }
@@ -50,21 +51,18 @@ public class Player extends Thread {
     }
 
     private void passBallToRandomPlayer() {
-        Player otherPlayer = getRandomPlayer();
+        PlayerUnsync otherPlayer = getRandomPlayer();
         while(otherPlayer == this) {
             otherPlayer = getRandomPlayer();
         }
 
-
-        System.out.println("Player " + num + " tries to give the ball " + ballNum + " to the player " + otherPlayer.getNum());
-
+        System.out.println("Player " + num + " gives the ball " + ballNum + " to the player " + otherPlayer.getNum());
         while(otherPlayer.getWaitingTime() > 0) {
             int time = otherPlayer.getWaitingTime();
             System.out.println("Player " + otherPlayer.getNum() + " is busy. Player " + num + " is waiting for " + time);
             sleep(time);
         }
 
-        System.out.println("Player " + num + " gives the ball " + ballNum + " to the player " + otherPlayer.getNum());
 
         otherPlayer.receiveBall(ballNum);
         ballNum = -1;
@@ -74,7 +72,7 @@ public class Player extends Thread {
     public void run() {
         while(true) {
             if (ballNum != -1) {
-                System.out.println("Player " + num + " has received ball " + ballNum);
+                System.out.println("Player " + num + " has received the ball " + ballNum);
                 sleepRandomTime();
                 passBallToRandomPlayer();
             }
