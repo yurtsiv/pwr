@@ -12,8 +12,16 @@ void test1() {
 
     cout << "\n--- Test 1 ---" << endl;
 
+    cout << "Min max: ";
+    Table<Table<double>> minMax = problem.getMinMaxValues();
+    for (int i = 0; i < minMax.size(); i++) {
+        for (int j = 0; j < minMax[i].size(); j+=2) {
+            cout << "(" << minMax[i][j] << ", " << minMax[i][j+1] << ") | ";
+        }
+    }
+
     int error;
-    cout << "Constraints satisfied: " << problem.constraintsSatisfied(solution, 3, error) << endl;
+    cout << "\nConstraints satisfied: " << problem.constraintsSatisfied(solution, 3, error) << endl;
     cout << "Quality: " << problem.getQuality(solution, 3, error) << endl;
 }
 
@@ -40,8 +48,16 @@ void test3() {
 
     cout << "\n--- Test 3 ---" << endl;
 
+    cout << "Min max: ";
+    Table<Table<double>> minMax = problem.getMinMaxValues();
+    for (int i = 0; i < minMax.size(); i++) {
+        for (int j = 0; j < minMax[i].size(); j+=2) {
+            cout << "(" << minMax[i][j] << ", " << minMax[i][j+1] << ") | ";
+        }
+    }
+
     int error;
-    cout << "Constraints satisfied: " << problem.constraintsSatisfied(solution, 8, error) << endl;
+    cout << "\nConstraints satisfied: " << problem.constraintsSatisfied(solution, 8, error) << endl;
     cout << "Quality: " << problem.getQuality(solution, 8, error) << endl;
 }
 
