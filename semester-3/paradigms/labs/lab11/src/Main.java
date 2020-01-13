@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Main {
-    static int playersNum = 3;
+    static int playersNum = 5;
     static int ballsNum = 2;
 
 
@@ -42,8 +42,8 @@ public class Main {
     }
 
     public static void main(String[] args) {
-//        testUnSynchronized();
-        testMonitors();
+        testUnSynchronized();
+//        testMonitors();
 //        testSemaphores();
     }
 }

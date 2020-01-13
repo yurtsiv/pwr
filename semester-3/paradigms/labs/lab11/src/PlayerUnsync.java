@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class PlayerUnsync extends Thread {
+    private static Random random = new Random();
     private ArrayList<PlayerUnsync> players;
     private int waitingTime = 0, num;
     private volatile int ballNum = -1;
@@ -18,8 +19,7 @@ public class PlayerUnsync extends Thread {
     }
 
     private static int getRandomInt(int min, int max) {
-        Random r = new Random();
-        return r.nextInt(max - min) + min;
+        return random.nextInt(max - min) + min;
     }
 
     public int getWaitingTime() {
@@ -45,7 +45,7 @@ public class PlayerUnsync extends Thread {
     }
 
     private void sleepRandomTime() {
-        int time = getRandomInt(500, 3000);
+        int time = getRandomInt(500, 2000);
         System.out.println("Player " + num + " sleeps for " + time);
         sleep(time);
     }
