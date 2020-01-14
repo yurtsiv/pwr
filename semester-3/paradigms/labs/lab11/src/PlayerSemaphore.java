@@ -3,6 +3,7 @@ import java.util.Random;
 import java.util.concurrent.Semaphore;
 
 public class PlayerSemaphore extends Thread {
+    private static Random random = new Random();
     private ArrayList<PlayerSemaphore> players;
     private int waitingTime = 0, num;
     private volatile int ballNum = -1;
@@ -26,8 +27,7 @@ public class PlayerSemaphore extends Thread {
     }
 
     private static int getRandomInt(int min, int max) {
-        Random r = new Random();
-        return r.nextInt(max - min) + min;
+        return random.nextInt(max - min) + min;
     }
 
     public int getWaitingTime() {

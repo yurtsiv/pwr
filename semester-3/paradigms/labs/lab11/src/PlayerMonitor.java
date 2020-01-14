@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class PlayerMonitor extends Thread {
+    private static Random random = new Random();
     private ArrayList<PlayerMonitor> players;
     private int waitingTime = 0, num;
     private volatile int ballNum = -1;
@@ -19,8 +20,7 @@ public class PlayerMonitor extends Thread {
     }
 
     private static int getRandomInt(int min, int max) {
-        Random r = new Random();
-        return r.nextInt(max - min) + min;
+        return random.nextInt(max - min) + min;
     }
 
     public int getWaitingTime() {
@@ -69,7 +69,6 @@ public class PlayerMonitor extends Thread {
         otherPlayer.giveBall(ballNum);
         ballNum = -1;
     }
-
 
     public void run() {
         while(true) {
