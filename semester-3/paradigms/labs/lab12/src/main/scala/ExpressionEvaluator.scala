@@ -3,7 +3,6 @@ import akka.actor._
 object ExpressionEvaluator {
   case object DivisionByZero
   case class Evaluate(expr: ExpressionTree)
-  case class EvaluationResult(v: Double)
 
   case class EvaluateExprArg(arg: ExpressionTree, argIndex: Int)
   case class ArgEvaluationRes(res: Double, argIndex: Int)
@@ -12,110 +11,94 @@ object ExpressionEvaluator {
 }
 
 class ExpressionEvaluator extends Actor {
-  private var evaluatedArg = 0;
-  private var oneArgEvaluated = false;
-  private var currentExpr: ExpressionTree;
+  var evaluatedArg = 0.0
+  var oneArgEvaluated = false
+  var currentExpr: ExpressionTree = Val(0.0)
+  var requester: ActorRef = null
+  var isRootEvaluator = false
+  var argIndex = 0
 
-  // TODO: refactor repetitive code
-  def evalExpr = {
-    case Val(v) => {
-      sender ! EvaluationResult(v)
-    }
-    case Sum(arg1, arg2) => {
-      val evaluator1 = context.actorOf(ExpressionEvaluator)
-      val evaluator2 = context.actorOf(ExpressionEvaluator)
+  def spawnChildren(arg1: ExpressionTree, arg2: ExpressionTree) = {
+    val evaluator1 = context.actorOf(ExpressionEvaluator.props)
+    val evaluator2 = context.actorOf(ExpressionEvaluator.props)
 
-      evaluator1 ! EvaluateExprArg(arg1, 0)
-      evaluator1 ! EvaluateExprArg(arg2, 1)
-    }
-    case Sub(arg1, arg2) => {
-      val evaluator1 = context.actorOf(ExpressionEvaluator)
-      val evaluator2 = context.actorOf(ExpressionEvaluator)
+    evaluator1 ! ExpressionEvaluator.EvaluateExprArg(arg1, 0)
+    evaluator2 ! ExpressionEvaluator.EvaluateExprArg(arg2, 1)
+  }
 
-      evaluator1 ! EvaluateExprArg(arg1, 0)
-      evaluator1 ! EvaluateExprArg(arg2, 1)
-    }
-    case Mul(arg1, arg2) => {
-      val evaluator1 = context.actorOf(ExpressionEvaluator)
-      val evaluator2 = context.actorOf(ExpressionEvaluator)
-
-      evaluator1 ! EvaluateExprArg(arg1, 0)
-      evaluator1 ! EvaluateExprArg(arg2, 1)
-    }
-    case Div(arg1, arg2) => {
-      val evaluator1 = context.actorOf(ExpressionEvaluator)
-      val evaluator2 = context.actorOf(ExpressionEvaluator)
-
-      evaluator1 ! EvaluateExprArg(arg1, 0)
-      evaluator1 ! EvaluateExprArg(arg2, 1)
+  def evalCompoundExpr(expr: ExpressionTree) = {
+    expr match {
+      case Sum(arg1, arg2) => spawnChildren(arg1, arg2)
+      case Sub(arg1, arg2) => spawnChildren(arg1, arg2)
+      case Mul(arg1, arg2) => spawnChildren(arg1, arg2)
+      case Div(arg1, arg2) => spawnChildren(arg1, arg2)
     }
   }
 
-  // TODO: refactor repetitive code
+  def evalExpr(expr:ExpressionTree) = {
+    expr match {
+      case Val(v) => {
+        requester ! ExpressionManager.EvaluationResult(v)
+      }
+      case _ => evalCompoundExpr(expr)
+    }
+  }
+
   def evalExprArg(expr: ExpressionTree, argIndex: Int) = {
     expr match {
-      case Sum(arg1, arg2) => {
-        val evaluator1 = context.actorOf(ExpressionEvaluator)
-        val evaluator2 = context.actorOf(ExpressionEvaluator)
-
-        evaluator1 ! EvaluateExprArg(arg1, 0)
-        evaluator1 ! EvaluateExprArg(arg2, 1)
+      case Val(v) => {
+        requester ! ExpressionEvaluator.ArgEvaluationRes(v, argIndex)
       }
-      case Sub(arg1, arg2) => {
-        val evaluator1 = context.actorOf(ExpressionEvaluator)
-        val evaluator2 = context.actorOf(ExpressionEvaluator)
+      case _ => evalCompoundExpr(expr)
+    }
+  }
 
-        evaluator1 ! EvaluateExprArg(arg1, 0)
-        evaluator1 ! EvaluateExprArg(arg2, 1)
-      }
-      case Mul(arg1, arg2) => {
-        val evaluator1 = context.actorOf(ExpressionEvaluator)
-        val evaluator2 = context.actorOf(ExpressionEvaluator)
-
-        evaluator1 ! EvaluateExprArg(arg1, 0)
-        evaluator1 ! EvaluateExprArg(arg2, 1)
-      }
-      case Div(arg1, arg2) => {
-        val evaluator1 = context.actorOf(ExpressionEvaluator)
-        val evaluator2 = context.actorOf(ExpressionEvaluator)
-
-        evaluator1 ! EvaluateExprArg(arg1, 0)
-        evaluator1 ! EvaluateExprArg(arg2, 1)
-      }
+  def sendOperatorEvalRes(res: Double) = {
+    if (isRootEvaluator) {
+      requester ! ExpressionManager.EvaluationResult(res)
+    } else {
+      requester ! ExpressionEvaluator.ArgEvaluationRes(res, argIndex)
     }
   }
 
   def evalOperator(arg1: Double, arg2: Double) = {
     currentExpr match {
-      Sum(_, _) => sender ! EvaluationResult(arg1 + arg2)
-      Sub(_, _) => sender ! EvaluationResult(arg1 - arg2)
-      Mul(_, _) => sender ! EvaluationResult(arg1 * arg2)
-      Div(_, _) => {
+      case Sum(_, _) => sendOperatorEvalRes(arg1 + arg2)
+      case Sub(_, _) => sendOperatorEvalRes(arg1 - arg2)
+      case Mul(_, _) => sendOperatorEvalRes(arg1 * arg2)
+      case Div(_, _) => {
         if (arg2 == 0) {
-          sender ! DivisionByZero
+          requester ! ExpressionEvaluator.DivisionByZero
         } else {
-          sender ! EvaluationResult(arg1 / arg2)
+          sendOperatorEvalRes(arg1 / arg2)
         }
       }
     }
-
   }
 
   def receive = {
-    case Evaluate(expr) => {
+    case ExpressionEvaluator.Evaluate(expr) => {
+      println(s"Evaluator: Requested to evaluate $expr from $sender")
+      isRootEvaluator = true
+      requester = sender
       currentExpr = expr
       evalExpr(expr) 
     }
-    case EvaluationResult(v) => {
-      sender ! EvaluationResult(v)
+    case ExpressionEvaluator.EvaluateExprArg(arg, index) => {
+      println(s"Evaluator: Requested to evaluate argument $arg")
+      requester = sender
+      currentExpr = arg
+      argIndex = index
+      evalExprArg(arg, index)
     }
-    case EvaluateExprArg(arg, argIndex) => {
-      evalExprArg(arg, argIndex)
+    case ExpressionEvaluator.DivisionByZero => {
+      requester ! ExpressionEvaluator.DivisionByZero
     }
-    case DivisionByZero => {
-      sender ! DivisionByZero
-    }
-    case ArgEvaluationRes(res, argIndex) => {
+    case ExpressionEvaluator.ArgEvaluationRes(res, argIndex) => {
+      println(s"Evaluator: Argument $argIndex evaluated: $res (from $sender)")
+      context.stop(sender)
+
+
       if (oneArgEvaluated) {
         if (argIndex == 0) {
           evalOperator(res, evaluatedArg)
