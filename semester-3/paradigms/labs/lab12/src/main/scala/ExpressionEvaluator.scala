@@ -1,9 +1,12 @@
 import akka.actor._
+import scala.collection.mutable.Map
+
 
 object ExpressionEvaluator {
   case object DivisionByZero
-  case class Evaluate(expr: ExpressionTree)
+  case object EvaluatorIdle
 
+  case class Evaluate(expr: ExpressionTree)
   case class EvaluateExprArg(arg: ExpressionTree, argIndex: Int)
   case class ArgEvaluationRes(res: Double, argIndex: Int)
 
@@ -11,14 +14,14 @@ object ExpressionEvaluator {
 }
 
 class ExpressionEvaluator extends Actor {
-  var evaluatedArg = 0.0
-  var oneArgEvaluated = false
-  var currentExpr: ExpressionTree = Val(0.0)
-  var requester: ActorRef = null
   var isRootEvaluator = false
-  var argIndex = 0
+  var isEvaluating = false
+  var evaluatedArgs: Map[Int, Double] = Map()
+  var currentExpr: ExpressionTree = null
+  var currArgIndex = 0
+  var requester: ActorRef = null
 
-  def spawnChildren(arg1: ExpressionTree, arg2: ExpressionTree) = {
+  def spawnChildrenToEvalArgs(arg1: ExpressionTree, arg2: ExpressionTree) = {
     val evaluator1 = context.actorOf(ExpressionEvaluator.props)
     val evaluator2 = context.actorOf(ExpressionEvaluator.props)
 
@@ -28,36 +31,26 @@ class ExpressionEvaluator extends Actor {
 
   def evalCompoundExpr(expr: ExpressionTree) = {
     expr match {
-      case Sum(arg1, arg2) => spawnChildren(arg1, arg2)
-      case Sub(arg1, arg2) => spawnChildren(arg1, arg2)
-      case Mul(arg1, arg2) => spawnChildren(arg1, arg2)
-      case Div(arg1, arg2) => spawnChildren(arg1, arg2)
+      case Sum(arg1, arg2) => spawnChildrenToEvalArgs(arg1, arg2)
+      case Sub(arg1, arg2) => spawnChildrenToEvalArgs(arg1, arg2)
+      case Mul(arg1, arg2) => spawnChildrenToEvalArgs(arg1, arg2)
+      case Div(arg1, arg2) => spawnChildrenToEvalArgs(arg1, arg2)
     }
   }
 
   def evalExpr(expr:ExpressionTree) = {
     expr match {
-      case Val(v) => {
-        requester ! ExpressionManager.EvaluationResult(v)
-      }
-      case _ => evalCompoundExpr(expr)
-    }
-  }
-
-  def evalExprArg(expr: ExpressionTree, argIndex: Int) = {
-    expr match {
-      case Val(v) => {
-        requester ! ExpressionEvaluator.ArgEvaluationRes(v, argIndex)
-      }
+      case Val(v) => sendOperatorEvalRes(v)
       case _ => evalCompoundExpr(expr)
     }
   }
 
   def sendOperatorEvalRes(res: Double) = {
     if (isRootEvaluator) {
+      isEvaluating = false
       requester ! ExpressionManager.EvaluationResult(res)
     } else {
-      requester ! ExpressionEvaluator.ArgEvaluationRes(res, argIndex)
+      requester ! ExpressionEvaluator.ArgEvaluationRes(res, currArgIndex)
     }
   }
 
@@ -69,6 +62,7 @@ class ExpressionEvaluator extends Actor {
       case Div(_, _) => {
         if (arg2 == 0) {
           requester ! ExpressionEvaluator.DivisionByZero
+          isEvaluating = false
         } else {
           sendOperatorEvalRes(arg1 / arg2)
         }
@@ -78,36 +72,35 @@ class ExpressionEvaluator extends Actor {
 
   def receive = {
     case ExpressionEvaluator.Evaluate(expr) => {
-      println(s"Evaluator: Requested to evaluate $expr from $sender")
-      isRootEvaluator = true
-      requester = sender
-      currentExpr = expr
-      evalExpr(expr) 
+      if (isEvaluating) {
+        sender ! ExpressionEvaluator.EvaluatorIdle
+      } else {
+        isEvaluating = true
+        isRootEvaluator = true
+        requester = sender
+        currentExpr = expr
+        evaluatedArgs = Map()
+        evalExpr(expr) 
+      }
     }
+
     case ExpressionEvaluator.EvaluateExprArg(arg, index) => {
-      println(s"Evaluator: Requested to evaluate argument $arg")
       requester = sender
       currentExpr = arg
-      argIndex = index
-      evalExprArg(arg, index)
+      currArgIndex = index
+      evalExpr(arg)
     }
+
     case ExpressionEvaluator.DivisionByZero => {
       requester ! ExpressionEvaluator.DivisionByZero
     }
+
     case ExpressionEvaluator.ArgEvaluationRes(res, argIndex) => {
-      println(s"Evaluator: Argument $argIndex evaluated: $res (from $sender)")
       context.stop(sender)
+      evaluatedArgs += (argIndex -> res)
 
-
-      if (oneArgEvaluated) {
-        if (argIndex == 0) {
-          evalOperator(res, evaluatedArg)
-        } else {
-          evalOperator(evaluatedArg, res)
-        }
-      } else {
-        oneArgEvaluated = true;
-        evaluatedArg = res;
+      if (evaluatedArgs.contains(0) && evaluatedArgs.contains(1)) {
+        evalOperator(evaluatedArgs(0), evaluatedArgs(1))
       }
     }
   }

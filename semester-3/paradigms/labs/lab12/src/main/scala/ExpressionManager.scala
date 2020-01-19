@@ -10,14 +10,16 @@ object ExpressionManager {
 class ExpressionManager extends Actor {
   def receive = {
     case ExpressionManager.Evaluate(expr, evaluator) => {
-      println(s"Manager: Evaluation request $expr")
       evaluator ! ExpressionEvaluator.Evaluate(expr)
     }
     case ExpressionManager.EvaluationResult(v) => {
-      println(s"Manager: Expression evaluated $v")
+      println(s"Result: $v")
     }
     case ExpressionEvaluator.DivisionByZero => {
-      println(s"Whoops. Division by zero")
+      println("Division by zero")
+    }
+    case ExpressionEvaluator.EvaluatorIdle => {
+      println("Evaluator is idle at the moment")
     }
   }
 }
