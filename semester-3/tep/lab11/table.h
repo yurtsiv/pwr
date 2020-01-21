@@ -80,7 +80,7 @@ public:
     {
         for(int i = 0; i < table.width; ++i)
         {
-            os << table.get(i) << ' ';
+            os << table.get(i) << "   ";
         }
         return os;
     }

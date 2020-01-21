@@ -4,7 +4,7 @@ object Main extends App {
   val actorSystem = ActorSystem("ExpressionEvaluator")
 
   val evaluator: ActorRef = actorSystem.actorOf(ExpressionEvaluator.props)
-  val manager: ActorRef = actorSystem.actorOf(ExpressionManager.props)
+  val manager: ActorRef = actorSystem.actorOf(ExpressionManager.props(evaluator))
 
   val exprs = List(
     Val(1),              // 1
@@ -18,7 +18,7 @@ object Main extends App {
   )
 
   for (expr <- exprs) {
-    manager ! ExpressionManager.Evaluate(expr, evaluator)
+    manager ! ExpressionManager.Evaluate(expr)
     Thread.sleep(500)
   }
 

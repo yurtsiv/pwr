@@ -20,13 +20,12 @@ void diffEvolTest()
     std::cout << p << '\n';
     DiffEvol de(&p);
     DiffIndividual di = de.getBestFound();
-    std::cerr << "Final fitness: " << di.getFitness() << '\n';
-    std::cerr << "Final solution: " << di.getGenotype() << '\n';
+    std::cout << "Final fitness: " << di.getFitness() << '\n';
+    std::cout << "Final solution: " << di.getGenotype() << '\n';
 }
 int main()
 {
     std::cout.precision(12);
-    std::cerr.precision(12);
     diffEvolTest();
 
     return 0;

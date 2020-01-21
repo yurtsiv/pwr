@@ -37,6 +37,7 @@ Table<double> DiffEvol::getMutatedGenotype(const Table<double> &base, const Tabl
 DiffIndividual DiffEvol::getBestFound(const int maxIteration, const int populationNumber) const
 {
   Table<DiffIndividual> pop = initPopulation(populationNumber);
+  std::cout << "Init population: \n" << pop;
   Random r;
   int solLen = problem->getSolutionLength();
   Table<Table<double>> minmax = problem->getMinMaxValues();
@@ -67,7 +68,7 @@ DiffIndividual DiffEvol::getBestFound(const int maxIteration, const int populati
           if(!pop[i].getAreContraintsSatisfied() || newQuality > pop[i].getFitness())
           {
             pop[i] = DiffIndividual(newQuality, solNew, true);
-            std::cerr << "Fitness: " << newQuality << '\n';
+            std::cout << "Fitness: " << newQuality << '\n';
           }
         }
       }

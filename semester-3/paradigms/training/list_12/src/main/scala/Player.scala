@@ -1,35 +1,28 @@
 import akka.actor._
 
 object Player {
-  case class Ping(count: Int)
-  case class Pong(count: Int)
-  case class Start(actor: ActorRef, initCount: Int)
   case object Stop
+  case class Start(actor: ActorRef, initCount: Int)
+  case class PassBall(count: Int)
 
-  def props(name: String) = Props(classOf[Player], name)
+  def props(name: String, sound: String) = Props(classOf[Player], name, sound)
 }
 
-class Player(val name: String) extends Actor {
-  def checkCount(count: Int) = {
-    if (count == 1) {
-      context.stop(self)
-      sender ! Player.Stop
-    }
-  }
-
+class Player(val name: String, val sound: String) extends Actor {
   def receive = {
-    case Player.Ping(count) => {
-      checkCount(count)
-      println(s"Player $name: Pong. Count $count")
-      sender ! Player.Pong(count -1)
-    }
-    case Player.Pong(count) => {
-      checkCount(count)
-      println(s"Player $name: Ping. Count $count")
-      sender ! Player.Ping(count - 1)
+    case Player.PassBall(count: Int) => {
+      if (count <= 1) {
+        sender ! Player.Stop
+        context.stop(self)
+      } else {
+        println(s"Player $name: $sound")
+        sender ! Player.PassBall(count - 1)
+      }
+
     }
     case Player.Start(actor: ActorRef, initCount: Int) => {
-      actor ! Player.Ping(initCount)
+      println("Starting the game")
+      actor ! Player.PassBall(initCount)
     }
     case Player.Stop => context.stop(self)
   }

@@ -18,6 +18,12 @@ public:
     bool getAreContraintsSatisfied() const;
     void setAreContraintsSatisfied(bool value);
 
+    friend std::ostream& operator<< (std::ostream &os, const DiffIndividual &ind)
+    {
+        os << "[ " << ind.genotype << " ]\n" << std::endl;
+        return os;
+    }
+
 private:
     Table<double> genotype;
     double fitness;

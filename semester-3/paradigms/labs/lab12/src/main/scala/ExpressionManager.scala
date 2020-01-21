@@ -1,15 +1,15 @@
 import akka.actor._
 
 object ExpressionManager {
-  case class Evaluate(expr: ExpressionTree, evaluator: ActorRef)
+  case class Evaluate(expr: ExpressionTree)
   case class EvaluationResult(v: Double)
 
-  def props = Props[ExpressionManager]
+  def props(evaluator: ActorRef) = Props(classOf[ExpressionManager], evaluator)
 }
 
-class ExpressionManager extends Actor {
+class ExpressionManager(val evaluator: ActorRef) extends Actor {
   def receive = {
-    case ExpressionManager.Evaluate(expr, evaluator) => {
+    case ExpressionManager.Evaluate(expr) => {
       evaluator ! ExpressionEvaluator.Evaluate(expr)
     }
     case ExpressionManager.EvaluationResult(v) => {

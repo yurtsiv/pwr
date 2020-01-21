@@ -31,7 +31,6 @@ void DiffEvol::iterate()
   {
     pop[currentIndex] = DiffIndividual(newQuality, candidateSolution, true);
 
-    std::cerr << "Fitness: " << newQuality << '\n';
     if(newQuality > best.getFitness())
     {
       best = pop[currentIndex];
@@ -54,18 +53,4 @@ void DiffEvol::initPopulation()
       best = pop[i];
     }
   }
-}
-
-int DiffEvol::getIndexFromTournament(int size)
-{
-  int bestIndex = r.next(0, populationNumber-1);
-  for(int i = 0; i < size-1; ++i)
-  {
-    int rand = r.next(0, populationNumber-1);
-    if((pop[rand].getAreContraintsSatisfied() && !pop[bestIndex].getAreContraintsSatisfied()) || pop[rand].getFitness() > pop[bestIndex].getFitness())
-    {
-      bestIndex = rand;
-    }
-  }
-  return bestIndex;
 }

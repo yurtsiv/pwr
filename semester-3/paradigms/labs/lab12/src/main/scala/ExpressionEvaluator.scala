@@ -10,18 +10,19 @@ object ExpressionEvaluator {
   case class EvaluateExprArg(arg: ExpressionTree, argIndex: Int)
   case class ArgEvaluationRes(res: Double, argIndex: Int)
 
+
   def props = Props[ExpressionEvaluator]
 }
 
 class ExpressionEvaluator extends Actor {
-  var isRootEvaluator = false
-  var isEvaluating = false
-  var evaluatedArgs: Map[Int, Double] = Map()
-  var currentExpr: ExpressionTree = null
-  var currArgIndex = 0
-  var requester: ActorRef = null
+  private var isRootEvaluator = false
+  private var isEvaluating = false
+  private var evaluatedArgs: Map[Int, Double] = Map()
+  private var currentExpr: ExpressionTree = null
+  private var currArgIndex = 0
+  private var requester: ActorRef = null
 
-  def spawnChildrenToEvalArgs(arg1: ExpressionTree, arg2: ExpressionTree) = {
+  private def spawnChildrenToEvalArgs(arg1: ExpressionTree, arg2: ExpressionTree) = {
     val evaluator1 = context.actorOf(ExpressionEvaluator.props)
     val evaluator2 = context.actorOf(ExpressionEvaluator.props)
 
@@ -29,7 +30,7 @@ class ExpressionEvaluator extends Actor {
     evaluator2 ! ExpressionEvaluator.EvaluateExprArg(arg2, 1)
   }
 
-  def evalCompoundExpr(expr: ExpressionTree) = {
+  private def evalCompoundExpr(expr: ExpressionTree) = {
     expr match {
       case Sum(arg1, arg2) => spawnChildrenToEvalArgs(arg1, arg2)
       case Sub(arg1, arg2) => spawnChildrenToEvalArgs(arg1, arg2)
@@ -38,14 +39,14 @@ class ExpressionEvaluator extends Actor {
     }
   }
 
-  def evalExpr(expr:ExpressionTree) = {
+  private def evalExpr(expr:ExpressionTree) = {
     expr match {
       case Val(v) => sendOperatorEvalRes(v)
       case _ => evalCompoundExpr(expr)
     }
   }
 
-  def sendOperatorEvalRes(res: Double) = {
+  private def sendOperatorEvalRes(res: Double) = {
     if (isRootEvaluator) {
       isEvaluating = false
       requester ! ExpressionManager.EvaluationResult(res)
@@ -54,7 +55,7 @@ class ExpressionEvaluator extends Actor {
     }
   }
 
-  def evalOperator(arg1: Double, arg2: Double) = {
+  private def evalOperator(arg1: Double, arg2: Double) = {
     currentExpr match {
       case Sum(_, _) => sendOperatorEvalRes(arg1 + arg2)
       case Sub(_, _) => sendOperatorEvalRes(arg1 - arg2)
