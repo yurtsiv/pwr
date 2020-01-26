@@ -1,7 +1,8 @@
-class OrderedListParam[T](implicit ordering: Ordering[T]) {
+abstract class OrderedListAbst {
+  type T
   private var list: List[T] = List() 
 
-  def insert(elem: T) = {
+  def insert(elem: T)(implicit ordering: Ordering[T]) = {
     def insert_in_order(l: List[T]): List[T] = {
       l match {
         case Nil => List(elem)
@@ -50,7 +51,7 @@ class OrderedListParam[T](implicit ordering: Ordering[T]) {
 println("\n\nTests\n\n")
 
 println("List of ints\n")
-val intList = new OrderedListParam[Int]()
+val intList = new OrderedListAbst { type T = Int }
 println("Adding 3, 5, 2, 4, 1")
 intList.insert(3)
 intList.insert(5)
@@ -84,7 +85,7 @@ try {
 }
 
 println("\nList of strings\n")
-val strList = new OrderedListParam[String]()
+val strList = new OrderedListAbst { type T = String }
 println("Adding B, D, A, C, E")
 strList.insert("B")
 strList.insert("D")
