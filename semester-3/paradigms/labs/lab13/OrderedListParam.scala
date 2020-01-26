@@ -1,21 +1,21 @@
-class OrderedListParam[T](implicit order: (T, T) => Ordered[T]) {
+class OrderedListParam[T](implicit ordering: Ordering[T]) {
   private var list: List[T] = List() 
 
   def insert(elem: T) = {
-    def ordered_insert(l: List[T]): List[T] = {
+    def insert_in_order(l: List[T]): List[T] = {
       l match {
-        case List() => List(elem)
+        case Nil => List(elem)
         case hd::tail => {
-          if (order(elem, hd)) {
+          if (ordering.compare(hd, elem) > 0) {
             elem::hd::tail
           } else {
-            hd::(ordered_insert(tail))
+            hd::(insert_in_order(tail))
           }
         }
       }
     }
 
-    list = ordered_insert(list)
+    list = insert_in_order(list)
   }
 
   def length = list.size
@@ -27,10 +27,22 @@ class OrderedListParam[T](implicit order: (T, T) => Ordered[T]) {
       throw new IllegalArgumentException("Wrong index")
     }
 
-    list.zipWithIndex.filter(_._1 != n).map(_._2)
+    def remove_help(count: Int, l: List[T]): List[T] = {
+      val hd::tail = l
+      if (count == n) {
+        tail
+      } else {
+        hd::remove_help(count + 1, tail)
+      }
+    }
+
+    list = remove_help(0, list)
   }
 
   def toList = list
 
-  override def toString = s"$list"
+  override def toString = {
+    val elems = list.foldLeft("")((s, e) => s"$s $e, ")
+    s"[$elems]"
+  }
 }
