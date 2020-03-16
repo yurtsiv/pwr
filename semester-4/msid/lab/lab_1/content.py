@@ -88,7 +88,14 @@ def model_selection(x_train, y_train, x_val, y_val, M_values):
     ciągu walidacyjnym, train_err i val_err to błędy na sredniokwadratowe na 
     ciągach treningowym i walidacyjnym
      """
-    pass
+
+    results = []
+    for M in M_values:
+        model, train_err = least_squares(x_train, y_train, M)
+        val_err = mean_squared_error(x_val, y_val, model)
+        results.append((model, train_err, val_err))
+
+    return min(results, key=lambda m: m[2])
 
 
 def regularized_model_selection(x_train, y_train, x_val, y_val, M, lambda_values):
@@ -106,4 +113,10 @@ def regularized_model_selection(x_train, y_train, x_val, y_val, M, lambda_values
     na ciągach treningowym i walidacyjnym. regularization_lambda to najlepsza
     wartość parametru regularyzacji
     """
-    pass
+    results = []
+    for l in lambda_values:
+        model, train_err = regularized_least_squares(x_train, y_train, M, l)
+        val_err = mean_squared_error(x_val, y_val, model)
+        results.append((model, train_err, val_err, l))
+
+    return min(results, key=lambda m: m[2])

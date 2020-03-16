@@ -67,88 +67,87 @@ if __name__ == "__main__":
         exit()
     sleep(0.1)
 
-    if False:
-        # Ladowanie danych
-        with open(os.path.join(os.path.dirname(__file__), 'data.pkl'), mode='rb') as file:
-            data = pickle.load(file)
-        x_plot = np.arange(0, 1.01, 0.01)
-        y_obj = target_output(x_plot)
+    # Ladowanie danych
+    with open(os.path.join(os.path.dirname(__file__), 'data.pkl'), mode='rb') as file:
+        data = pickle.load(file)
+    x_plot = np.arange(0, 1.01, 0.01)
+    y_obj = target_output(x_plot)
 
-        # Dopasowanie wielomianow metoda najmniejszych kwadratow
-        print('\n--- Dopasowanie wielomianow metoda najmniejszych kwadratow ---')
-        print('-------------- Liczba punktow treningowych N=8. --------------')
-        fig = plt.figure(figsize=(12, 6), num='Zadanie najmniejszych kwadratow dla N=8')
+    # Dopasowanie wielomianow metoda najmniejszych kwadratow
+    print('\n--- Dopasowanie wielomianow metoda najmniejszych kwadratow ---')
+    print('-------------- Liczba punktow treningowych N=8. --------------')
+    fig = plt.figure(figsize=(12, 6), num='Zadanie najmniejszych kwadratow dla N=8')
 
-        for i in range(8):
-            w, err = least_squares(data['x_train_8'], data['y_train_8'], i)
-            y_model = polynomial(x_plot, w)
-            sub = fig.add_subplot(2, 4, i + 1)
-            plot_model(data['x_train_8'], data['y_train_8'], x_plot, y_obj, y_model)
-            sub.set_title("M = {}".format(i))
-
-        plt.tight_layout()
-        plt.draw()
-        print('\n--- Wcisnij klawisz, aby kontynuowac ---')
-        plt.waitforbuttonpress(0)
-
-        print('\n--- Dopasowanie wielomianow metoda najmniejszych kwadratow ---')
-        print('-------------- Liczba punktow treningowych N=50. --------------')
-        fig = plt.figure(figsize=(12, 6), num='Zadanie najmniejszych kwadratow dla N=50')
-
-        for i in range(8):
-            w, err = least_squares(data['x_train_50'], data['y_train_50'], i)
-            y_model = polynomial(x_plot, w)
-            sub = fig.add_subplot(2, 4, i + 1)
-            plot_model(data['x_train_50'], data['y_train_50'], x_plot, y_obj, y_model)
-            sub.set_title("M = {}".format(i))
-
-        plt.tight_layout()
-        plt.draw()
-        print('\n--- Wcisnij klawisz, aby kontynuowac ---')
-        plt.waitforbuttonpress(0)
-
-        # Selekcja modelu
-        print('\n--- Selekcja modelu dla liniowego zadania najmniejszych kwadratow ---')
-        print('---------------- Modele wielomianowe stopnia M=0,...,7 ----------------')
-        print('- Liczba punktow treningowych N=50. Liczba punktow walidacyjnych N=20 -')
-
-        M_values = range(0, 7)
-        w, train_err, val_err = model_selection(data['x_train_50'], data['y_train_50'],
-                                                data['x_val_20'], data['y_val_20'], M_values)
-        M = np.shape(w)[0] - 1
+    for i in range(8):
+        w, err = least_squares(data['x_train_8'], data['y_train_8'], i)
         y_model = polynomial(x_plot, w)
+        sub = fig.add_subplot(2, 4, i + 1)
+        plot_model(data['x_train_8'], data['y_train_8'], x_plot, y_obj, y_model)
+        sub.set_title("M = {}".format(i))
 
-        fig = plt.figure(figsize=(6, 5), num='Selekcja modelu dla M')
-        sub = fig.add_subplot(1, 1, 1)
-        sub.set_title('Najlepsze M={}'.format(M))
-        plot_model(data['x_train_50'], data['y_train_50'], x_plot, y_obj, y_model,
-                data['x_val_20'], data['y_val_20'], train_err, val_err)
+    plt.tight_layout()
+    plt.draw()
+    print('\n--- Wcisnij klawisz, aby kontynuowac ---')
+    plt.waitforbuttonpress(0)
 
-        plt.tight_layout()
-        plt.draw()
-        print('\n--- Wcisnij klawisz, aby kontynuowac ---')
-        plt.waitforbuttonpress(0)
+    print('\n--- Dopasowanie wielomianow metoda najmniejszych kwadratow ---')
+    print('-------------- Liczba punktow treningowych N=50. --------------')
+    fig = plt.figure(figsize=(12, 6), num='Zadanie najmniejszych kwadratow dla N=50')
 
-        print('\n--- Selekcja modelu dla liniowego zadania najmniejszych kwadratow z regularyzacja ---')
-        print('-- Stopien M=7. Liczba punktow treningowych N=50. Liczba punktow walidacyjnych N=20 --')
-
-        M = 7
-        lambdas = [0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100, 300]
-        w, train_err, val_err, best_lambda = regularized_model_selection(data['x_train_50'],
-                                                                        data['y_train_50'],
-                                                                        data['x_val_20'],
-                                                                        data['y_val_20'],
-                                                                        M, lambdas)
+    for i in range(8):
+        w, err = least_squares(data['x_train_50'], data['y_train_50'], i)
         y_model = polynomial(x_plot, w)
+        sub = fig.add_subplot(2, 4, i + 1)
+        plot_model(data['x_train_50'], data['y_train_50'], x_plot, y_obj, y_model)
+        sub.set_title("M = {}".format(i))
 
-        fig = plt.figure(figsize=(6, 5), num='Selekcja modelu dla parametru regularyzacji')
-        sub = fig.add_subplot(1, 1, 1)
-        sub.set_title('M={}    Najlepsze $\lambda$={}'.format(M, best_lambda))
-        plot_model(data['x_train_50'], data['y_train_50'], x_plot, y_obj, y_model,
-                data['x_val_20'], data['y_val_20'],
-                train_err, val_err)
+    plt.tight_layout()
+    plt.draw()
+    print('\n--- Wcisnij klawisz, aby kontynuowac ---')
+    plt.waitforbuttonpress(0)
 
-        plt.tight_layout()
-        plt.draw()
-        print('\n--- Wcisnij klawisz, aby kontynuowac ---')
-        plt.waitforbuttonpress(0)
+    # Selekcja modelu
+    print('\n--- Selekcja modelu dla liniowego zadania najmniejszych kwadratow ---')
+    print('---------------- Modele wielomianowe stopnia M=0,...,7 ----------------')
+    print('- Liczba punktow treningowych N=50. Liczba punktow walidacyjnych N=20 -')
+
+    M_values = range(0, 7)
+    w, train_err, val_err = model_selection(data['x_train_50'], data['y_train_50'],
+                                            data['x_val_20'], data['y_val_20'], M_values)
+    M = np.shape(w)[0] - 1
+    y_model = polynomial(x_plot, w)
+
+    fig = plt.figure(figsize=(6, 5), num='Selekcja modelu dla M')
+    sub = fig.add_subplot(1, 1, 1)
+    sub.set_title('Najlepsze M={}'.format(M))
+    plot_model(data['x_train_50'], data['y_train_50'], x_plot, y_obj, y_model,
+            data['x_val_20'], data['y_val_20'], train_err, val_err)
+
+    plt.tight_layout()
+    plt.draw()
+    print('\n--- Wcisnij klawisz, aby kontynuowac ---')
+    plt.waitforbuttonpress(0)
+
+    print('\n--- Selekcja modelu dla liniowego zadania najmniejszych kwadratow z regularyzacja ---')
+    print('-- Stopien M=7. Liczba punktow treningowych N=50. Liczba punktow walidacyjnych N=20 --')
+
+    M = 7
+    lambdas = [0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100, 300]
+    w, train_err, val_err, best_lambda = regularized_model_selection(data['x_train_50'],
+                                                                    data['y_train_50'],
+                                                                    data['x_val_20'],
+                                                                    data['y_val_20'],
+                                                                    M, lambdas)
+    y_model = polynomial(x_plot, w)
+
+    fig = plt.figure(figsize=(6, 5), num='Selekcja modelu dla parametru regularyzacji')
+    sub = fig.add_subplot(1, 1, 1)
+    sub.set_title('M={}    Najlepsze $\lambda$={}'.format(M, best_lambda))
+    plot_model(data['x_train_50'], data['y_train_50'], x_plot, y_obj, y_model,
+            data['x_val_20'], data['y_val_20'],
+            train_err, val_err)
+
+    plt.tight_layout()
+    plt.draw()
+    print('\n--- Wcisnij klawisz, aby kontynuowac ---')
+    plt.waitforbuttonpress(0)
