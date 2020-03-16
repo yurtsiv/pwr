@@ -2,4 +2,6 @@ out/
 .idea/
 bin/
 *.out
+__pycache__
+.vscode
 
