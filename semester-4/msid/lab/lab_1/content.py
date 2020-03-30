@@ -113,6 +113,7 @@ def regularized_model_selection(x_train, y_train, x_val, y_val, M, lambda_values
     na ciągach treningowym i walidacyjnym. regularization_lambda to najlepsza
     wartość parametru regularyzacji
     """
+    print(str(lambda_values))
     results = []
     for l in lambda_values:
         model, train_err = regularized_least_squares(x_train, y_train, M, l)
