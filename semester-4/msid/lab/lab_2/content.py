@@ -39,7 +39,13 @@ def sort_train_labels_knn(Dist, y):
 
     Do sortowania użyj algorytmu mergesort.
     """
-    pass
+    res = np.zeros(Dist.shape)
+    for row_num, row in enumerate(Dist):
+        row_with_i = [(i, x) for i,x in enumerate(row)]
+        sorted_row = sorted(row_with_i, key=lambda e: e[1])
+        res[row_num] = [y[i] for i,_ in sorted_row]
+
+    return res
 
 
 def p_y_x_knn(y, k):
