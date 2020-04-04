@@ -80,8 +80,21 @@ def classification_error(p_y_x, y_true):
     :param y_true: zbiór rzeczywistych etykiet klas 1xN
     :return: błąd klasyfikacji
     """
-    pass
+    def choose_category(probabilities):
+        max_prob = 0
+        max_cat = 0
+        for cat, prob in enumerate(probabilities):
+            if prob >= max_prob:
+                max_prob = prob
+                max_cat = cat
+        return max_cat
 
+    wrong_predictions = 0
+    for sample_num, sample in enumerate(p_y_x):
+        if choose_category(sample) != y_true[sample_num]:
+            wrong_predictions += 1
+    
+    return wrong_predictions / len(y_true)
 
 def model_selection_knn(X_val, X_train, y_val, y_train, k_values):
     """
