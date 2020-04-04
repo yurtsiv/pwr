@@ -80,18 +80,18 @@ def classification_error(p_y_x, y_true):
     :param y_true: zbiór rzeczywistych etykiet klas 1xN
     :return: błąd klasyfikacji
     """
-    def choose_category(probabilities):
+    def choose_label(probabilities):
         max_prob = 0
-        max_cat = 0
+        max_label = 0
         for cat, prob in enumerate(probabilities):
             if prob >= max_prob:
                 max_prob = prob
-                max_cat = cat
-        return max_cat
+                max_label = cat
+        return max_label
 
     wrong_predictions = 0
     for sample_num, sample in enumerate(p_y_x):
-        if choose_category(sample) != y_true[sample_num]:
+        if choose_label(sample) != y_true[sample_num]:
             wrong_predictions += 1
     
     return wrong_predictions / len(y_true)
@@ -112,7 +112,18 @@ def model_selection_knn(X_val, X_train, y_val, y_train, k_values):
         najniższy, a "errors" - lista wartości błędów dla kolejnych
         "k" z "k_values"
     """
-    pass
+    dist = hamming_distance(X_val, X_train)
+    labels_sorted = sort_train_labels_knn(dist, y_train)
+
+    k_errors = []
+    for k in k_values:
+        p_y_x = p_y_x_knn(labels_sorted, k)
+        error = classification_error(p_y_x, y_val)
+        k_errors.append((error, k))
+
+    best_error, best_k = min(k_errors, key=lambda e: e[0])
+    return (best_error, best_k, [error for error, _ in k_errors])
+
 
 
 def estimate_a_priori_nb(y_train):
