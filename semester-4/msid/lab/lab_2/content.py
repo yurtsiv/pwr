@@ -134,7 +134,13 @@ def estimate_a_priori_nb(y_train):
     :param y_train: etykiety dla danych treningowych 1xN
     :return: wektor prawdopodobieństw a priori p(y) 1xM
     """
-    pass
+    N = len(y_train)
+    res = []
+    for k in range(len(np.unique(y_train))):
+        pi_k = np.count_nonzero(y_train == k) / N
+        res.append(pi_k)
+    
+    return res
 
 
 def estimate_p_x_y_nb(X_train, y_train, a, b):
@@ -148,7 +154,20 @@ def estimate_p_x_y_nb(X_train, y_train, a, b):
     :param b: parametr "b" rozkładu Beta
     :return: macierz prawdopodobieństw p(x|y) dla obiektów z "X_train" MxD.
     """
-    pass
+    _, D = X_train.shape 
+    M = len(np.unique(y_train))
+
+    res = np.zeros((M, D))
+
+    for k in range(M):
+        for d in range(D):
+            x_d = X_train[:, d].toarray().flatten()
+
+            numerator = np.count_nonzero([(y_train == k) & (x_d == 1)]) + a - 1 
+            denominator = np.count_nonzero(y_train == k) + a + b - 2
+            res[k][d] = (numerator / denominator)
+    
+    return res
 
 
 def p_y_x_nb(p_y, p_x_1_y, X):
