@@ -17,8 +17,9 @@ def hamming_distance(X, X_train):
     :param X_train: zbiór obiektów do których porównujemy N2xD
     :return: macierz odległości pomiędzy obiektami z "X" i "X_train" N1xN2
     """
-
-    res = np.zeros((X.shape[0], X_train.shape[0]))
+    N1 = X.shape[0]
+    N2 = X_train.shape[0]
+    res = np.empty((N1, N2))
 
     for res_row, x_text in enumerate(X):
         for res_col, x_train_text in enumerate(X_train):
@@ -39,7 +40,7 @@ def sort_train_labels_knn(Dist, y):
 
     Do sortowania użyj algorytmu mergesort.
     """
-    res = np.zeros(Dist.shape)
+    res = np.empty(Dist.shape)
     for row_num, row in enumerate(Dist):
         row_with_i = [(i, x) for i,x in enumerate(row)]
         sorted_row = sorted(row_with_i, key=lambda e: e[1])
@@ -166,7 +167,7 @@ def estimate_p_x_y_nb(X_train, y_train, a, b):
             numerator = np.count_nonzero([(y_train == k) & (x_d == 1)]) + a - 1 
             denominator = np.count_nonzero(y_train == k) + a + b - 2
             res[k][d] = (numerator / denominator)
-    
+
     return res
 
 
@@ -180,7 +181,23 @@ def p_y_x_nb(p_y, p_x_1_y, X):
     :param X: dane dla których beda wyznaczone prawdopodobieństwa, macierz NxD
     :return: macierz prawdopodobieństw p(y|x) dla obiektów z "X" NxM
     """
-    pass
+
+    X = X.toarray()
+    p_x_1_y_rev = 1 - p_x_1_y
+    X_rev = 1 - X
+    res = []
+
+    for i in range(X.shape[0]):
+        success = p_x_1_y ** X[i, ]
+        fail = p_x_1_y_rev ** X_rev[i, ]
+        a = np.prod(success * fail, axis=1) * p_y
+        # suma p(x|y') * p(y')
+        sum = np.sum(a)
+        # prawdopodobieństwo każdej z klas podzielone przez sumę
+        res.append(a / sum)
+
+    return np.array(res)
+
 
 
 def model_selection_nb(X_train, X_val, y_train, y_val, a_values, b_values):
@@ -202,4 +219,17 @@ def model_selection_nb(X_train, X_val, y_train, y_val, a_values, b_values):
         iterowania najpierw po "a_values" [pętla zewnętrzna], a następnie
         "b_values" [pętla wewnętrzna]).
     """
-    pass
+    errors = np.ones((len(a_values), len(b_values)))
+    estimated_p_y = estimate_a_priori_nb(y_train)
+    best_a = 0
+    best_b = 0
+    best_error = np.inf
+    for i in range(len(a_values)):
+        for j in range(len(b_values)):
+            error = classification_error(p_y_x_nb(estimated_p_y, estimate_p_x_y_nb(X_train, y_train, a_values[i], b_values[j]), X_val), y_val)
+            errors[i][j] = error
+            if error<best_error:
+                best_a = a_values[i]
+                best_b = b_values[j]
+                best_error = error
+    return best_error, best_a, best_b, errors
