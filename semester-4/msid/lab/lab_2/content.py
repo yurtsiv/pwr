@@ -7,6 +7,7 @@
 # --------------------------------------------------------------------------
 
 import numpy as np
+from scipy.spatial import distance
 
 
 def hamming_distance(X, X_train):
@@ -17,16 +18,12 @@ def hamming_distance(X, X_train):
     :param X_train: zbiór obiektów do których porównujemy N2xD
     :return: macierz odległości pomiędzy obiektami z "X" i "X_train" N1xN2
     """
-    N1 = X.shape[0]
-    N2 = X_train.shape[0]
-    res = np.empty((N1, N2))
 
-    for res_row, x_text in enumerate(X):
-        for res_col, x_train_text in enumerate(X_train):
-            res[res_row][res_col] = np.count_nonzero(x_text.toarray() ^ x_train_text.toarray())
-
-    return res 
-
+    X = X.toarray()
+    X_train = X_train.toarray().transpose()
+    outArr = X.astype(np.uint8) @ X_train.astype(np.uint8)
+    outArr += (~X).astype(np.uint8) @ (~X_train).astype(np.uint8)
+    return np.subtract(np.uint8(X_train.shape[0]), outArr)
 
 def sort_train_labels_knn(Dist, y):
     """
@@ -40,14 +37,9 @@ def sort_train_labels_knn(Dist, y):
 
     Do sortowania użyj algorytmu mergesort.
     """
-    res = np.empty(Dist.shape)
-    for row_num, row in enumerate(Dist):
-        row_with_i = [(i, x) for i,x in enumerate(row)]
-        sorted_row = sorted(row_with_i, key=lambda e: e[1])
-        res[row_num] = [y[i] for i,_ in sorted_row]
 
-    return res
-
+    indecies = Dist.argsort(kind='mergesort')
+    return y[indecies]
 
 def p_y_x_knn(y, k):
     """
@@ -59,6 +51,7 @@ def p_y_x_knn(y, k):
     :param k: liczba najbliższych sasiadow dla KNN
     :return: macierz prawdopodobieństw p(y|x) dla obiektów z "X" N1xM
     """
+
     m = len(np.unique(y[0]))
     res = np.zeros((y.shape[0], m))
 
@@ -71,7 +64,6 @@ def p_y_x_knn(y, k):
     
     return res
 
-
 def classification_error(p_y_x, y_true):
     """
     Wyznacz błąd klasyfikacji.
@@ -81,18 +73,13 @@ def classification_error(p_y_x, y_true):
     :param y_true: zbiór rzeczywistych etykiet klas 1xN
     :return: błąd klasyfikacji
     """
-    def choose_label(probabilities):
-        max_prob = 0
-        max_label = 0
-        for cat, prob in enumerate(probabilities):
-            if prob >= max_prob:
-                max_prob = prob
-                max_label = cat
-        return max_label
 
     wrong_predictions = 0
     for sample_num, sample in enumerate(p_y_x):
-        if choose_label(sample) != y_true[sample_num]:
+        max_probablity_label = len(sample) - np.argmax(np.flip(sample)) - 1
+        true_lable = y_true[sample_num]
+
+        if max_probablity_label != true_lable:
             wrong_predictions += 1
     
     return wrong_predictions / len(y_true)
@@ -113,6 +100,7 @@ def model_selection_knn(X_val, X_train, y_val, y_train, k_values):
         najniższy, a "errors" - lista wartości błędów dla kolejnych
         "k" z "k_values"
     """
+
     dist = hamming_distance(X_val, X_train)
     labels_sorted = sort_train_labels_knn(dist, y_train)
 
@@ -126,7 +114,6 @@ def model_selection_knn(X_val, X_train, y_val, y_train, k_values):
     return (best_error, best_k, [error for error, _ in k_errors])
 
 
-
 def estimate_a_priori_nb(y_train):
     """
     Wyznacz rozkład a priori p(y) każdej z klas dla obiektów ze zbioru
@@ -135,6 +122,7 @@ def estimate_a_priori_nb(y_train):
     :param y_train: etykiety dla danych treningowych 1xN
     :return: wektor prawdopodobieństw a priori p(y) 1xM
     """
+
     N = len(y_train)
     res = []
     for k in range(len(np.unique(y_train))):
@@ -142,7 +130,6 @@ def estimate_a_priori_nb(y_train):
         res.append(pi_k)
     
     return res
-
 
 def estimate_p_x_y_nb(X_train, y_train, a, b):
     """
@@ -155,6 +142,7 @@ def estimate_p_x_y_nb(X_train, y_train, a, b):
     :param b: parametr "b" rozkładu Beta
     :return: macierz prawdopodobieństw p(x|y) dla obiektów z "X_train" MxD.
     """
+
     _, D = X_train.shape 
     M = len(np.unique(y_train))
 
@@ -170,7 +158,6 @@ def estimate_p_x_y_nb(X_train, y_train, a, b):
 
     return res
 
-
 def p_y_x_nb(p_y, p_x_1_y, X):
     """
     Wyznacz rozkład prawdopodobieństwa p(y|x) dla każdej z klas z wykorzystaniem
@@ -182,23 +169,19 @@ def p_y_x_nb(p_y, p_x_1_y, X):
     :return: macierz prawdopodobieństw p(y|x) dla obiektów z "X" NxM
     """
 
+    M = p_x_1_y.shape[0]
+    N = X.shape[0]
     X = X.toarray()
+    res = np.empty((N, M))
     p_x_1_y_rev = 1 - p_x_1_y
-    X_rev = 1 - X
-    res = []
 
-    for i in range(X.shape[0]):
-        success = p_x_1_y ** X[i, ]
-        fail = p_x_1_y_rev ** X_rev[i, ]
-        a = np.prod(success * fail, axis=1) * p_y
-        # suma p(x|y') * p(y')
-        sum = np.sum(a)
-        # prawdopodobieństwo każdej z klas podzielone przez sumę
-        res.append(a / sum)
+    for n, x in enumerate(X):
+        x_rev = 1 - x
+        categories_p = np.prod((p_x_1_y ** x) * (p_x_1_y_rev ** x_rev), axis=1) * p_y
 
-    return np.array(res)
+        res[n] = categories_p / np.sum(categories_p)
 
-
+    return res
 
 def model_selection_nb(X_train, X_val, y_train, y_val, a_values, b_values):
     """
@@ -219,6 +202,7 @@ def model_selection_nb(X_train, X_val, y_train, y_val, a_values, b_values):
         iterowania najpierw po "a_values" [pętla zewnętrzna], a następnie
         "b_values" [pętla wewnętrzna]).
     """
+
     errors = np.ones((len(a_values), len(b_values)))
     estimated_p_y = estimate_a_priori_nb(y_train)
     best_a = 0
@@ -228,7 +212,7 @@ def model_selection_nb(X_train, X_val, y_train, y_val, a_values, b_values):
         for j in range(len(b_values)):
             error = classification_error(p_y_x_nb(estimated_p_y, estimate_p_x_y_nb(X_train, y_train, a_values[i], b_values[j]), X_val), y_val)
             errors[i][j] = error
-            if error<best_error:
+            if error < best_error:
                 best_a = a_values[i]
                 best_b = b_values[j]
                 best_error = error
