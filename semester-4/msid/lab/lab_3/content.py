@@ -65,8 +65,25 @@ def gradient_descent(obj_fun, w0, epochs, eta):
         punkt *w*, a *log_values* to lista wartości funkcji celu w każdej
         epoce (lista o długości *epochs*)
     """
-    pass
 
+    log_values = []
+    w = w0
+
+    for epoch in range(epochs):
+        val, grad = obj_fun(w)
+
+        if epoch != 0:
+            log_values.append(val)
+
+        w -= eta * grad
+
+
+    final_val, _ = obj_fun(w)
+    log_values.append(final_val)
+
+    log_values_res = np.array(log_values).reshape((epochs))
+
+    return (w, log_values_res)
 
 def stochastic_gradient_descent(obj_fun, x_train, y_train, w0, epochs, eta, mini_batch):
     """
@@ -88,7 +105,23 @@ def stochastic_gradient_descent(obj_fun, x_train, y_train, w0, epochs, eta, mini
         punkt *w*, a *log_values* to lista wartości funkcji celu dla całego
         zbioru treningowego w każdej epoce (lista o długości *epochs*)
     """
-    pass
+    M = int(y_train.shape[0] / mini_batch)
+    x_train_batches = np.split(x_train, M)
+    y_train_batches = np.split(y_train, M)
+
+    w = w0
+    log_values = []
+
+    for _ in range(epochs):
+        for x_batch, y_batch in zip(x_train_batches, y_train_batches):
+            _, grad = obj_fun(w, x_batch, y_batch)
+            w -= eta * grad
+        
+        val, _ = obj_fun(w, x_train, y_train)
+        log_values.append(val)
+
+    return (w, np.array(log_values).reshape((epochs)))
+
 
 
 def regularized_logistic_cost_function(w, x_train, y_train, regularization_lambda):
