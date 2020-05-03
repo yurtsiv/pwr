@@ -16,7 +16,13 @@ def sigmoid(x):
     :param x: wektor wartości *x* do zaaplikowania funkcji sigmoidalnej Nx1
     :return: wektor wartości funkcji sigmoidalnej dla wartości *x* Nx1
     """
-    pass
+    res = []
+
+    for x_val in x:
+        y = 1 / (1 + np.exp(-x_val))
+        res.append(y)
+
+    return np.array(res)
 
 
 def logistic_cost_function(w, x_train, y_train):
@@ -29,8 +35,19 @@ def logistic_cost_function(w, x_train, y_train):
     :return: krotka (log, grad), gdzie *log* to wartość funkcji logistycznej,
         a *grad* jej gradient po parametrach *w* Mx1
     """
-    pass
+    N, _ = x_train.shape
 
+    sigma = sigmoid(x_train @ w)
+
+    log = 0
+    for n, y_n in enumerate(y_train):
+        log_n = y_n * np.log(sigma[n]) + (1 - y_n) * np.log(1 - sigma[n])
+        log += log_n
+    log = -(log/N)
+
+    grad = (x_train.transpose() @ (sigma - y_train)) / N
+
+    return (log, grad)
 
 def gradient_descent(obj_fun, w0, epochs, eta):
     """
