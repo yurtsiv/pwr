@@ -174,8 +174,11 @@ def f_measure(y_true, y_pred):
     :param y_pred: wektor etykiet predykowanych przed model Nx1
     :return: wartość miary F (F-measure)
     """
-    pass
+    TP = np.sum(np.logical_and(y_pred == 1, y_true == 1))
+    FP = np.sum(np.logical_and(y_pred == 1, y_true == 0))
+    FN = np.sum(np.logical_and(y_pred == 0, y_true == 1))
 
+    return (2 * TP) / (2 * TP + FP + FN)
 
 def model_selection(x_train, y_train, x_val, y_val, w0, epochs, eta, mini_batch, lambdas, thetas):
     """
