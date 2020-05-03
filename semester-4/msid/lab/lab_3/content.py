@@ -157,7 +157,12 @@ def prediction(x, w, theta):
     :param theta: próg klasyfikacji z przedziału [0,1]
     :return: wektor predykowanych etykiet ze zbioru {0, 1} Nx1
     """
-    pass
+
+    sigmas = sigmoid(x @ w)
+
+    decisions = [1 if sigma >= theta else 0 for sigma in sigmas]
+
+    return np.array(decisions).reshape((x.shape[0], 1))
 
 
 def f_measure(y_true, y_pred):
