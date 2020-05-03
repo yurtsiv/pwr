@@ -7,6 +7,7 @@
 # --------------------------------------------------------------------------
 
 import numpy as np
+import functools
 
 
 def sigmoid(x):
@@ -106,10 +107,10 @@ def stochastic_gradient_descent(obj_fun, x_train, y_train, w0, epochs, eta, mini
         zbioru treningowego w każdej epoce (lista o długości *epochs*)
     """
     M = int(y_train.shape[0] / mini_batch)
-    x_train_batches = np.split(x_train, M)
-    y_train_batches = np.split(y_train, M)
+    x_train_batches = np.vsplit(x_train, M)
+    y_train_batches = np.vsplit(y_train, M)
 
-    w = w0
+    w = np.array(w0, copy=True)
     log_values = []
 
     for _ in range(epochs):
@@ -160,10 +161,9 @@ def prediction(x, w, theta):
 
     sigmas = sigmoid(x @ w)
 
-    decisions = [1 if sigma >= theta else 0 for sigma in sigmas]
+    decisions = np.greater_equal(sigmas, theta)
 
     return np.array(decisions).reshape((x.shape[0], 1))
-
 
 def f_measure(y_true, y_pred):
     """
@@ -205,4 +205,29 @@ def model_selection(x_train, y_train, x_val, y_val, w0, epochs, eta, mini_batch,
         *w* to parametry najlepszego modelu, a *F* to macierz wartości miary F
         dla wszystkich par *(lambda, theta)* #lambda x #theta
     """
-    pass
+
+    best_f_measure = -1
+    best_lambda = 0
+    best_theta = 0
+    best_w = 0
+    f_matrix = np.empty((len(lambdas), len(thetas)))
+
+    for l_i, l in enumerate(lambdas):
+        obj_fun = functools.partial(regularized_logistic_cost_function, regularization_lambda=l)
+
+        w, _ = stochastic_gradient_descent(obj_fun, x_train, y_train, w0, epochs, eta, mini_batch)
+
+        for t_i, t in enumerate(thetas):
+            y_pred = prediction(x_val, w, t)
+
+            f_m = f_measure(y_val, y_pred)
+            f_matrix[l_i][t_i] = f_m
+
+            if f_m > best_f_measure:
+                best_f_measure = f_m
+                best_lambda = l
+                best_theta = t
+                best_w = w
+
+    return (best_lambda, best_theta, best_w, f_matrix)
+    
