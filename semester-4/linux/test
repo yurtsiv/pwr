@@ -1,0 +1,5 @@
+#!/bin/bash
+
+name="hello"
+
+echo "Full name: $name $surname"

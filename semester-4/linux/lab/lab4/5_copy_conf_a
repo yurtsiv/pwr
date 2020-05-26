@@ -1,0 +1,12 @@
+#!/bin/bash
+
+folder="$HOME/pliki_z_etc"
+
+if [[ ! -e $folder ]]
+then
+  mkdir $folder
+fi
+
+cp /etc/*.conf $folder
+
+

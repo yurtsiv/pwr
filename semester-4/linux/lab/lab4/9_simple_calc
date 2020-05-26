@@ -1,0 +1,27 @@
+#!/bin/bash
+
+sum () {
+  echo $(($1 + $2))
+}
+
+sub () {
+  echo $(($1 - $2))
+}
+
+mul () {
+  echo $(($1 * $2))
+}
+
+if [[ $1 == "sum" ]]
+then
+  sum $2 $3
+elif [[ $1 == "sub" ]]
+then
+  sub $2 $3
+elif [[ $1 == "mul" ]]
+then
+  mul $2 $3
+else
+  echo "Unknow operation"
+fi
+

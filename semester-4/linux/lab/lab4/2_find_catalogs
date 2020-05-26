@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for file in `ls -d /etc/cr*`
+do
+  echo $file
+done
+

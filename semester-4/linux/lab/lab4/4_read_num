@@ -1,0 +1,15 @@
+#!/bin/bash
+
+echo "Enter num:"
+
+read num
+
+if (($num < 5))
+then
+  echo "Cold"
+elif (($num >= 5 && $num <= 18))
+then
+  echo "Warm"
+else
+  echo "Hot"
+fi

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo -n "Number of groups: `cat /etc/group | wc -l`"
+
+ITER=0
+for group in `cat /etc/group`:
+do
+  echo "${ITER} $group"
+  ITER=$((ITER + 1))
+done

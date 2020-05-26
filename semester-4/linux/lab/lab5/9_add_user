@@ -1,0 +1,23 @@
+#!/bin/bash
+
+NAME=$1
+HOME="/home/$NAME"
+
+if `useradd $NAME`
+then
+  passwd $NAME
+
+  if [[ ! -e $HOME ]]
+  then
+    mkdir $HOME
+    mkdir "$HOME/Desktop"
+    mkdir "$HOME/Downloads"
+    mkdir "$HOME/Pictures"
+    mkdir "$HOME/Templates"
+    mkdir "$HOME/Documents"
+    mkdir "$HOME/Music"
+    mkdir "$HOME/Public"
+    mkdir "$HOME/Videos"
+  fi
+fi
+

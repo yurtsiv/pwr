@@ -1,0 +1,5 @@
+#!/bin/bash
+
+file="$HOME/combined.conf"
+
+cat /etc/*.conf > $file

@@ -1,0 +1,23 @@
+#!/bin/bash
+
+echo "Even numbers from 100 to 200"
+
+for num in {100..200}
+do
+  if (($num % 2 == 0))
+  then
+    echo $num
+  fi
+done
+
+echo "Numbers divisible by 10 from 10 to 100"
+
+for num in {10..100}
+do
+  if (($num % 10 == 0))
+  then
+    echo $num
+  fi
+done
+
+
