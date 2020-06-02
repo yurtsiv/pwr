@@ -20,8 +20,6 @@ export const addStudent = (name: string, surname: string) => {
   writeStudents(students);
 }
 
-addStudent('fas', 'fdadslj')
-
 export const addSubject = (name: string) => {
   const subjects = readSubjects();
 
