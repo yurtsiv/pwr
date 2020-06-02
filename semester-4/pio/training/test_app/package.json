@@ -6,7 +6,10 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
-    "moduleFileExtensions": ["js", "ts"]
+    "moduleFileExtensions": [
+      "js",
+      "ts"
+    ]
   },
   "scripts": {
     "test-watch": "jest --watchAll --coverage",

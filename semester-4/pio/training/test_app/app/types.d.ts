@@ -4,9 +4,7 @@ export interface Student {
   grades: Grade[]
 }
 
-export interface Subject {
-  name: string
-}
+export type Subject = string
 
 interface Grade {
   value: number

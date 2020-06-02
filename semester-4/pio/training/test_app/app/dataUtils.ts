@@ -2,13 +2,13 @@ import {Student, Subject} from './types';
 import {studentsFile, subjectsFile} from './constants';
 import {writeJSONFile, readJSONFile} from './helpers';
 
-const readStudents: () => Student[] = readJSONFile(studentsFile);
-const readSubjects: () => Subject[] = readJSONFile(subjectsFile);
+export const readStudents: () => Student[] = readJSONFile(studentsFile);
+export const readSubjects: () => Subject[] = readJSONFile(subjectsFile);
 
 export const writeStudents: (s: Student[]) => void = writeJSONFile(studentsFile);
 export const writeSubjects: (s: Subject[]) => void = writeJSONFile(subjectsFile);
 
-const findStudent = (studs: Student[], name: string, surname: string) =>
+export const findStudent = (studs: Student[], name: string, surname: string) =>
   studs.find(s => s.name === name && s.surname === surname);
 
 export const addStudent = (name: string, surname: string) => {
@@ -24,11 +24,11 @@ export const addStudent = (name: string, surname: string) => {
 export const addSubject = (name: string) => {
   const subjects = readSubjects();
 
-  const existingSubj = subjects.find(s => s.name === name);
+  const existingSubj = subjects.find(s => s === name);
 
   if (existingSubj) throw new Error('Subject already exists');
 
-  subjects.push({name});
+  subjects.push(name);
 
   writeSubjects(subjects);
 }
@@ -53,7 +53,7 @@ export const delSubject = (name: string) => {
   if (!subjects.length)
     throw new Error('No subjects');
 
-  const newSubjects = subjects.filter(s => s.name !== name);
+  const newSubjects = subjects.filter(s => s !== name);
 
   if (newSubjects.length === subjects.length)
     throw new Error('Subject does not exist');
@@ -62,7 +62,7 @@ export const delSubject = (name: string) => {
   const students = readStudents();
   const newStudents = students.map(s => ({
     ...s,
-    grades: s.grades.filter(g => g.subject === name)
+    grades: s.grades.filter(g => g.subject !== name)
   }));
 
   writeSubjects(newSubjects);
@@ -74,33 +74,24 @@ export const countStudents = () => readStudents().length;
 export const countSubjects = () => readSubjects().length;
 
 export const setGrade = (studName: string, studSurname: string, subjName: string, grade: number) => {
-  if (
-    !Number.isInteger(grade) ||
-    grade < 2 ||
-    grade > 5
-  ) {
-    throw new Error('Invalid grade');
-  }
-
   const students = readStudents();
   const student = findStudent(students, studName, studSurname);
-
   if (!student) throw new Error('Student does not exist');
 
   const subjects = readSubjects(); 
-  const subject = subjects.find(s => s.name === subjName);
+  const subject = subjects.find(s => s === subjName);
 
   if (!subject) throw new Error('Subject does not exist');
 
   const newStudents = students.map(s => {
-    if (s.name === studName && s.surname === studName) {
+    if (s.name === studName && s.surname === studSurname) {
       return {
         ...s,
         grades: [
           ...s.grades,
           {
             value: grade,
-            subject: subject.name
+            subject
           }
         ]
       }
@@ -108,6 +99,7 @@ export const setGrade = (studName: string, studSurname: string, subjName: string
 
     return s;
   });
+
 
   writeStudents(newStudents);
 }
