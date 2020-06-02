@@ -1,3 +1,4 @@
 node_modules/
 students.json
 subjects.json
+build/
