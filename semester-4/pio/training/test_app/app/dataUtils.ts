@@ -3,9 +3,10 @@ import {studentsFile, subjectsFile} from './constants';
 import {writeJSONFile, readJSONFile} from './helpers';
 
 const readStudents: () => Student[] = readJSONFile(studentsFile);
-const writeStudents: (s: Student[]) => void = writeJSONFile(studentsFile);
 const readSubjects: () => Subject[] = readJSONFile(subjectsFile);
-const writeSubjects: (s: Subject[]) => void = writeJSONFile(subjectsFile);
+
+export const writeStudents: (s: Student[]) => void = writeJSONFile(studentsFile);
+export const writeSubjects: (s: Subject[]) => void = writeJSONFile(subjectsFile);
 
 const findStudent = (studs: Student[], name: string, surname: string) =>
   studs.find(s => s.name === name && s.surname === surname);
@@ -35,6 +36,9 @@ export const addSubject = (name: string) => {
 export const delStudent = (name: string, surname: string) => {
   const students = readStudents();
 
+  if (!students.length)
+    throw new Error('No students');
+
   const newStudents = students.filter(s => s.name !== name && s.surname !== surname);
 
   if (newStudents.length === students.length)
@@ -45,6 +49,9 @@ export const delStudent = (name: string, surname: string) => {
 
 export const delSubject = (name: string) => {
   const subjects = readSubjects();
+
+  if (!subjects.length)
+    throw new Error('No subjects');
 
   const newSubjects = subjects.filter(s => s.name !== name);
 
@@ -109,14 +116,11 @@ export const getAverage = (studName: string, studSurname: string, subjName: stri
   const students = readStudents();
 
   const student = findStudent(students, studName, studSurname);
-
   if (!student) return '0.0';
 
   const grades = student.grades.filter(g => g.subject === subjName);
-
   if (!grades.length) return '0.0';
 
   const sum = grades.reduce((acc, g) => acc + g.value, 0);
-
   return (sum / grades.length).toFixed(1);
 }

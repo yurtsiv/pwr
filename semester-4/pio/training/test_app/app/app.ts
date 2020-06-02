@@ -65,8 +65,10 @@ export const runApp = (args) => {
   try {
     const res = func(...funcArgs) ?? 'OK';
     console.log(res)
+    return res;
   } catch (e) {
     console.log('ERROR')
+    return 'ERROR';
   }
 }
 
