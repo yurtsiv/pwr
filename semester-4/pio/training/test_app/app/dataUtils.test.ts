@@ -13,11 +13,7 @@ import {
   getAverage
 } from "./dataUtils"
 
-const student = {
-  name: 'Jan',
-  surname: 'Kowalski'
-};
-
+const student = 'Jan';
 const subject = 'Physics';
 
 describe('countStudents', () => {
@@ -30,7 +26,7 @@ describe('countStudents', () => {
   })
 
   it('should be 1', () => {
-    addStudent(student.name, student.surname);
+    addStudent(student);
     expect(countStudents()).toBe(1);
   })
 })
@@ -57,13 +53,13 @@ describe('addStudent', () => {
   });
 
   it('should add student', () => {
-    addStudent(student.name, student.surname); 
+    addStudent(student)
 
     expect(countStudents()).toBe(1);
   });
 
   it('can not add existing student', () => {
-    expect(() => addStudent(student.name, student.surname)).toThrow();
+    expect(() => addStudent(student)).toThrow();
   });
 });
 
@@ -88,21 +84,21 @@ describe('delStudent', () => {
   beforeAll(() => {
     writeStudents([]);
     writeSubjects([]);
-    addStudent(student.name, student.surname);
+    addStudent(student);
   });
 
   it('can not delete non existing student', () => {
-    expect(() => delStudent('Some', 'Name')).toThrow();
+    expect(() => delStudent('Some')).toThrow();
   });
 
   it('should delete student', () => {
-    delStudent(student.name, student.surname);
+    delStudent(student);
 
     expect(countStudents()).toBe(0);
   });
 
   it('can not delete student if none added', () => {
-    expect(() => delStudent('Some', 'Name')).toThrow();
+    expect(() => delStudent('Some')).toThrow();
   });
 });
 
@@ -111,27 +107,25 @@ describe('setGrade', () => {
     writeStudents([]);
     writeSubjects([]);
 
-    addStudent(student.name, student.surname);
-    addStudent('Other', 'Student');
+    addStudent(student);
+    addStudent('Other');
     addSubject(subject);
   });
 
   it('should add grades', () => {
     setGrade(
-      student.name,
-      student.surname,
+      student,
       subject,
-      3
+      '3'
     );
 
     setGrade(
-      student.name,
-      student.surname,
+      student,
       subject,
-      4
+      '4'
     );
 
-    const stud = findStudent(readStudents(), student.name, student.surname);
+    const stud = findStudent(readStudents(), student);
 
     expect(stud.grades).toEqual([
       {
@@ -146,11 +140,11 @@ describe('setGrade', () => {
   });
 
   it('can not set grade for non existing student', () => {
-    expect(() => setGrade('Some', 'Stud', subject, 2)).toThrow();
+    expect(() => setGrade('Some', subject, '2')).toThrow();
   });
 
   it('can not set grade with non existing subject', () => {
-    expect(() => setGrade(student.name, student.surname, 'InvalidSubj', 2)).toThrow();
+    expect(() => setGrade(student, 'InvalidSubj', '2')).toThrow();
   });
 });
 
@@ -159,8 +153,8 @@ describe('delSubject', () => {
     writeStudents([]);
     writeSubjects([]);
     addSubject(subject);
-    addStudent(student.name, student.surname);
-    setGrade(student.name, student.surname, subject, 2);
+    addStudent(student);
+    setGrade(student, subject, '2');
   });
 
   it('can not delete non existing subject', () => {
@@ -174,8 +168,7 @@ describe('delSubject', () => {
 
     const stud = findStudent(
       readStudents(),
-      student.name,
-      student.surname
+      student
     );
 
     expect(stud.grades).toEqual([]);
@@ -192,33 +185,33 @@ describe('getAverage', () => {
     writeStudents([]);
     writeSubjects([]);
     addSubject(subject);
-    addStudent(student.name, student.surname);
-    setGrade(student.name, student.surname, subject, 2);
-    setGrade(student.name, student.surname, subject, 3);
-    setGrade(student.name, student.surname, subject, 5);
+    addStudent(student);
+    setGrade(student, subject, '2');
+    setGrade(student, subject, '3');
+    setGrade(student, subject, '5');
   });
 
   it('returns rounded average', () => {
     expect(
-      getAverage(student.name, student.surname, subject)
+      getAverage(student, subject)
     ).toBe("3.3")
 
-    setGrade(student.name, student.surname, subject, 5);
+    setGrade(student, subject, '5');
 
     expect(
-      getAverage(student.name, student.surname, subject)
+      getAverage(student, subject)
     ).toBe("3.8")
   });
 
   it('returns 0.0 for non existing student', () => {
     expect(
-      getAverage('Invalid', 'Student', subject)
+      getAverage('Invalid', subject)
     ).toBe('0.0');
   });
 
   it('return 0.0 for non existing subject', () => {
     expect(
-      getAverage(student.name, student.surname, 'InvalidSubj')
+      getAverage(student, 'Invalid')
     ).toBe('0.0');
   });
 });

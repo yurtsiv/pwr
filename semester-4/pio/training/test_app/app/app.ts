@@ -11,48 +11,53 @@ import {
   getAverage
 } from './dataUtils';
 
-const commands: [RegExp, Function][] = [
+const studName = /^[A-Z][a-zA-Z]+ ([A-Z][a-zA-Z]+)$/;
+const subjName = /^([A-Z][a-zA-Z]+)$/;
+
+const commands: [RegExp[], Function][] = [
   [
-    /add student [A-Z][a-zA-Z]+ ([A-Z][a-zA-Z]+)$/,
+    [/^add$/, /^student$/, studName],
     addStudent
   ],
   [
-    /add subject ([A-Z][a-zA-Z]+)$/,
+    [/^add$/, /^subject$/, subjName],
     addSubject
   ],
   [
-    /del student [A-Z][a-zA-Z]+ ([A-Z][a-zA-Z]+)$/,
+    [/^del$/, /^student$/, studName],
     delStudent
   ],
   [
-    /del subject ([A-Z][a-zA-Z]+)$/,
+    [/^del$/, /^subject$/, subjName],
     delSubject
   ],
   [
-    /count students$/,
+    [/^count$/, /^students$/],
     countStudents
   ],
   [
-    /count subjects$/,
+    [/^count$/, /^subjects$/],
     countSubjects
   ],
   [
-    /set grade [A-Z][a-zA-Z]+ [A-Z][a-zA-Z]+ [A-Z][a-zA-Z]+ [2-5]$/,
+    [/^set$/, /^grade$/, studName, subjName, /^[2-5]$/],
     setGrade
   ],
   [
-    /average [A-Z][a-zA-Z]+ [A-Z][a-zA-Z]+ ([A-Z][a-zA-Z]+)$/,
+    [/^average$/, studName, subjName],
     getAverage
   ]
 ] 
 
-export const runApp = (args) => {
-  const argsString = args.join(' ').trim();
-
-  const command = commands.find((c) => c[0].test(argsString))
+export const runApp = (args: string[]) => {
+  const command = commands.find(([regs, func]) =>
+    args.length === regs.length &&
+    regs.every((reg, index) => reg.test(args[index]))  
+  );
 
   if (!command) {
-    return console.log('ERROR');
+    console.log('ERROR');
+    return 'ERROR';
   } 
 
   const [_regEx, func] = command;
@@ -64,7 +69,6 @@ export const runApp = (args) => {
 
   try {
     const res = func(...funcArgs) ?? 'OK';
-    console.log(res)
     return res;
   } catch (e) {
     console.log('ERROR')
@@ -73,4 +77,5 @@ export const runApp = (args) => {
 }
 
 const [_node, _script, ...args] = process.argv;
+console.log(args);
 runApp(args);

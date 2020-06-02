@@ -1,5 +1,4 @@
 export interface Student {
-  surname: string,
   name: string,
   grades: Grade[]
 }
