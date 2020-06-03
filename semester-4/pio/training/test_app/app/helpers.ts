@@ -9,7 +9,11 @@ export const readJSONFile = fileName => () => {
     return [];
   }
 
-  return JSON.parse(readFileSync(fileName, 'utf-8'));
+  try {
+    return JSON.parse(readFileSync(fileName, 'utf-8'));
+  } catch (e) {
+    return [];
+  }
 }
 
 export const writeJSONFile = fileName => data =>

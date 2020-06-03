@@ -69,6 +69,7 @@ export const runApp = (args: string[]) => {
 
   try {
     const res = func(...funcArgs) ?? 'OK';
+    console.log(res);
     return res;
   } catch (e) {
     console.log('ERROR')
@@ -77,5 +78,5 @@ export const runApp = (args: string[]) => {
 }
 
 const [_node, _script, ...args] = process.argv;
-console.log(args);
+
 runApp(args);
