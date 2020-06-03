@@ -65,7 +65,9 @@ export const runTests = async (tests: TestDefinition[], beforeAll: () => Promise
   await beforeAll();
 
   for (const test of tests) {
-    const {name, positive} = await runTest(test);
-    console.log(`${name} :  ${positive}`)
+    const testRes = await runTest(test);
+    if (!testRes.positive) {
+      console.error(testRes);
+    }
   }
 };
