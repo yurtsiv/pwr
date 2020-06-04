@@ -1,4 +1,6 @@
-import { exec } from "child_process";
+import {exec} from 'child_process';
+import {printTable, Table} from 'console-table-printer';
+import * as chalk from 'chalk';
 
 const [_node, _script, appPath] = process.argv;
 
@@ -61,13 +63,37 @@ const runTest = async ({name, command, res: expectedRes, before}: TestDefinition
   }
 };
 
+const printResults = (testRes: TestResult[]) => {
+  const table = new Table({
+    columns: [
+      {name: 'Test name', alignment: 'left'},
+      {name: 'Command', alignment: 'left'},
+      {name: 'Positive', alignment: 'left'},
+      {name: 'Expected', alignment: 'left'},
+      {name: 'Received', alignment: 'left'}
+    ]
+  });
+
+  testRes.forEach((res) => {
+    table.addRow({
+      'Test name': res.name,
+      'Command': res.command,
+      'Positive': res.positive,
+      'Expected': res.expected,
+      'Received': res.received
+    }, {color: res.positive ? 'white' : 'red'})
+  });
+
+  table.printTable();
+}
+
 export const runTests = async (tests: TestDefinition[], beforeAll: () => Promise<void>) => {
   await beforeAll();
 
+  const results = [];
   for (const test of tests) {
-    const testRes = await runTest(test);
-    if (!testRes.positive) {
-      console.error(testRes);
-    }
+    results.push(await runTest(test));
   }
+
+  printResults(results);
 };

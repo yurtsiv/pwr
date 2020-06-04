@@ -104,6 +104,16 @@ const tests: TestDefinition[] = [
     command: `add subject "${subjects[1]}"`,
     res: 'OK',
   },
+  {
+    name: 'Stress test (adding 20 grades in parallel)',
+    before: async () => {
+      for (let i = 0; i < 20; i++) {
+        runApp(`set grade "${students[0]}" "${subjects[0]}" 3`);
+      }
+    },
+    command: `average "${students[0]}" "${subjects[0]}"`,
+    res: '3.0'
+  },
 
   /**
    * Invalid add
