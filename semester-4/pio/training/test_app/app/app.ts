@@ -11,21 +11,22 @@ import {
   getAverage
 } from './dataUtils';
 
-const studName = /^[A-Z][a-zA-Z]+ ([A-Z][a-zA-Z]+)$/;
+const studName = /^[A-Z][a-zA-Z]+$/;
+const studSurname = /^[A-Z][a-zA-Z]+$/;
 const subjName = /^([A-Z][a-zA-Z]+)$/;
 
 const commands: [RegExp[], Function][] = [
   [
-    [/^add$/, /^student$/, studName],
-    addStudent
+    [/^add$/, /^student$/, studName, studSurname],
+    (name, surname) => addStudent(`${name} ${surname}`)
   ],
   [
     [/^add$/, /^subject$/, subjName],
     addSubject
   ],
   [
-    [/^del$/, /^student$/, studName],
-    delStudent
+    [/^del$/, /^student$/, studName, studSurname],
+    (name, surname) => delStudent(`${name} ${surname}`)
   ],
   [
     [/^del$/, /^subject$/, subjName],
@@ -40,12 +41,12 @@ const commands: [RegExp[], Function][] = [
     countSubjects
   ],
   [
-    [/^set$/, /^grade$/, studName, subjName, /^[2-5]$/],
-    setGrade
+    [/^set$/, /^grade$/, studName, studSurname, subjName, /^[2-5]$/],
+    (name, surname, subj, grade) => setGrade(`${name} ${surname}`, subj, grade)
   ],
   [
-    [/^average$/, studName, subjName],
-    getAverage
+    [/^average$/, studName, studSurname, subjName],
+    (name, surname, subj) => getAverage(`${name} ${surname}`, subj)
   ]
 ] 
 

@@ -1,6 +1,5 @@
 import {exec} from 'child_process';
-import {printTable, Table} from 'console-table-printer';
-import * as chalk from 'chalk';
+import {Table} from 'console-table-printer';
 
 const [_node, _script, appPath] = process.argv;
 

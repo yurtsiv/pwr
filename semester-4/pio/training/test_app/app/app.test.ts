@@ -14,14 +14,14 @@ afterAll(() => {
 describe('runApp', () => {
   it('accepts valid commands', () => {
     const validCommands = [
-      ['add', 'student', 'Jan Kowalski'],
+      ['add', 'student', 'Jan', 'Kowalski'],
       ['add', 'subject', 'Physics'],
-      ['set', 'grade', 'Jan Kowalski', 'Physics', '2'],
-      ['set', 'grade', 'Jan Kowalski', 'Physics', '3'],
-      ['set', 'grade', 'Jan Kowalski', 'Physics', '4'],
-      ['set', 'grade', 'Jan Kowalski', 'Physics', '5'],
-      ['average', 'Jan Kowalski', 'Physics'],
-      ['del', 'student', 'Jan Kowalski'],
+      ['set', 'grade', 'Jan', 'Kowalski', 'Physics', '2'],
+      ['set', 'grade', 'Jan', 'Kowalski', 'Physics', '3'],
+      ['set', 'grade', 'Jan', 'Kowalski', 'Physics', '4'],
+      ['set', 'grade', 'Jan', 'Kowalski', 'Physics', '5'],
+      ['average', 'Jan', 'Kowalski', 'Physics'],
+      ['del', 'student', 'Jan', 'Kowalski'],
       ['del', 'subject', 'Physics'],
       ['count', 'students'],
       ['count', 'subjects'],
@@ -38,11 +38,11 @@ describe('runApp', () => {
       ['add'],
       ['add', 'student'],
       ['add', 'student', 'Jan'],
-      ['add', 'student', 'jan Kowalski'],
-      ['add', 'student', 'Jan kowalski'],
-      ['add', 'student', 'Jan Kowalski '],
-      ['add', 'student', 'Jan  Kowalski'],
-      ['add', 'student', 'J@n Kowalski'],
+      ['add', 'student', 'jan', 'Kowalski'],
+      ['add', 'student', 'Jan', 'kowalski'],
+      ['add', 'student', 'Jan', 'Kowalski '],
+      ['add', 'student', 'Jan', ' Kowalski'],
+      ['add', 'student', 'J@n', 'Kowalski'],
       ['add', 'subject'],
       ['add', 'subject', 'physics'],
       ['add', 'subject', 'Physics '],
@@ -51,18 +51,18 @@ describe('runApp', () => {
       ['set'],
       ['set', 'grade'],
       ['set', 'grade', 'Jan'],
-      ['set', 'grade', 'Jan Kowalski'],
-      ['set', 'grade', 'Jan Kowalski', 'Physics'],
-      ['set', 'grade', 'Jan Kowalski', 'Physics', '4 '],
-      ['set', 'grade', 'Jan Kowalski', 'Physics', '1'],
-      ['set', 'grade', 'Jan Kowalski', 'Physics', '2.2'],
-      ['set', 'grade', 'Jan Kowalski', 'Physics', '2.0'],
-      ['set', 'grade', 'Jan Kowalski', 'Physics', '3.5'],
-      ['set', 'grade', 'Jan Kowalski', 'Physics', '6'],
-      ['set', 'grade', 'Jan Kowalski', 'Physics', '-2'],
+      ['set', 'grade', 'Jan', 'Kowalski'],
+      ['set', 'grade', 'Jan', 'Kowalski', 'Physics'],
+      ['set', 'grade', 'Jan', 'Kowalski', 'Physics', '4 '],
+      ['set', 'grade', 'Jan', 'Kowalski', 'Physics', '1'],
+      ['set', 'grade', 'Jan', 'Kowalski', 'Physics', '2.2'],
+      ['set', 'grade', 'Jan', 'Kowalski', 'Physics', '2.0'],
+      ['set', 'grade', 'Jan', 'Kowalski', 'Physics', '3.5'],
+      ['set', 'grade', 'Jan', 'Kowalski', 'Physics', '6'],
+      ['set', 'grade', 'Jan', 'Kowalski', 'Physics', '-2'],
       ['average'],
       ['average', 'Jan'],
-      ['average', 'Jan Kowalski'],
+      ['average', 'Jan', 'Kowalski'],
       ['del'],
       ['del', 'student'],
       ['del', 'student', 'Jan'],
@@ -76,7 +76,7 @@ describe('runApp', () => {
   });
 
   it('does not crash on unsuccessful operation', () => {
-    const command = ['add', 'student', 'Jan Kowalski'];
+    const command = ['add', 'student', 'Jan', 'Kowalski'];
 
     runApp(command);
 

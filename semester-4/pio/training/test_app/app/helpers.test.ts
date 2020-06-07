@@ -1,4 +1,4 @@
-import { unlinkSync, existsSync, exists } from "fs";
+import { unlinkSync, existsSync, writeFileSync} from "fs";
 import { readJSONFile, writeJSONFile } from "./helpers";
 
 const file = 'tempFileForTestingPurposes.json';
@@ -29,4 +29,10 @@ it('should successfully write and read JSON', () => {
   writeJSONFile(file)(data);
 
   expect(readJSONFile(file)()).toEqual(data);
+});
+
+it('should not crash if JSON is invalid', () => {
+  writeFileSync(file, 'invalid json');
+  const res = readJSONFile(file)();
+  expect(res).toEqual([]);
 });
