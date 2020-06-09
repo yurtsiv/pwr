@@ -12,7 +12,8 @@
     ]
   },
   "scripts": {
-    "test-watch": "jest --watchAll --coverage",
+    "test-watch": "jest --watchAll",
+    "test": "jest --coverage",
     "start": "nodemon ./app/app.ts --exec ts-node",
     "build": "tsc ./app/app.ts --outDir build"
   },
