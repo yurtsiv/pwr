@@ -1,9 +1,3 @@
---DROP TABLE Kocury CASCADE CONSTRAINTS PURGE;
---DROP TABLE Bandy CASCADE CONSTRAINTS PURGE; 
---DROP TABLE Funkcje CASCADE CONSTRAINTS PURGE; 
---DROP TABLE Wrogowie CASCADE CONSTRAINTS PURGE; 
---DROP TABLE Wrogowie_Kocurow CASCADE CONSTRAINTS PURGE; 
-
 CREATE TABLE Bandy
 (
   nr_bandy NUMBER(2) CONSTRAINT bandy_pk PRIMARY KEY,
@@ -47,8 +41,7 @@ CREATE TABLE Kocury
 CREATE TABLE Wrogowie_Kocurow
 (
   pseudo VARCHAR2(15) CONSTRAINT pseudo_fk REFERENCES Kocury(pseudo),
-  imie_wroga VARCHAR2(15)
-    CONSTRAINT imie_wroga_fk REFERENCES Wrogowie(imie_wroga),
+  imie_wroga VARCHAR2(15) CONSTRAINT imie_wroga_fk REFERENCES Wrogowie(imie_wroga),
   data_incydentu DATE CONSTRAINT data_incydentu_nn NOT NULL,
   opis_incydentu VARCHAR2(50),
   CONSTRAINT wrogowie_kocurow_pk PRIMARY KEY (pseudo, imie_wroga)
@@ -200,11 +193,121 @@ SELECT
     (
         SELECT
             CASE
-                WHEN ROCZNY = 660 THEN "SMTH"
-                ELSE "SMTH ELSE"
+                WHEN rocznie > 660 THEN TO_CHAR(rocznie)
+                WHEN rocznie = 660 THEN 'Limit'
+                ELSE 'Ponizej 660'
             END
         FROM (
-            SELECT przydzial_myszy * 12 + NVL(myszy_extra, 0) * 12 AS ROCZNY FROM dual
+            SELECT przydzial_myszy * 12 + NVL(myszy_extra, 0) * 12 AS rocznie FROM dual
         )
-    ) "Zjada rocznie"
+    )  "Zjada rocznie"
 FROM Kocury;
+
+-- Zadanie 9
+
+--2020-10-27
+SELECT
+    pseudo,
+    w_stadku_od "W STADKU",
+    (
+        SELECT
+            CASE
+                WHEN day_of_month <= 15 AND last_wednesday >= '2020-10-27'
+                    THEN last_wednesday
+                ELSE NEXT_DAY(ADD_MONTHS('2020-10-27', 1) - 7, 'WEDNESDAY')
+            END
+        FROM (
+            SELECT
+                EXTRACT(DAY FROM w_stadku_od) AS day_of_month,
+                NEXT_DAY(
+                    LAST_DAY('2020-10-27') - INTERVAL '7' DAY,
+                    'WEDNESDAY'
+                ) AS last_wednesday
+            FROM dual
+        )
+    ) "WYPLATA"
+FROM Kocury;
+
+--2020-10-29
+SELECT
+    pseudo,
+    w_stadku_od "W STADKU",
+    (
+        SELECT
+            CASE
+                WHEN day_of_month <= 15 AND last_wednesday >= '2020-10-29'
+                    THEN last_wednesday
+                ELSE NEXT_DAY(ADD_MONTHS('2020-10-29', 1) - 7, 'WEDNESDAY')
+            END
+        FROM (
+            SELECT
+                EXTRACT(DAY FROM w_stadku_od) AS day_of_month,
+                NEXT_DAY(
+                    LAST_DAY('2020-10-29') - INTERVAL '7' DAY,
+                    'WEDNESDAY'
+                ) AS last_wednesday
+            FROM dual
+        )
+    ) "WYPLATA"
+FROM Kocury;
+
+-- Zadanie 10
+
+SELECT pseudo || ' - ' || NVL2(NULLIF(COUNT(*), 1), 'Nieunikalny', 'Unikalny') "Unikalnosc atr. PSEUDO"
+FROM Kocury
+GROUP BY pseudo;
+
+SELECT szef || ' - ' || NVL2(NULLIF(COUNT(*), 1), 'Nieunikalny', 'Unikalny') "Unikalnosc atr. SZEF"
+FROM Kocury
+GROUP BY szef
+HAVING szef IS NOT NULL;
+
+-- Zadanie 11
+SELECT pseudo "Pseudonim", COUNT(pseudo) "Liczba wrogow"
+FROM Wrogowie_Kocurow
+GROUP BY pseudo
+HAVING COUNT(pseudo) >= 2;
+
+-- Zadanie 12
+SELECT 'Liczba kotow= ' || COUNT(pseudo) || ' lowi jako ' || funkcja || ' i zjada max. ' || MAX(przydzial_myszy + NVL(myszy_extra, 0)) " "
+FROM Kocury
+WHERE plec != 'M'
+GROUP BY funkcja
+HAVING
+    funkcja != 'SZEFUNIO' AND
+    AVG(przydzial_myszy + NVL(myszy_extra, 0)) > 50;
+    
+-- Zadanie 13
+SELECT
+    nr_bandy "Nr bandy",
+    plec "Plec",
+    MIN(przydzial_myszy) "Minimalny przydzial"
+FROM Kocury
+GROUP BY nr_bandy, plec;
+
+-- Zadanie 14
+SELECT LEVEL "Poziom", pseudo "Pseudonim", funkcja "Funkcja", nr_bandy "Nr bandy"
+FROM Kocury
+WHERE plec = 'M'
+START WITH funkcja = 'BANDZIOR'
+CONNECT BY szef = PRIOR pseudo;
+
+-- Zadanie 15
+SELECT
+    LPAD(TO_CHAR(LEVEL - 1), (LEVEL -1) * 4 + LENGTH(TO_CHAR(LEVEL - 1)), '===>') || '            ' || imie "Hierarchia",
+    NVL(szef, 'Sam sobie szef') "Pseudo szefa",
+    funkcja "Funkcja"
+FROM Kocury
+WHERE myszy_extra > 0
+START WITH szef IS NULL
+CONNECT BY szef = PRIOR pseudo;
+
+-- Zadanie 16
+SELECT
+    RPAD(' ', (LEVEL - 1) * 4, ' ') || pseudo "Droga sluzbowa"
+FROM Kocury
+START WITH
+    plec = 'M' AND
+    EXTRACT(YEAR FROM CURRENT_DATE) - EXTRACT(YEAR FROM w_stadku_od) > 11 AND
+    myszy_extra IS NULL
+CONNECT BY pseudo = PRIOR szef;
