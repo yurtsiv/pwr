@@ -1,0 +1,4 @@
+sumwaga1=type Zakupy.txt | StarczyJeden $1 | SelKol 3 | SumaNum
+sumwaga2=type Zakupy.txt | StarczyJeden $* | SelKol 3 | SumaNum
+zakupydnia=type Zakupy.txt | StarczyJeden $1 
+zakupydniasum=type Zakupy.txt | StarczyJeden $1 | SelKol 4 | SumaNum
