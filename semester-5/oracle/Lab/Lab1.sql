@@ -182,3 +182,29 @@ FROM Kocury
 WHERE
     EXTRACT(YEAR FROM CURRENT_DATE) - EXTRACT(YEAR FROM w_stadku_od) > 11 AND
     EXTRACT(MONTH FROM w_stadku_od) BETWEEN 3 AND 9;
+    
+-- Zadanie 7
+SELECT
+    imie,
+    przydzial_myszy * 3 "MYSZY KWARTALNIE",
+    NVL(myszy_extra, 0) "KWARTALNE DODATKI"
+FROM Kocury
+WHERE
+    przydzial_myszy >= 55 AND
+    przydzial_myszy > NVL(myszy_extra, 0) * 2;
+
+
+-- Zadanie 8
+SELECT
+    imie,
+    (
+        SELECT
+            CASE
+                WHEN ROCZNY = 660 THEN "SMTH"
+                ELSE "SMTH ELSE"
+            END
+        FROM (
+            SELECT przydzial_myszy * 12 + NVL(myszy_extra, 0) * 12 AS ROCZNY FROM dual
+        )
+    ) "Zjada rocznie"
+FROM Kocury;
