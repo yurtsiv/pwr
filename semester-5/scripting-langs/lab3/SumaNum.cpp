@@ -10,7 +10,7 @@ int main() {
     while(getline(cin, rowStr)) {
         try {
             sum += stod(rowStr);
-        } catch (int a) {
+        } catch (invalid_argument a) {
             // noop
         }
     }
