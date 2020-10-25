@@ -1,0 +1,1 @@
+type Nostromo.txt | findStr /r .*It.*of$ | LiczbaLinii
