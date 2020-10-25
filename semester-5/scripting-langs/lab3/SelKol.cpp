@@ -16,9 +16,15 @@ int main(int argc, char* argv[]) {
 
         for (int i = 1; i < argc; i++) {
             int columnNum = stoi(argv[i]);
-            cout << row[columnNum - 1] << '\t';
+            cout << row[columnNum - 1];
+
+            // Print tab if not last column 
+            if (i < argc - 1)
+                cout << '\t';
         }
 
         cout << endl;
     }
+
+    return 0;
 }

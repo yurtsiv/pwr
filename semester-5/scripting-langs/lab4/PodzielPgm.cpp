@@ -1,7 +1,5 @@
 #include <iostream>
 #include <string>
-#include <vector>
-#include <sstream>
 #include <regex>
 
 using namespace std;
@@ -27,4 +25,6 @@ int main(int argc, char* argv[]) {
             cout << str << endl;
         }
     }
+
+    return 0;
 }

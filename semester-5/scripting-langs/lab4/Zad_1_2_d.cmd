@@ -1,1 +1,3 @@
-type Nostromo.txt | findStr /r .*It.*of$ | LiczbaLinii
+@echo off
+
+type Nostromo.txt | findStr It | findstr /e of | LiczbaLinii
