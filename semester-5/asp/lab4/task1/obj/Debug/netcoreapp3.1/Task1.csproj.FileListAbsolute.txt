@@ -1,0 +1,13 @@
+D:\pwr-repo\semester-5\asp\lab4\task1\bin\Debug\netcoreapp3.1\Task1.exe
+D:\pwr-repo\semester-5\asp\lab4\task1\bin\Debug\netcoreapp3.1\Task1.deps.json
+D:\pwr-repo\semester-5\asp\lab4\task1\bin\Debug\netcoreapp3.1\Task1.runtimeconfig.json
+D:\pwr-repo\semester-5\asp\lab4\task1\bin\Debug\netcoreapp3.1\Task1.runtimeconfig.dev.json
+D:\pwr-repo\semester-5\asp\lab4\task1\bin\Debug\netcoreapp3.1\Task1.dll
+D:\pwr-repo\semester-5\asp\lab4\task1\bin\Debug\netcoreapp3.1\Task1.pdb
+D:\pwr-repo\semester-5\asp\lab4\task1\obj\Debug\netcoreapp3.1\Task1.csprojAssemblyReference.cache
+D:\pwr-repo\semester-5\asp\lab4\task1\obj\Debug\netcoreapp3.1\Task1.AssemblyInfoInputs.cache
+D:\pwr-repo\semester-5\asp\lab4\task1\obj\Debug\netcoreapp3.1\Task1.AssemblyInfo.cs
+D:\pwr-repo\semester-5\asp\lab4\task1\obj\Debug\netcoreapp3.1\Task1.csproj.CoreCompileInputs.cache
+D:\pwr-repo\semester-5\asp\lab4\task1\obj\Debug\netcoreapp3.1\Task1.dll
+D:\pwr-repo\semester-5\asp\lab4\task1\obj\Debug\netcoreapp3.1\Task1.pdb
+D:\pwr-repo\semester-5\asp\lab4\task1\obj\Debug\netcoreapp3.1\Task1.genruntimeconfig.cache
