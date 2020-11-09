@@ -3,8 +3,9 @@ def average(arr):
 
 def moving_average(step, arr):
   res = []
-  for i in range(0, (len(arr) - step) + 1):
-    subset = arr[i:i+step]
+  actual_step = min(step, len(arr))
+  for i in range(0, (len(arr) - actual_step) + 1):
+    subset = arr[i:i+actual_step]
     res.append(average(subset))
 
   return res

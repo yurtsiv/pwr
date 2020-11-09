@@ -25,6 +25,6 @@ def next_prime(n):
     else:
       count += 1
 
-
-n = read_int("Start value:")
-print("Next prime " + str(next_prime(n)))
+while True:
+  n = read_int("Start value:")
+  print("Next prime " + str(next_prime(n)))
