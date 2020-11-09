@@ -1,6 +1,6 @@
-﻿#undef DEBUG
+﻿using System;
 
-using System;
+// Stepan Yurtsiv 246437
 
 namespace Task1
 {
@@ -13,9 +13,6 @@ namespace Task1
             Console.WriteLine(comment1);
             while (!int.TryParse(Console.ReadLine(), out num1))
             {
-#if DEBUG
-                Console.WriteLine("Debug: incorrect value");
-#endif
                 Console.WriteLine(comment1);
             }
 
@@ -23,9 +20,6 @@ namespace Task1
             Console.WriteLine(comment2);
             while (!int.TryParse(Console.ReadLine(), out num2))
             {
-#if DEBUG
-                Console.WriteLine("Debug: incorrect value");
-#endif
                 Console.WriteLine(comment2);
             }
 
@@ -37,18 +31,12 @@ namespace Task1
             Console.WriteLine(comment1);
             while (!int.TryParse(Console.ReadLine(), out num1))
             {
-#if DEBUG
-                Console.WriteLine("Debug: incorrect value");
-#endif
                 Console.WriteLine(comment1);
             }
 
             Console.WriteLine(comment2);
             while (!int.TryParse(Console.ReadLine(), out num2))
             {
-#if DEBUG
-                Console.WriteLine("Debug: incorrect value");
-#endif
                 Console.WriteLine(comment2);
             }
         }
@@ -57,13 +45,13 @@ namespace Task1
         {
             Console.WriteLine("-- Pierwsza realizacja --");
             var res = getFromConsoleXY("Liczba 1", "Liczba 2");
-            Console.WriteLine($"Result: {res}\n");
+            Console.WriteLine($"Wynik: {res}\n");
 
             Console.WriteLine("-- Druga realizacja  --");
             int num1;
             int num2;
-            getFromConsoleXY("Number 1", "Number 2", out num1, out num2);
-            Console.WriteLine($"num1={num1}, num2={num2}");
+            getFromConsoleXY("Liczba 1", "Liczba 2", out num1, out num2);
+            Console.WriteLine($"liczba1={num1}, liczba2={num2}");
         }
     }
 }
