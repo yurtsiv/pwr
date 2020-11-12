@@ -1,7 +1,7 @@
-﻿#undef DEBUG
-
-using System;
+﻿using System;
 using System.Linq;
+
+// Stepan Yurtsiv 246437
 
 namespace Task2
 {
@@ -41,26 +41,10 @@ namespace Task2
 
         static void Main(string[] args)
         {
-#if DEBUG
-            Console.WriteLine("Debug: calling with all default params");
-#endif
             DrawCard("Stepan");
-
-#if DEBUG
-            Console.WriteLine("Debug: calling with second line");
-#endif
             DrawCard("Stepan", "Yurtsiv");
-#if DEBUG
-            Console.WriteLine("Debug: using named param for minWidth");
-#endif
             DrawCard("Stepan", "Yurtsiv", minWidth: 30);
-#if DEBUG
-            Console.WriteLine("Debug: using named params");
-#endif
             DrawCard(line1: "Stepan", line2: "Yurtsiv", borderWidth: 4);
-#if DEBUG
-            Console.WriteLine("Debug: custom width and border char");
-#endif
             DrawCard("Stepan", "Yurtsiv", minWidth: 32, borderChar: '@');
         }
     }
