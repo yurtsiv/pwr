@@ -58,4 +58,107 @@ FROM
 )
 GROUP BY imie, funkcja;
 
+ALTER SESSION SET NLS_DATE_FORMAT='DD-MM-YYYY';
 
+-- Zadanie 20
+SELECT
+    imie "Imie kotki",
+    nazwa "Nazwa bandy",
+    imie_wroga "Imie wroga",
+    LPAD(stopien_wrogosci, 15) "Ocena wroga",
+    data_incydentu "Data incydentu"
+FROM Kocury
+NATURAL JOIN Bandy
+NATURAL JOIN Wrogowie_kocurow
+NATURAL JOIN Wrogowie
+WHERE plec = 'D' AND data_incydentu > '01.01.2007'
+ORDER BY imie
+
+-- Zadanie 21
+SELECT nazwa "Nazwa bandy", COUNT(DISTINCT pseudo) "Koty z wrogami"
+FROM Bandy
+NATURAL JOIN Kocury
+NATURAL JOIN Wrogowie_kocurow
+GROUP BY nazwa
+
+-- Zadanie 22
+SELECT funkcja "Funkcja", pseudo "Pseudonim kota", COUNT(*) "Liczba wrogów"
+FROM Kocury
+NATURAL JOIN Wrogowie_kocurow
+GROUP BY funkcja, pseudo
+HAVING COUNT(*) > 1
+
+-- Zadanie 23
+SELECT
+    imie,
+    przydzial_myszy * 12 + myszy_extra * 12 "Dawka roczna",
+    'powyzej 864' "Dawka"
+FROM Kocury
+WHERE
+    przydzial_myszy * 12 + myszy_extra * 12 > 864 AND
+    myszy_extra IS NOT NULL
+UNION
+SELECT
+    imie,
+    przydzial_myszy * 12 + myszy_extra * 12 "Dawka roczna",
+    '864' "Dawka"
+FROM KOCURY
+WHERE
+    przydzial_myszy * 12 + myszy_extra * 12 = 864 AND
+    myszy_extra IS NOT NULL
+UNION
+SELECT
+    imie,
+    przydzial_myszy * 12 + myszy_extra * 12 "Dawka roczna",
+    'ponizej 864' "Dawka"
+FROM KOCURY
+WHERE
+    przydzial_myszy * 12 + myszy_extra * 12 < 864 AND
+    myszy_extra IS NOT NULL
+ORDER BY "Dawka roczna" DESC
+
+-- Zadanie 24 (bez podzapytań i operatorów zbiorowych)
+SELECT LPAD(nr_bandy, 10) "NR BANDY", nazwa, teren
+FROM Bandy
+LEFT JOIN Kocury USING(nr_bandy)
+WHERE pseudo IS NULL
+
+-- Zadanie 24 (z operatorem zbiorowym)
+SELECT nr_bandy, nazwa, teren
+FROM Bandy
+LEFT JOIN Kocury USING(nr_bandy)
+MINUS
+SELECT nr_bandy, nazwa, teren
+FROM Bandy
+NATURAL JOIN Kocury;
+
+-- Zadanie 25
+SELECT *
+FROM Kocury
+WHERE przydzial_myszy >= 3 * (
+        SELECT przydzial_myszy
+        FROM (SELECT * FROM Kocury ORDER BY przydzial_myszy DESC)
+        NATURAL JOIN Bandy
+        WHERE funkcja = 'MILUSIA' AND teren IN ('SAD', 'CALOSC') AND rownum = 1
+      );
+
+-- Zadanie 26
+SELECT
+  funkcja,
+  ROUND(AVG(przydzial_myszy + NVL(myszy_extra, 0)))  "Srednio najw. i najm. myszy"
+FROM Funkcje
+NATURAL JOIN Kocury
+WHERE funkcja <> 'SZEFUNIO'
+GROUP BY funkcja
+HAVING AVG(przydzial_myszy + NVL(myszy_extra, 0)) IN (
+    (SELECT MIN(AVG(przydzial_myszy + NVL(myszy_extra, 0)))
+     FROM Funkcje
+     NATURAL JOIN Kocury
+     WHERE funkcja <> 'SZEFUNIO'
+     GROUP BY Funkcja),
+    (SELECT MAX(AVG(przydzial_myszy + NVL(myszy_extra, 0)))
+     FROM Funkcje
+     NATURAL JOIN Kocury
+     WHERE funkcja <> 'SZEFUNIO'
+     GROUP BY Funkcja)
+);
