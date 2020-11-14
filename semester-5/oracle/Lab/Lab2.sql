@@ -255,3 +255,50 @@ FROM Kocury
 GROUP BY EXTRACT(YEAR FROM w_stadku_od)
 ORDER BY "Liczba wstapien"
 
+-- Zadanie 29a
+SELECT
+    K1.imie,
+    K1.przydzial_myszy + NVL(K1.myszy_extra, 0) "Zjada",
+    K1.nr_bandy "Nr bandy",
+    AVG(K2.przydzial_myszy + NVL(K2.myszy_extra, 0)) "Srednia bandy"
+FROM Kocury K1
+JOIN Kocury K2 ON K1.nr_bandy = K2.nr_bandy
+WHERE K1.plec = 'M'
+GROUP BY K1.imie, K1.nr_bandy, K1.przydzial_myszy, K1.myszy_extra
+HAVING (K1.przydzial_myszy + NVL(K1.myszy_extra, 0)) <= (
+     AVG(K2.przydzial_myszy + NVL(K2.myszy_extra, 0))
+)
+ORDER BY K1.nr_bandy DESC
+
+-- Zadanie 29b
+SELECT
+    imie,
+    przydzial_myszy + NVL(myszy_extra, 0) "Zjada",
+    nr_bandy "Nr bandy",
+    "Srednia bandy"
+FROM (
+    SELECT nr_bandy, AVG(przydzial_myszy + NVL(myszy_extra, 0)) "Srednia bandy"
+    FROM Kocury
+    GROUP BY nr_bandy
+)
+JOIN Kocury USING (nr_bandy)
+WHERE (przydzial_myszy + NVL(myszy_extra, 0)) <= "Srednia bandy" AND plec = 'M'
+ORDER BY nr_bandy DESC
+
+-- Zadanie 29c
+SELECT
+    K.imie,
+    K.przydzial_myszy + NVL(myszy_extra, 0) "Zjada",
+    K.nr_bandy "Nr bandy",
+    (
+        SELECT AVG(przydzial_myszy + NVL(myszy_extra, 0))
+        FROM Kocury
+        WHERE nr_bandy = K.nr_bandy
+    ) "Srednia bandy"
+FROM Kocury K
+WHERE (przydzial_myszy + NVL(myszy_extra, 0)) <= (
+    SELECT AVG(przydzial_myszy + NVL(myszy_extra, 0))
+    FROM Kocury
+    WHERE nr_bandy = K.nr_bandy
+) AND plec = 'M'
+ORDER BY nr_bandy DESC
