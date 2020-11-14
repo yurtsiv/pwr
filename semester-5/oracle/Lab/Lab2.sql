@@ -162,3 +162,96 @@ HAVING AVG(przydzial_myszy + NVL(myszy_extra, 0)) IN (
      WHERE funkcja <> 'SZEFUNIO'
      GROUP BY Funkcja)
 );
+
+-- Zadanie 27a
+SELECT pseudo, (przydzial_myszy + NVL(myszy_extra, 0)) Zjada
+FROM Kocury K
+WHERE 6 >= (
+        SELECT COUNT(*)
+        FROM Kocury
+        WHERE (K.przydzial_myszy + NVL(K.myszy_extra, 0)) <
+                (przydzial_myszy + NVL(myszy_extra, 0))
+    )
+ORDER BY Zjada DESC
+
+-- Zadanie 27b
+SELECT pseudo, (przydzial_myszy + NVL(myszy_extra, 0)) Zjada
+FROM Kocury
+WHERE (przydzial_myszy + NVL(myszy_extra, 0)) IN (
+    SELECT *
+    FROM (
+        SELECT (przydzial_myszy + NVL(myszy_extra, 0)) zjada
+        FROM Kocury
+        ORDER BY zjada DESC
+    )
+    WHERE ROWNUM <= 6
+)
+ORDER BY Zjada DESC
+
+-- Zadanie 27c
+SELECT K1.pseudo, MAX(K1.przydzial_myszy + NVL(K1.myszy_extra, 0)) Zjada
+FROM Kocury K1, Kocury K2
+WHERE (K1.przydzial_myszy + NVL(K1.myszy_extra, 0)) <=
+      (K2.przydzial_myszy + NVL(K2.myszy_extra, 0))
+GROUP BY K1.pseudo
+HAVING COUNT(DISTINCT K2.przydzial_myszy + NVL(K2.myszy_extra, 0)) <= 6
+ORDER BY Zjada DESC
+
+-- Zadanie 27d
+SELECT pseudo, Zjada    
+FROM (
+    SELECT
+        pseudo,
+        przydzial_myszy + NVL(myszy_extra, 0) Zjada,
+        DENSE_RANK() OVER (ORDER BY przydzial_myszy + NVL(myszy_extra, 0) DESC) pozycja
+    FROM Kocury
+)
+WHERE pozycja <= 6
+
+-- -- Zadanie 28
+SELECT
+    TO_CHAR(EXTRACT(YEAR FROM w_stadku_od)) "Rok",
+    COUNT(*) "Liczba wstapien"
+FROM Kocury
+GROUP BY EXTRACT(YEAR FROM w_stadku_od)
+HAVING COUNT(*) IN (
+    -- Pierwsza większa od śrendiej
+    (
+        SELECT *
+        FROM (
+            SELECT COUNT(*)
+            FROM Kocury
+            GROUP BY EXTRACT(YEAR FROM w_stadku_od)
+            HAVING COUNT(*) > (
+                SELECT AVG(COUNT(*))
+                FROM Kocury
+                GROUP BY EXTRACT(YEAR FROM w_stadku_od)
+            )
+            ORDER BY COUNT(*) DESC
+        )
+        WHERE ROWNUM = 1
+    ),
+
+    -- Pierwsza niższa od średniej
+    (
+        SELECT *
+        FROM (
+            SELECT COUNT(*)
+            FROM Kocury
+            GROUP BY EXTRACT(YEAR FROM w_stadku_od)
+            HAVING COUNT(*) < (
+                SELECT AVG(COUNT(*))
+                FROM Kocury
+                GROUP BY EXTRACT(YEAR FROM w_stadku_od)
+            )
+            ORDER BY COUNT(*) DESC
+        )
+        WHERE ROWNUM = 1
+    )
+)
+UNION
+SELECT 'Srednia' "Rok", ROUND(AVG(COUNT(*)), 7) "Liczba wstapien"
+FROM Kocury
+GROUP BY EXTRACT(YEAR FROM w_stadku_od)
+ORDER BY "Liczba wstapien"
+
