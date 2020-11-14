@@ -302,3 +302,317 @@ WHERE (przydzial_myszy + NVL(myszy_extra, 0)) <= (
     WHERE nr_bandy = K.nr_bandy
 ) AND plec = 'M'
 ORDER BY nr_bandy DESC
+
+-- Zadanie 30
+SELECT
+    imie,
+    w_stadku_od "Wstapil do stadka",
+    '<--- NAJMLODSZY STAZEM W BANDZIE ' || nazwa " "
+FROM Kocury K
+JOIN Bandy B ON K.nr_bandy = B.nr_bandy 
+WHERE w_stadku_od = (
+    SELECT MAX(w_stadku_od)
+    FROM Kocury
+    WHERE K.nr_bandy = nr_bandy
+)
+UNION
+SELECT
+    imie,
+    w_stadku_od "Wstapil do stadka",
+    '<--- NAJSTARSZY STAZEM W BANDZIE ' || nazwa " "
+FROM Kocury K
+JOIN Bandy B ON K.nr_bandy = B.nr_bandy 
+WHERE w_stadku_od = (
+    SELECT MIN(w_stadku_od) FROM Kocury WHERE K.nr_bandy = nr_bandy
+)
+UNION
+SELECT
+    imie,
+    w_stadku_od,
+    ' ' " "
+FROM Kocury K
+JOIN Bandy B ON K.nr_bandy = B.nr_bandy
+WHERE w_stadku_od NOT IN (
+    (SELECT MAX(w_stadku_od) FROM Kocury WHERE K.nr_bandy = nr_bandy),
+    (SELECT MIN(w_stadku_od) FROM Kocury WHERE K.nr_bandy = nr_bandy)
+)
+
+-- Zadanie 31
+CREATE OR REPLACE VIEW Bandy_info AS
+SELECT
+    nazwa nazwa_bandy,
+    AVG(przydzial_myszy) sre_spoz,
+    MAX(przydzial_myszy) max_spoz,
+    MIN(przydzial_myszy) min_spoz,
+    COUNT(*) koty,
+    COUNT(myszy_extra) koty_z_dod
+FROM Kocury
+NATURAL JOIN Bandy
+GROUP BY nazwa
+ORDER BY max_spoz DESC;
+
+SELECT * from Bandy_info
+
+-- TODO: check
+SELECT
+    pseudo,
+    imie,
+    funkcja,
+    przydzial_myszy "Zjada",
+    'OD ' || min || ' DO ' || max "Granice spozycia",
+    w_stadku_od "Lowi od"
+FROM Kocury
+NATURAL JOIN Bandy
+NATURAL JOIN Bandy_info
+WHERE pseudo = $(pseudonim_kota)
+
+-- Zadanie 32
+SELECT
+    pseudo "Pseudonim",
+    plec "Plec",
+    przydzial_myszy "Myszy przed podw.",
+    NVL(myszy_extra, 0) "Extra przed podw."
+FROM Kocury
+WHERE pseudo IN (
+    (
+        SELECT *
+        FROM (
+            SELECT pseudo
+            FROM Kocury
+            NATURAL JOIN Bandy
+            WHERE nazwa = 'CZARNI RYCERZE'
+            ORDER BY w_stadku_od
+        )
+        WHERE ROWNUM < 4
+    )
+    UNION ALL
+    (
+        SELECT *
+        FROM (
+            SELECT pseudo
+            FROM Kocury
+            NATURAL JOIN Bandy
+            WHERE nazwa = 'LACIACI MYSLIWI'
+            ORDER BY w_stadku_od
+        )
+        WHERE ROWNUM < 4   
+    )
+);
+
+UPDATE Kocury
+SET przydzial_myszy =
+    CASE plec
+    WHEN 'M' THEN przydzial_myszy + 10
+    ELSE (
+        przydzial_myszy + (SELECT MIN(przydzial_myszy) FROM Kocury) * 0.1
+    )
+    END,
+    myszy_extra = NVL(myszy_extra, 0) + (
+        SELECT AVG(NVL(myszy_extra, 0))
+        FROM Kocury K2
+        WHERE Kocury.nr_bandy = K2.nr_bandy
+    ) * 0.15
+WHERE pseudo IN (
+    (
+        SELECT *
+        FROM (
+            SELECT pseudo
+            FROM Kocury
+            NATURAL JOIN Bandy
+            WHERE nazwa = 'CZARNI RYCERZE'
+            ORDER BY w_stadku_od
+        )
+        WHERE ROWNUM < 4
+    )
+    UNION ALL
+    (
+        SELECT *
+        FROM (
+            SELECT pseudo
+            FROM Kocury
+            NATURAL JOIN Bandy
+            WHERE nazwa = 'LACIACI MYSLIWI'
+            ORDER BY w_stadku_od
+        )
+        WHERE ROWNUM < 4   
+    )
+);
+
+SELECT
+    pseudo "Pseudonim",
+    plec "Plec",
+    przydzial_myszy "Myszy po podw.",
+    NVL(myszy_extra, 0) "Extra po podw."
+FROM Kocury
+WHERE pseudo IN (
+    (
+        SELECT *
+        FROM (
+            SELECT pseudo
+            FROM Kocury
+            NATURAL JOIN Bandy
+            WHERE nazwa = 'CZARNI RYCERZE'
+            ORDER BY w_stadku_od
+        )
+        WHERE ROWNUM < 4
+    )
+    UNION ALL
+    (
+        SELECT *
+        FROM (
+            SELECT pseudo
+            FROM Kocury
+            NATURAL JOIN Bandy
+            WHERE nazwa = 'LACIACI MYSLIWI'
+            ORDER BY w_stadku_od
+        )
+        WHERE ROWNUM < 4   
+    )
+);
+
+ROLLBACK;
+
+-- Zadanie 33a
+SELECT
+    DECODE(plec, 'Kocur', ' ', nazwa) nazwa,
+    plec,
+    ile,
+    szefunio,
+    bandzior,
+    lowczy,
+    lapacz,
+    kot,
+    milusia,
+    dzielczy,
+    suma
+FROM (
+    SELECT
+        nazwa,
+        DECODE(PLEC, 'D', 'Kotka', 'Kocur') plec,
+        TO_CHAR(COUNT(*)) ile,
+        TO_CHAR(SUM(DECODE(funkcja,'SZEFUNIO', NVL(przydzial_myszy, 0) + NVL(myszy_extra, 0), 0))) szefunio,
+        TO_CHAR(SUM(DECODE(funkcja, 'BANDZIOR', NVL(przydzial_myszy, 0) + NVL(myszy_extra, 0), 0))) bandzior,
+        TO_CHAR(SUM(DECODE(funkcja, 'LOWCZY', NVL(przydzial_myszy, 0) + NVL(myszy_extra, 0), 0))) lowczy,
+        TO_CHAR(SUM(DECODE(funkcja, 'LAPACZ', NVL(przydzial_myszy, 0) + NVL(myszy_extra, 0), 0))) lapacz,
+        TO_CHAR(SUM(DECODE(funkcja, 'KOT', NVL(przydzial_myszy, 0) + NVL(myszy_extra, 0), 0))) kot,
+        TO_CHAR(SUM(DECODE(funkcja, 'MILUSIA', NVL(przydzial_myszy, 0) + NVL(myszy_extra, 0), 0))) milusia,
+        TO_CHAR(SUM(DECODE(funkcja, 'DZIELCZY', NVL(przydzial_myszy, 0) + NVL(myszy_extra, 0), 0))) dzielczy,
+        TO_CHAR(SUM(NVL(przydzial_myszy, 0) + NVL(myszy_extra, 0))) suma
+    FROM Kocury
+    NATURAL JOIN Bandy
+    GROUP BY nazwa, plec
+    UNION
+    SELECT
+        'Z----------------',
+        '--------',
+        '----------',
+        '-----------',
+        '-----------',
+        '----------',
+        '----------',
+        '----------',
+        '----------',
+        '----------',
+        '----------'
+    FROM dual
+    UNION
+    SELECT
+        'ZJADA RAZEM' nazwa, ' ' plec, ' ' ile,
+        TO_CHAR(SUM(DECODE(funkcja, 'SZEFUNIO', NVL(przydzial_myszy, 0) + NVL(myszy_extra, 0), 0))) szefunio,
+        TO_CHAR(SUM(DECODE(funkcja, 'BANDZIOR', NVL(przydzial_myszy, 0) + NVL(myszy_extra, 0), 0))) bandzior,
+        TO_CHAR(SUM(DECODE(funkcja, 'LOWCZY', NVL(przydzial_myszy, 0) + NVL(myszy_extra, 0), 0))) lowczy,
+        TO_CHAR(SUM(DECODE(funkcja, 'LAPACZ', NVL(przydzial_myszy, 0) + NVL(myszy_extra, 0), 0))) lapacz,
+        TO_CHAR(SUM(DECODE(funkcja, 'KOT', NVL(przydzial_myszy, 0) + NVL(myszy_extra, 0),0))) kot,
+        TO_CHAR(SUM(DECODE(funkcja, 'MILUSIA', NVL(przydzial_myszy, 0) + NVL(myszy_extra, 0), 0))) milusia,
+        TO_CHAR(SUM(DECODE(funkcja, 'DZIELCZY', NVL(przydzial_myszy, 0) + NVL(myszy_extra, 0), 0))) dzielczy,
+        TO_CHAR(SUM(NVL(przydzial_myszy, 0) + NVL(myszy_extra, 0))) suma
+    FROM Kocury
+    NATURAL JOIN BANDY
+    ORDER BY 1, 2 DESC
+);
+
+-- Zadanie 33b
+SELECT *
+FROM
+(
+  SELECT
+    TO_CHAR(DECODE(plec, 'D', nazwa, ' ')) "NAZWA BANDY",
+    TO_CHAR(DECODE(plec, 'D', 'Kotka', 'Kocor')) plec,
+    TO_CHAR(ile) ile,
+    TO_CHAR(NVL(szefunio, 0)) szefunio,
+    TO_CHAR(NVL(bandzior, 0)) bandzior,
+    TO_CHAR(NVL(lowczy, 0)) lowczy,
+    TO_CHAR(NVL(lapacz, 0)) lapacz,
+    TO_CHAR(NVL(kot, 0)) kot,
+    TO_CHAR(NVL(milusia, 0)) milusia,
+    TO_CHAR(NVL(dzielczy, 0)) dzielczy,
+    TO_CHAR(NVL(suma, 0)) suma
+  FROM
+  (
+    SELECT nazwa, plec, funkcja, przydzial_myszy + NVL(myszy_extra, 0) liczba
+    FROM Kocury
+    NATURAL JOIN Bandy
+  ) PIVOT (
+      SUM(liczba) FOR funkcja IN (
+        'SZEFUNIO' szefunio,
+        'BANDZIOR' bandzior,
+        'LOWCZY' lowczy,
+        'LAPACZ' lapacz,
+        'KOT' kot,
+        'MILUSIA' milusia,
+        'DZIELCZY' dzielczy
+    )
+  ) JOIN (
+    SELECT nazwa n, plec p, COUNT(pseudo) ile, SUM(przydzial_myszy + NVL(myszy_extra, 0)) suma
+    FROM Kocury
+    NATURAL JOIN Bandy
+    GROUP BY nazwa, plec
+    ORDER BY nazwa
+  ) ON n = nazwa AND p = plec
+)
+UNION ALL
+SELECT
+    'Z--------------',
+    '------',
+    '--------',
+    '---------',
+    '---------',
+    '--------',
+    '--------',
+    '--------',
+    '--------',
+    '--------',
+    '--------'
+FROM DUAL
+UNION ALL
+SELECT 
+    'ZJADA RAZEM',
+    ' ',
+    ' ',
+    TO_CHAR(NVL(szefunio, 0)) szefunio,
+    TO_CHAR(NVL(bandzior, 0)) bandzior,
+    TO_CHAR(NVL(lowczy, 0)) lowczy,
+    TO_CHAR(NVL(lapacz, 0)) lapacz,
+    TO_CHAR(NVL(kot, 0)) kot,
+    TO_CHAR(NVL(milusia, 0)) milusia,
+    TO_CHAR(NVL(dzielczy, 0)) dzielczy,
+    TO_CHAR(NVL(suma, 0)) suma
+FROM
+(
+  SELECT funkcja, przydzial_myszy + NVL(myszy_extra, 0) liczba
+  FROM Kocury
+  NATURAL JOIN Bandy
+) PIVOT (
+    SUM(liczba) FOR funkcja IN (
+        'SZEFUNIO' szefunio,
+        'BANDZIOR' bandzior,
+        'LOWCZY' lowczy,
+        'LAPACZ' lapacz,
+        'KOT' kot,
+        'MILUSIA' milusia,
+        'DZIELCZY' dzielczy
+    )
+) CROSS JOIN (
+  SELECT SUM(przydzial_myszy + NVL(myszy_extra, 0)) suma
+  FROM Kocury
+);
