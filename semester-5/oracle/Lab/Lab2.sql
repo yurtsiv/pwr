@@ -353,18 +353,17 @@ ORDER BY max_spoz DESC;
 
 SELECT * from Bandy_info
 
--- TODO: check
 SELECT
     pseudo,
     imie,
     funkcja,
     przydzial_myszy "Zjada",
-    'OD ' || min || ' DO ' || max "Granice spozycia",
+    'OD ' || min_spoz || ' DO ' || max_spoz "Granice spozycia",
     w_stadku_od "Lowi od"
-FROM Kocury
-NATURAL JOIN Bandy
-NATURAL JOIN Bandy_info
-WHERE pseudo = $(pseudonim_kota)
+FROM Kocury K
+JOIN Bandy B ON K.nr_bandy = B.nr_bandy
+JOIN Bandy_info BI ON B.nazwa = BI.nazwa_bandy
+WHERE pseudo = 'PLACEK';
 
 -- Zadanie 32
 SELECT
