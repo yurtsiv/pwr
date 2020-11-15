@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace task1
 {
@@ -13,11 +11,12 @@ namespace task1
         public int whole { get; set; }
 
         public int numerator 
-        { 
+        {
             get => _numerator;
             set
             {
                 _numerator = value < 0 ? -value : value;
+
                 Simplify();
             }
         }
@@ -95,6 +94,16 @@ namespace task1
             }
         }
 
+        public static MixedNumber operator+(MixedNumber a, MixedNumber b)
+        {
+            int lcm = LeastCommonMultiple(a.denominator, b.denominator);
+            int num1 = a.numerator * (lcm / a.denominator);
+            int num2 = b.numerator * (lcm / b.denominator);
+            MixedNumber res = new MixedNumber(a.whole + b.whole, num1 + num2, lcm);
+            res.Simplify();
+            return res;
+        }
+
         public override string ToString()
         {
             return $"{whole} {numerator}/{denominator}";
@@ -103,6 +112,23 @@ namespace task1
         private static void CheckDenominator(int denominator)
         {
             if (denominator == 0) throw new ArgumentException("Denominator can't be zero");
+        }
+
+        private static int LeastCommonMultiple(int a, int b)
+        {
+            int baseA = a, baseB = b;
+            while (a != b)
+            {
+                if (a > b)
+                {
+                    b += baseB;
+                }
+                else
+                {
+                    a += baseA;
+                }
+            }
+            return a;
         }
 
         private static int GreatestCommonDivisor(int a, int b)
