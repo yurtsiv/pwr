@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Text;
+
+// Stepan Yurtsiv 246437
 
 namespace task2
 {
@@ -6,7 +9,10 @@ namespace task2
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!".SampleExstensionMethod());
+            string example = "Stepan Yurtsiv, 246437 ąęś";
+
+            Console.OutputEncoding = Encoding.Unicode;
+            Console.WriteLine(example.SampleExstensionMethod());
         }
     }
 }
