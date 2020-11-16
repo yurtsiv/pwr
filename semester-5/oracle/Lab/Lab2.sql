@@ -162,7 +162,7 @@ WHERE (przydzial_myszy + NVL(myszy_extra, 0)) IN (
         GROUP BY (przydzial_myszy + NVL(myszy_extra, 0))
         ORDER BY zjada DESC
     )
-    WHERE ROWNUM < 7
+    WHERE ROWNUM <= 12
 )
 ORDER BY Zjada DESC;
 
@@ -271,9 +271,9 @@ SELECT imie,
    '<--- NAJMLODSZY STAZEM W BANDZIE ' || nazwa " "
 FROM Kocury K JOIN Bandy B ON K.nr_bandy = B.nr_bandy 
 WHERE w_stadku_od = (
-SELECT MAX(w_stadku_od)
-FROM Kocury
-WHERE K.nr_bandy = nr_bandy
+    SELECT MAX(w_stadku_od)
+    FROM Kocury
+    WHERE K.nr_bandy = nr_bandy
 )
 UNION
 SELECT imie,
@@ -281,9 +281,9 @@ SELECT imie,
    '<--- NAJSTARSZY STAZEM W BANDZIE ' || nazwa " "
 FROM Kocury K JOIN Bandy B ON K.nr_bandy = B.nr_bandy 
 WHERE w_stadku_od = (
-SELECT MIN(w_stadku_od)
-FROM Kocury
-WHERE K.nr_bandy = nr_bandy
+    SELECT MIN(w_stadku_od)
+    FROM Kocury
+    WHERE K.nr_bandy = nr_bandy
 )
 UNION
 SELECT imie,
@@ -292,8 +292,8 @@ SELECT imie,
 FROM Kocury K
 JOIN Bandy B ON K.nr_bandy = B.nr_bandy
 WHERE w_stadku_od NOT IN (
-(SELECT MAX(w_stadku_od) FROM Kocury WHERE K.nr_bandy = nr_bandy),
-(SELECT MIN(w_stadku_od) FROM Kocury WHERE K.nr_bandy = nr_bandy)
+    (SELECT MAX(w_stadku_od) FROM Kocury WHERE K.nr_bandy = nr_bandy),
+    (SELECT MIN(w_stadku_od) FROM Kocury WHERE K.nr_bandy = nr_bandy)
 );
 
 -- Zadanie 31
@@ -542,7 +542,7 @@ FROM (
         'MILUSIA' milusia,
         'DZIELCZY' dzielczy
     )
-) CROSS JOIN (
+), (
     SELECT SUM(przydzial_myszy + NVL(myszy_extra, 0)) suma
     FROM Kocury
 );
