@@ -8,8 +8,9 @@ namespace task2
         {
             foreach (object figure in figures)
             {
-                IHasInterior interiorFigure = figure as IHasInterior;
-                Console.WriteLine(interiorFigure == null ? "No color" : interiorFigure.color);
+                Console.WriteLine(
+                    figure is IHasInterior ? ((IHasInterior)figure).color : "No color"
+                );
             }
         }
 
@@ -17,9 +18,11 @@ namespace task2
         {
             object[] figures =
             {
+                new Triangle("purple"),
                 new Point(),
                 new Square("red"),
                 new Point(),
+                new Triangle("blue"),
                 new Point(),
                 new Square("black")
             };

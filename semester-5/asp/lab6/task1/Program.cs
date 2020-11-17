@@ -4,7 +4,13 @@ namespace task1
 {
     class Program
     {
-        static double getTotalLoad(Vehicle[] vehicles)
+        static void printComputerInfo()
+        {
+            Console.WriteLine("Stepan Yurtsiv, 246437");
+            Console.WriteLine($"PC: {Environment.MachineName}\n");
+        }
+
+        static double getTotalLoad1(Vehicle[] vehicles)
         {
             double res = 0;
             foreach(Vehicle vehicle in vehicles)
@@ -18,9 +24,24 @@ namespace task1
 
             return res;
         }
+        static double getTotalLoad2(Vehicle[] vehicles)
+        {
+            double res = 0;
+            foreach(Vehicle vehicle in vehicles)
+            {
+                if (vehicle is Car)
+                {
+                    res += ((Car)vehicle).maxLoad;
+                }
+            }
+
+            return res;
+        }
 
         static void Main(string[] args)
         {
+            printComputerInfo();
+
             Car car1 = new Car("Nissan", "Juke", 1300, 1670); ;
             Car car2 = new Car("Toyota", "Corolla", 1190, 945);
 
@@ -59,7 +80,8 @@ namespace task1
                 Console.WriteLine();
             }
 
-            Console.WriteLine($"Total max load: {getTotalLoad(vehicles)}");
+            Console.WriteLine($"Total max load (as): {getTotalLoad1(vehicles)}kg");
+            Console.WriteLine($"Total max load (is): {getTotalLoad2(vehicles)}kg");
         }
     }
 }
