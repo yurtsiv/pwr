@@ -9,3 +9,29 @@ Czas wykonania kodu:
     - Java 123 ms
     - C++: 68 ms
     - Python: 15 ms
+
+Czas tworzenia kodu:
+  * Zad 2
+    - batch: 40 min
+    - Java: 15 min
+    - C++: 10 min
+    - Python: 10min
+
+  * Zad 3
+    - batch: 2 min
+    - Java: 3 min
+    - C++: 2 min
+    - Python: 1 min
+
+Rozmiar kodu:
+  * Zad 2
+    - batch: 8 linii
+    - Java: 25 linii
+    - C++: 37 linii
+    - Python: 22 linii
+  
+  * Zad 3
+    - batch: 9 linii
+    - Java: 34 linii
+    - C++: 43 linii
+    - Python: 26 linii
