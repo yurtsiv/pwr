@@ -84,3 +84,4 @@ for cases_country in cases_countries:
   country_name = country_names.get_name_by_code(cases_country.country_code)
 
   print("Worst day for " + country_name + ": " + str(worst_day)) 
+pass

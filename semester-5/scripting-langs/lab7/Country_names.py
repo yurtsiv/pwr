@@ -18,8 +18,6 @@ class Country_names:
     for country_name in country_names:
       if calc_edit_distance(country_name, name) < 1:
         return
-      else:
-        pass
 
     self.__countries[code] = { "name": name, "continent": continent }
 
@@ -34,7 +32,7 @@ class Country_names:
   def get_code_by_name(self, name):
     codes = filter(
       lambda code:
-        calc_edit_distance(self.__countries["code"], name) < 2,
+        calc_edit_distance(self.__countries[code]["name"], name) < 2,
       list(self.__countries.keys())
     )
 
