@@ -42,21 +42,27 @@ most_cases_country = max(cases_countries)
 most_cases_country_name = country_names.get_name_by_code(most_cases_country.country_code)
 print("\nMost cases: " + most_cases_country_name)
 
+def get_worst_day(cases_days):
+  cases_days.sort(key=lambda day: day.day)
+  worst_day_date = all_days[0].day
+  worst_day_deaths = all_days[0].deaths
+
+  for day, cases_for_date in groupby(cases_days, key=lambda day: day.day):
+    deaths = sum(map(lambda day: day.deaths, list(cases_for_date)))
+
+    if deaths > worst_day_deaths:
+      worst_day_date = day
+      worst_day_deaths = deaths
+  
+  return (worst_day_date, worst_day_deaths)
+
+
 # Worst day in the world
 all_days = flatten_list(
   map(lambda country: country.all_days, cases_countries)
 )
 
-all_days.sort(key=lambda day: day.day)
-worst_day_date = all_days[0].day
-worst_day_deaths = all_days[0].deaths
-
-for day, day_cases in groupby(all_days, key=lambda day: day.day):
-  deaths = sum(map(lambda day: day.deaths, list(day_cases)))
-
-  if deaths > worst_day_deaths:
-    worst_day_date = day
-    worst_day_deaths = deaths
+(worst_day_date, worst_day_deaths) = get_worst_day(all_days)
 
 print("\nWorst day in the world: %s  %d deaths" % (worst_day_date.strftime(DATE_FORMAT), worst_day_deaths))
 
@@ -64,18 +70,22 @@ print("\nWorst day in the world: %s  %d deaths" % (worst_day_date.strftime(DATE_
 print("\n-- Worst days for each continent --\n")
 countries_in_continents = country_names.countries_in_continents
 for continent in countries_in_continents.keys():
-  cases_continent_countries = map(
+  continent_cases_countries = map(
     lambda code: cases_world.get_cases_country(code),
     countries_in_continents[continent]
   )
 
-  continent_days = flatten_list(
-    map(lambda country: country.all_days, cases_continent_countries)
+  continent_all_days = flatten_list(
+    map(lambda country: country.all_days, continent_cases_countries)
   )
 
-  worst_day = max(continent_days, key=lambda day: day.deaths)
+  (continent_worst_day_date, continent_worst_day_deaths) = get_worst_day(continent_all_days)
 
-  print("Worst day for " + continent + ": " + str(worst_day))
+  print("\nWorst day for %s: %s  %d deaths" % (
+    continent,
+    continent_worst_day_date.strftime(DATE_FORMAT),
+    continent_worst_day_deaths
+  ))
 
 # Worst day for each country
 print("\n-- Worst days for each country --\n")
@@ -83,5 +93,5 @@ for cases_country in cases_countries:
   worst_day = max(cases_country.all_days, key=lambda day: day.deaths)
   country_name = country_names.get_name_by_code(cases_country.country_code)
 
-  print("Worst day for " + country_name + ": " + str(worst_day)) 
-pass
+  if country_name is not None:
+    print("Worst day for " + country_name + ": " + str(worst_day)) 
