@@ -90,8 +90,9 @@ for continent in countries_in_continents.keys():
 # Worst day for each country
 print("\n-- Worst days for each country --\n")
 for cases_country in cases_countries:
-  worst_day = max(cases_country.all_days, key=lambda day: day.deaths)
   country_name = country_names.get_name_by_code(cases_country.country_code)
+  if country_name is None:
+    continue
 
-  if country_name is not None:
-    print("Worst day for " + country_name + ": " + str(worst_day)) 
+  worst_day = max(cases_country.all_days, key=lambda day: day.deaths)
+  print("Worst day for " + country_name + ": " + str(worst_day)) 
