@@ -1,5 +1,7 @@
 from utils import calc_edit_distance
 
+TOLERABLE_DISTANCE = 2
+
 class Country_names:
   def __init__(self):
     # Structure
@@ -16,7 +18,7 @@ class Country_names:
     )
 
     for country_name in country_names:
-      if calc_edit_distance(country_name, name) < 2:
+      if calc_edit_distance(country_name, name) <= TOLERABLE_DISTANCE:
         return
 
     self.__countries[code] = { "name": name, "continent": continent }
@@ -32,7 +34,7 @@ class Country_names:
   def get_code_by_name(self, name):
     codes = filter(
       lambda code:
-        calc_edit_distance(self.__countries[code]["name"], name) < 2,
+        calc_edit_distance(self.__countries[code]["name"], name) <= TOLERABLE_DISTANCE,
       list(self.__countries.keys())
     )
 
