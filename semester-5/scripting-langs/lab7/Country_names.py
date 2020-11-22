@@ -16,7 +16,7 @@ class Country_names:
     )
 
     for country_name in country_names:
-      if calc_edit_distance(country_name, name) < 1:
+      if calc_edit_distance(country_name, name) < 2:
         return
 
     self.__countries[code] = { "name": name, "continent": continent }
