@@ -2,6 +2,9 @@ from datetime import datetime
 from const import DATE_COLUMN, CASES_COLUMN, DEATHS_COLUMN, DATE_FORMAT
 
 class Cases_day:
+    '''
+    Holds all cases/deaths for a particular date
+    '''
     def __init__(self, day, cases, deaths):
         self.__day = day
         self.__cases = cases

@@ -3,6 +3,9 @@ from Cases_day import Cases_day
 
 
 class Cases_world:
+    '''
+    Holds all cases/deaths for each country in the world
+    '''
     def __init__(self):
         # Structure
         # { "PL": Cases_country(...) }

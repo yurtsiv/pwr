@@ -2,6 +2,9 @@ from const import COUNTRY_CODE_COLUMN
 from Cases_day import Cases_day
 
 class Cases_country:
+    '''
+    Holds all cases/deaths for a single country
+    '''
     def __init__(self, country_code, cases_days):
         self.__country_code = country_code
         self.__cases_days = {}

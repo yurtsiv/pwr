@@ -2,8 +2,11 @@ from utils import calc_edit_distance
 
 TOLERABLE_DISTANCE = 2
 
-
 class Country_names:
+    '''
+    Holds unique country codes with the
+    corresponding country name and continent
+    '''
     def __init__(self):
         # Structure
         # { "PL": { "name": "Poland", "continent": "Europe" } }
