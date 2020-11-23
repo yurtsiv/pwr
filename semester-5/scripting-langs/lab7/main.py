@@ -47,8 +47,8 @@ print("\nMost cases: " + most_cases_country_name)
 
 def get_worst_day(cases_days):
     cases_days.sort(key=lambda day: day.day)
-    worst_day_date = all_days[0].day
-    worst_day_deaths = all_days[0].deaths
+    worst_day_date = cases_days[0].day
+    worst_day_deaths = cases_days[0].deaths
 
     for day, cases_for_date in groupby(cases_days, key=lambda day: day.day):
         deaths = sum(map(lambda day: day.deaths, list(cases_for_date)))
