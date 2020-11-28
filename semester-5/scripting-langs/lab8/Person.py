@@ -24,6 +24,10 @@ class Person:
         Person.__person_count += 1
 
     @property
+    def surname(self):
+        return self.__surname
+
+    @property
     def age(self):
         return datetime.today().year - self.__birthday.year
 

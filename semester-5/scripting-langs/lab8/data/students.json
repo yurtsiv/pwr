@@ -1,0 +1,122 @@
+[
+  {
+    "name": ["Jakub", "Mikołaj"],
+    "surname": "Bura",
+    "birthday": "03/04/1998",
+    "grades": [
+      ["WF", 4],
+      ["WF", 1],
+      ["CH", 3],
+      ["PO", 4],
+      ["JS", 5]
+    ]
+  },
+  {
+    "name": ["Małgorzata"],
+    "surname": "Bystroń",
+    "birthday": "13/05/1999",
+    "grades": [
+      ["CH", 5],
+      ["PO", 2],
+      ["WF", 4],
+      ["JS", 3],
+      ["ALG", 5]
+    ]
+  },
+  {
+    "name": ["Robert"],
+    "surname": "Hejda",
+    "birthday": "23/11/1999",
+    "grades": [
+      ["CH", 4],
+      ["PO", 4],
+      ["WF", 5],
+      ["JS", 5],
+      ["ALG", 5]
+    ]
+  },
+  {
+    "name": ["Korneliusz"],
+    "surname": "Wasilewski",
+    "birthday": "23/06/1999",
+    "grades": [
+      ["CH", 2],
+      ["PO", 2],
+      ["WF", 4],
+      ["JS", 2],
+      ["ALG", 5]
+    ]
+  },
+  {
+    "name": ["Amadeusz"],
+    "surname": "Gajewski",
+    "birthday": "13/05/1999",
+    "grades": [
+      ["CH", 5],
+      ["PO", 3],
+      ["WF", 4],
+      ["JS", 5],
+      ["ALG", 5]
+    ]
+  },
+  {
+    "name": ["Krzysztof"],
+    "surname": "Górski",
+    "birthday": "16/05/1999",
+    "grades": [
+      ["CH", 2],
+      ["PO", 2],
+      ["WF", 4],
+      ["JS", 3],
+      ["ALG", 5]
+    ]
+  },
+  {
+    "name": ["Małgorzata"],
+    "surname": "Bystroń",
+    "birthday": "13/05/1999",
+    "grades": [
+      ["CH", 5],
+      ["PO", 2],
+      ["WF", 4],
+      ["JS", 3],
+      ["ALG", 5]
+    ]
+  },
+  {
+    "name": ["Ariel"],
+    "surname": "Dąbrowski",
+    "birthday": "01/07/1999",
+    "grades": [
+      ["CH", 5],
+      ["PO", 2],
+      ["WF", 2],
+      ["JS", 4],
+      ["ALG", 2]
+    ]
+  },
+  {
+    "name": ["Jan"],
+    "surname": "Wróblewski",
+    "birthday": "11/10/1999",
+    "grades": [
+      ["CH", 2],
+      ["PO", 2],
+      ["WF", 2],
+      ["JS", 5],
+      ["ALG", 5]
+    ]
+  },
+  {
+    "name": ["Klaudiusz"],
+    "surname": "Jaworski",
+    "birthday": "01/01/1999",
+    "grades": [
+      ["CH", 5],
+      ["PO", 2],
+      ["WF", 4],
+      ["JS", 3],
+      ["ALG", 5]
+    ]
+  }
+]

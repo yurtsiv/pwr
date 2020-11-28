@@ -1,87 +1,69 @@
 from itertools import groupby
-from operator import itemgetter 
+from operator import itemgetter
 from datetime import datetime
-from Person import Person
+
 from const import DATE_FORMAT
+from Person import Person
 
 
 class Worker(Person):
-  def __init__(self, names, surname, birthday, publications = []):
-    Person.__init__(self, names, surname, birthday)
+    def __init__(self, names, surname, birthday, publications=[]):
+        Person.__init__(self, names, surname, birthday)
 
-    self.__publications = publications
-  
-  def add_publication(self, year, points):
-    self.__publications.append((year, points))
-  
-  @staticmethod
-  def _get_total_points(pubs):
-    return sum(map(itemgetter(1), pubs))
-  
-  @staticmethod
-  def _group_pubs(pubs):
-    sorted_pubs = sorted(pubs, key=itemgetter(0))
-    return groupby(sorted_pubs, key=itemgetter(0))
-  
-  def get_last_4_years_points(self):
-    current_year = datetime.today().year
-    total_points = 0
+        self.__publications = publications
 
-    for y in range(current_year - 3, current_year + 1):
-      pubs = filter(lambda pub: pub[0] == y, self.__publications)
-      total_points += Worker._get_total_points(pubs)
-    
-    return total_points
-  
-  def empty_years(self):
-    res = []
+    def add_publication(self, year, points):
+        self.__publications.append((year, points))
 
-    for year, pubs in Worker._group_pubs(self.__publications):
-      points_in_year = Worker._get_total_points(pubs)
+    @staticmethod
+    def _get_total_points(pubs):
+        return sum(map(itemgetter(1), pubs))
 
-      if points_in_year == 0:
-        res.append(year)
+    @staticmethod
+    def _group_pubs(pubs):
+        sorted_pubs = sorted(pubs, key=itemgetter(0))
+        return groupby(sorted_pubs, key=itemgetter(0))
 
-    return res
-  
-  def __str__(self):
-    pubs_str = "\n\n-- Publications --\n"
+    @property
+    def last_4_years_points(self):
+        current_year = datetime.today().year
+        total_points = 0
 
-    for year, pubs in Worker._group_pubs(self.__publications):
-      points_in_year = Worker._get_total_points(pubs)
+        for y in range(current_year - 3, current_year + 1):
+            pubs = filter(lambda pub: pub[0] == y, self.__publications)
+            total_points += Worker._get_total_points(pubs)
 
-      pubs_str += "\n%d: %d" % (year, points_in_year)
+        return total_points
 
-    return super().__str__() + pubs_str
+    @property
+    def empty_years(self):
+        res = []
 
+        for year, pubs in Worker._group_pubs(self.__publications):
+            points_in_year = Worker._get_total_points(pubs)
 
+            if points_in_year == 0:
+                res.append(year)
 
-def date(str):
-  return datetime.strptime(str, DATE_FORMAT)
+        return res
 
+    @classmethod
+    def from_dict(cls, dict):
+        pubs = list(map(lambda p: (p[0], p[1]), dict["publications"]))
 
-a = Worker(
-  ["Stepan"],
-  "u",
-  date('09/01/1999'),
-  [
-    (2020, 0),
-    (2000, 10),
-    (2000, 11),
-    (2015, 10),
-    (2016, 10),
-    (2016, 10),
-    (2021, 1),
-    (2017, 10),
-    (2017, 10),
-    (2018, 10),
-    (2019, 10),
-    (2020, 0),
-    (2021, 0),
-    (2021, 0),
-    (2021, 0),
-    (2021, 0),
-  ]
-)
+        return cls(
+            dict["name"],
+            dict["surname"],
+            datetime.strptime(dict["birthday"], DATE_FORMAT),
+            pubs
+        )
 
-print(a)
+    def __str__(self):
+        pubs_str = "\n\nPublications:\n"
+
+        for year, pubs in Worker._group_pubs(self.__publications):
+            points_in_year = Worker._get_total_points(pubs)
+
+            pubs_str += "\n%d: %d" % (year, points_in_year)
+
+        return super().__str__() + pubs_str

@@ -34,6 +34,15 @@ class Subjects:
     def get_name(self, code):
         return self.__subjs.get(code)
 
+    @classmethod
+    def from_list_of_lists(cls, list_of_lists):
+        subjs = cls()
+
+        for l in list_of_lists:
+            subjs.add_subject(l[0], l[1])
+
+        return subjs
+
     def __str__(self):
         res = ""
 
