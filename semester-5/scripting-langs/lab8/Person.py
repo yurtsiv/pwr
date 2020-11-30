@@ -16,11 +16,14 @@ class Person:
 
         if not type(surname) == str:
             raise ValueError("Surname should be string. Got " + str(surname) + ". Person name: " + name)
-            
-        if not isinstance(birthday, datetime):
-            raise ValueError("Birthday should be an instance of date. Got " + str(birthday) + ". Person name: " + name + " " + surname)
 
-        if birthday > datetime.today():
+        birthday_date = None
+        try:
+            birthday_date = datetime.strptime(birthday, DATE_FORMAT)
+        except:
+            raise ValueError("Could not parse birthday for " + name + " " + surname + ". The required format is " + DATE_FORMAT) 
+
+        if birthday_date > datetime.today():
             raise ValueError("Birthday can't be in the future. Person name: " + name + " " + surname)
 
     def __init__(self, names, surname, birthday):
@@ -28,7 +31,7 @@ class Person:
 
         self.__names = names[:3]
         self.__surname = surname
-        self.__birthday = birthday
+        self.__birthday = datetime.strptime(birthday, DATE_FORMAT)
 
         self.__id = Person.__person_count
         Person.__person_count += 1

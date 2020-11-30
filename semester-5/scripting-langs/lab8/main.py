@@ -38,10 +38,17 @@ except OSError as e:
     print(e)
     exit()
 
+students = None
+workers = None
+subjects = None
 
-students = list(map(Student.from_dict, students_data))
-workers = list(map(Worker.from_dict, workers_data))
-subjects = Subjects.from_list_of_lists(subjects_data)
+try:
+    students = list(map(Student.from_dict, students_data))
+    workers = list(map(Worker.from_dict, workers_data))
+    subjects = Subjects.from_list_of_lists(subjects_data)
+except ValueError as e:
+    print(e)
+    exit()
 
 for s in students:
     s.set_subjects(subjects)

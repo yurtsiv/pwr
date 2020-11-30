@@ -55,7 +55,7 @@ class Worker(Person):
         return cls(
             dict["name"],
             dict["surname"],
-            datetime.strptime(dict["birthday"], DATE_FORMAT),
+            dict["birthday"],
             pubs
         )
 
