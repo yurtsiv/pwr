@@ -5,11 +5,12 @@ from datetime import datetime
 from const import DATE_FORMAT
 from Person import Person
 
-
 class Worker(Person):
     def __init__(self, names, surname, birthday, publications=[]):
         Person.__init__(self, names, surname, birthday)
 
+        # Example
+        # [(2010, 10)]
         self.__publications = publications
 
     def add_publication(self, year, points):

@@ -25,10 +25,19 @@ def sort_by_surname(students):
 def task_4(students):
     return sorted(students, reverse=True, key=attrgetter("average_grade"))
 
+students_data = None
+workers_data = None
+subjects_data = None
 
-students_data = read_json_data("students.json")
-workers_data = read_json_data("workers.json")
-subjects_data = read_json_data("subjects.json")
+try:
+    students_data = read_json_data("students.json")
+    workers_data = read_json_data("workers.json")
+    subjects_data = read_json_data("subjects.json")
+except OSError as e:
+    print("Error while opening/reading file")
+    print(e)
+    exit()
+
 
 students = list(map(Student.from_dict, students_data))
 workers = list(map(Worker.from_dict, workers_data))
