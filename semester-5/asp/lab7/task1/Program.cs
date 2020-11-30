@@ -3,12 +3,18 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
+using static System.Console;
 
 
 namespace task1
 {
     class Program
     {
+        static void printInfo()
+        {
+            WriteLine("Stepan Yurtsiv, 246437");
+            WriteLine($"Computer: {Environment.MachineName}");
+        }
         static Dictionary<string, int> countWords(StreamReader sr)
         {
             Regex wordRegex = new Regex("[A-Za-z]+");
@@ -47,14 +53,20 @@ namespace task1
 
             foreach (var keyValue in firstTen)
             {
-                Console.WriteLine($"{keyValue.Key}: {keyValue.Value}");
+                WriteLine($"{keyValue.Key}: {keyValue.Value}");
             }
         }
 
         static string getFilePath()
         {
-            Console.WriteLine("File path: ");
-            string path = Console.ReadLine();
+            WriteLine("File path: ");
+            string path = ReadLine();
+
+            if (path == "")
+            {
+                throw new ArgumentException("File path can not be empty");
+            }
+
             string workingDirectory = Environment.CurrentDirectory;
             string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
             string relativeFilePath = $"{projectDirectory}\\{path}";
@@ -64,10 +76,18 @@ namespace task1
 
         static void Main(string[] args)
         {
-            string filePath = getFilePath();
-            using var sr = new StreamReader(filePath);
-            var wordsCount = countWords(sr);
-            printResult(wordsCount);
+            printInfo();
+
+            try
+            {
+                string filePath = getFilePath();
+                using var sr = new StreamReader(filePath);
+                var wordsCount = countWords(sr);
+                printResult(wordsCount);
+            } catch (Exception e)
+            {
+                WriteLine(e.Message);
+            }
         }
     }
 }

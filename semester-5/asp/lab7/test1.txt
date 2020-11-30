@@ -1,0 +1,12 @@
+01 aaa 
+02 aaa bbb
+03 aaa bbb ccc
+03 aaa bbb ccc ddd
+05 aaa bbb ccc ddd eee
+06 aaa bbb ccc ddd eee fff
+07 aaa bbb ccc ddd eee fff ggg
+08 aaa bbb ccc ddd eee fff ggg hhh
+09 aaa bbb ccc ddd eee fff ggg hhh iii
+10 aaa bbb ccc ddd eee fff ggg hhh iii jjj
+11 aaa bbb ccc ddd eee fff ggg hhh iii jjj kkk
+koniec

@@ -3,11 +3,18 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
+using static System.Console;
 
 namespace task3
 {
     class Program
     {
+        static void printInfo()
+        {
+            WriteLine("Stepan Yurtsiv, 246437");
+            WriteLine($"Computer: {Environment.MachineName}");
+        }
+
         static Dictionary<string, int> countWords(StreamReader sr)
         {
             Regex wordRegex = new Regex("[A-Za-z]+");
@@ -46,30 +53,29 @@ namespace task3
 
             foreach (var keyValue in firstTen)
             {
-                Console.WriteLine($"{keyValue.Key}: {keyValue.Value}");
+                WriteLine($"{keyValue.Key}: {keyValue.Value}");
             }
         }
 
         static string getFilePath()
         {
-            Console.WriteLine("File path: ");
-            string path = Console.ReadLine();
-            string workingDirectory = Environment.CurrentDirectory;
-            string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
-            string relativeFilePath = $"{projectDirectory}\\{path}";
+            string absolutePath;
+            do
+            {
+                WriteLine("File path: ");
+                string relativePath = ReadLine();
+                string workingDirectory = Environment.CurrentDirectory;
+                string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
+                absolutePath = $"{projectDirectory}\\{relativePath}";
+            } while (!File.Exists(absolutePath));
 
-            return relativeFilePath;
+            return absolutePath;
         }
 
         static void Main(string[] args)
         {
+            printInfo();
             string filePath = getFilePath();
-
-            if (!File.Exists(filePath))
-            {
-                Console.WriteLine($"Can't find file {filePath}");
-                return;
-            }
 
             using var sr = new StreamReader(filePath);
 
@@ -77,9 +83,12 @@ namespace task3
             {
                 var wordsCount = countWords(sr);
                 printResult(wordsCount);
+            } catch (ArgumentException e)
+            {
+                WriteLine($"Argument exception: {e.Message}");
             } catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                WriteLine(e.Message);
             }
         }
     }
