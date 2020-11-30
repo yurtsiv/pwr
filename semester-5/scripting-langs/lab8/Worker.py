@@ -5,6 +5,7 @@ from datetime import datetime
 from const import DATE_FORMAT
 from Person import Person
 
+
 class Worker(Person):
     def __init__(self, names, surname, birthday, publications=[]):
         Person.__init__(self, names, surname, birthday)

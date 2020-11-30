@@ -10,7 +10,11 @@ class Student(Person):
     def __init__(self, names, surname, birthday, grades=[]):
         Person.__init__(self, names, surname, birthday)
 
+        # Example
+        # [("WF", 4)]
         self.__grades = grades
+
+        # Instance of Subjects
         self.__subjects = None
 
     def add_grade(self, sub_code, grade):

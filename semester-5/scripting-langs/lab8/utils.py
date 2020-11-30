@@ -32,7 +32,7 @@ def read_json_data(file_name):
         return json.loads(json_file.read())
 
 
-def unwrap_list(l):
+def unwrap_value_from_list(l):
     if len(l) == 1:
         return l[0]
 

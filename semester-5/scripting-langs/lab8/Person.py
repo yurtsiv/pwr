@@ -8,23 +8,28 @@ class Person:
     @staticmethod
     def _validate_params(names, surname, birthday):
         if not isinstance(names, list):
-            raise ValueError("'names' should be array. Got " + str(names) + " . Surname: " + surname)
+            raise ValueError("'names' should be array. Got " +
+                             str(names) + " . Surname: " + surname)
 
         name = ' '.join(names)
         if len(names) > 3:
-            raise ValueError("Can't specify more than 3 names for a person. Got: " + name)
+            raise ValueError(
+                "Can't specify more than 3 names for a person. Got: " + name)
 
         if not type(surname) == str:
-            raise ValueError("Surname should be string. Got " + str(surname) + ". Person name: " + name)
+            raise ValueError("Surname should be string. Got " +
+                             str(surname) + ". Person name: " + name)
 
         birthday_date = None
         try:
             birthday_date = datetime.strptime(birthday, DATE_FORMAT)
         except:
-            raise ValueError("Could not parse birthday for " + name + " " + surname + ". The required format is " + DATE_FORMAT) 
+            raise ValueError("Could not parse birthday for " + name +
+                             " " + surname + ". The required format is " + DATE_FORMAT)
 
         if birthday_date > datetime.today():
-            raise ValueError("Birthday can't be in the future. Person name: " + name + " " + surname)
+            raise ValueError(
+                "Birthday can't be in the future. Person name: " + name + " " + surname)
 
     def __init__(self, names, surname, birthday):
         Person._validate_params(names, surname, birthday)

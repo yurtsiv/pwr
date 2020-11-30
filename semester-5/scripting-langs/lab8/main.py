@@ -1,6 +1,6 @@
 from operator import attrgetter
 
-from utils import read_json_data, unwrap_list, print_maybe_list
+from utils import read_json_data, unwrap_value_from_list, print_maybe_list
 from Student import Student
 from Worker import Worker
 from Subjects import Subjects
@@ -15,7 +15,7 @@ def task_1(workers):
     max_points_workers = list(filter(
         lambda w: w.last_4_years_points == max_points_worker.last_4_years_points, target_workers))
 
-    return unwrap_list(max_points_workers)
+    return unwrap_value_from_list(max_points_workers)
 
 
 def sort_by_surname(students):
@@ -24,6 +24,7 @@ def sort_by_surname(students):
 
 def task_4(students):
     return sorted(students, reverse=True, key=attrgetter("average_grade"))
+
 
 students_data = None
 workers_data = None
