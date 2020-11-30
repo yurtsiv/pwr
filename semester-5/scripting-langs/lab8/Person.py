@@ -11,6 +11,9 @@ class Person:
             raise ValueError("'names' should be array. Got " +
                              str(names) + " . Surname: " + surname)
 
+        if len(names) == 0:
+            raise ValueError("At least one name should be specified for a person")
+
         name = ' '.join(names)
         if len(names) > 3:
             raise ValueError(
@@ -19,6 +22,9 @@ class Person:
         if not type(surname) == str:
             raise ValueError("Surname should be string. Got " +
                              str(surname) + ". Person name: " + name)
+ 
+        if surname == "":
+            raise ValueError("Surname can't be empty string. Person name: " + name)
 
         birthday_date = None
         try:
