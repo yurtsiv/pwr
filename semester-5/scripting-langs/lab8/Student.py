@@ -3,8 +3,6 @@ from datetime import datetime
 from operator import itemgetter
 
 from Person import Person
-from const import DATE_FORMAT
-
 
 class Student(Person):
     def __init__(self, names, surname, birthday, grades=[]):

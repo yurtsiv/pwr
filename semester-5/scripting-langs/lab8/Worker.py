@@ -2,7 +2,6 @@ from itertools import groupby
 from operator import itemgetter
 from datetime import datetime
 
-from const import DATE_FORMAT
 from Person import Person
 
 
