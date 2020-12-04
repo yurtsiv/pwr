@@ -1,10 +1,12 @@
 from logic.const import COUNTRY_CODE_COLUMN
 from logic.Cases_day import Cases_day
 
+
 class Cases_country:
     '''
     Holds all cases/deaths for a single country
     '''
+
     def __init__(self, country_code, cases_days):
         self.__country_code = country_code
         self.__cases_days = {}
@@ -44,6 +46,18 @@ class Cases_country:
     @property
     def all_days(self):
         return list(self.__cases_days.values())
+
+    @property
+    def rows(self):
+        return list(map(
+            lambda cases_day: {
+                "country_code": self.country_code,
+                "day": cases_day.day,
+                "cases": cases_day.cases,
+                "deaths": cases_day.deaths
+            },
+            self.all_days
+        ))
 
     def add_cases_day(self, cases_day):
         self.__cases_days[cases_day.day] = cases_day

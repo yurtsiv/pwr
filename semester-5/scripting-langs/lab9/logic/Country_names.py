@@ -1,4 +1,5 @@
 from logic.utils import calc_edit_distance
+from operator import itemgetter
 
 TOLERABLE_DISTANCE = 2
 
@@ -34,24 +35,11 @@ class Country_names:
             return None
 
         return country["name"]
-
+    
     def get_code_by_name(self, name):
-        codes = filter(
-            lambda code:
-            calc_edit_distance(
-                self.__countries[code]["name"], name) <= TOLERABLE_DISTANCE,
-            list(self.__countries.keys())
-        )
-
-        codes_list = list(codes)
-        codes_num = len(codes_list)
-        if codes_num == 0:
-            return None
-
-        if codes_num == 1:
-            return codes_list[0]
-
-        return codes_list
+        for code in self.__countries.keys():
+            if self.__countries[code]["name"] == name:
+                return code
 
     @property
     def countries_in_continents(self):
@@ -66,3 +54,17 @@ class Country_names:
                 result[continent].append(code)
 
         return result
+
+    @property
+    def continents(self):
+        return list(self.countries_in_continents.keys())
+    
+    @property
+    def country_names(self):
+        return list(
+            map(
+                lambda c: c["name"],
+                self.__countries.values()
+            )
+        )
+

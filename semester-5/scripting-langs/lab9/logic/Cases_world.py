@@ -17,5 +17,6 @@ class Cases_world:
     def get_cases_country(self, country_code):
         return self.__countries.get(country_code)
 
-    def get_countries(self):
+    @property
+    def all_cases_countries(self):
         return list(self.__countries.values())

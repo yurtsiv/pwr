@@ -19,6 +19,3 @@ def calc_edit_distance(s, t, costs=(1, 1, 1)):
                                  dist[row-1][col-1] + cost)  # substitution
 
     return dist[rows - 1][cols - 1]
-
-def flatten_list(list):
-    return [item for sublist in list for item in sublist]
