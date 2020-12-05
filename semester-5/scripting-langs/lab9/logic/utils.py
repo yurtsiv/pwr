@@ -1,3 +1,5 @@
+from operator import itemgetter
+
 def calc_edit_distance(s, t, costs=(1, 1, 1)):
     rows = len(s) + 1
     cols = len(t) + 1
@@ -19,3 +21,16 @@ def calc_edit_distance(s, t, costs=(1, 1, 1)):
                                  dist[row-1][col-1] + cost)  # substitution
 
     return dist[rows - 1][cols - 1]
+
+def get_closest_string(strings, string):
+    string_lower = string.lower()
+    weighted_strings = map(
+        lambda s: (
+            s,
+            calc_edit_distance(
+                s.lower(), string_lower)
+        ),
+        strings
+    )
+
+    return min(weighted_strings, key=itemgetter(1))[0]

@@ -17,13 +17,25 @@ def transform_data(cases_world, country_names, country_code=None, continent=None
     if continent is not None:
         continent_countries = country_names.countries_in_continents[continent]
 
+        result = []
         for country in continent_countries:
             result += cases_world.get_cases_country(country).rows
 
     if date_range is not None:
         (date_from, date_to) = date_range
+
+        def predicate(row):
+            if date_from and date_to:
+                return date_from <= row["day"] <= date_to
+            elif date_from:
+                return row["day"] >= date_from
+            elif date_to:
+                return row["day"] <= date_to
+            else:
+                return True
+ 
         result = list(filter(
-            lambda row: date_from <= row["day"] <= date_to,
+            predicate,
             result
         ))
 

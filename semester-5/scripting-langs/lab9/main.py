@@ -1,3 +1,4 @@
-from ui import run_one_line_command_interpreter
+# from ui.command_interpreter import run_command_interpreter
+from ui.cli import run_cli
 
-run_one_line_command_interpreter()
+run_cli()

@@ -1,5 +1,8 @@
-from logic import parse_data, transform_data, calc_edit_distance, SORT_BY_KEYS, DATE_FORMAT
+from logic.const import SORT_BY_KEYS, DATE_FORMAT
+from logic.logic import parse_data, transform_data
+from logic.utils import get_closest_string
 from ui.const import MONTHS, YEAR
+from ui.utils import try_parse_place, print_result
 from calendar import monthrange
 from datetime import datetime
 from operator import itemgetter
@@ -9,7 +12,7 @@ A command has the following format:
 
 <place> <date> sort by <sort_field> limit to <limit_number>
 
-<place>        - country name or "World" (parts of the name should be joined by underscore)
+<place>        - country name, continent or World (parts of the name should be joined by underscore)
 <date>         - day and month name or just month name (implicit year is 2020)
 <sort_field>   - "deaths" or "cases"
 <limit_number> - number of rows to output
@@ -22,60 +25,19 @@ Examples:
 > World 14 July sort by cases limit to 10
 """
 
-def get_closest_string(strings, string):
-    string_lower = string.lower()
-    weighted_strings = map(
-        lambda s: (
-            s,
-            calc_edit_distance(
-                s.lower(), string_lower)
-        ),
-        strings
-    )
-
-    return min(weighted_strings, key=itemgetter(1))[0]
-
-def print_result(result, country_names):
-    print("")
-    print("Country".ljust(20) + "Day".ljust(20) + "Cases".ljust(10) + "Deaths".ljust(10))
-    print("_" * 60)
-    print("")
-
-    for item in result:
-        country_name = country_names.get_name_by_code(item["country_code"])
-        day = item["day"].strftime(DATE_FORMAT)
-        cases = str(item["cases"])
-        deaths = str(item["deaths"])
-
-        row = country_name.ljust(20) + day.ljust(20) + cases.ljust(10) + deaths.ljust(10)
-
-        print(row)
-    
-    print("")
 
 def parse_place(line, country_names):
     words = line.split(" ")
     place = words[0]
+
+    continent, country_code, closest_place = try_parse_place(place, country_names)
+
+    if closest_place is not None:
+        raise ValueError("Couldn't find the place called %s. Did you mean %s?" % (place, closest_place))
+    
     line_rest = ' '.join(words[1:])
 
-    if place == "World":
-        return line_rest, None, None
-
-    continents = map(lambda c: c.lower(), country_names.continents)
-
-    if place in continents:
-        return line_rest, place, None
-
-    country_code = country_names.get_code_by_name(place)
-    if country_code is not None:
-        return line_rest, None, country_code
- 
-    closest_place = get_closest_string(
-        list(continents) + country_names.country_names + ["World"],
-        place
-    )
-
-    raise ValueError("Couldn't find the place called %s. Did you mean %s?" % (place, closest_place))
+    return line_rest, continent, country_code
  
 def parse_date(line):
     if line == "":
@@ -168,7 +130,7 @@ print("Prasing the file. Please wait...")
 cases_world, country_names = parse_data()
 print("You can now enter commands. Type ? for help")
 
-def run_one_line_command_interpreter():
+def run_command_interpreter():
     while True:
         line = input("> ").strip()
 
