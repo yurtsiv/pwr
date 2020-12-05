@@ -2,7 +2,7 @@ from logic.utils import get_closest_string
 from logic.logic import parse_data, transform_data
 from logic.const import DATE_FORMAT
 from ui.console import get_string, get_date, get_menu_choice, get_integer
-from ui.utils import try_parse_place, print_result
+from ui.utils import try_parse_place, format_result
 
 place_help = """
 Country name, continent or World (parts of the name should be joined by underscore)
@@ -62,7 +62,7 @@ def get_rows_limit():
   return None if limit == "all" else limit
 
 
-print("Prasing the file. Please wait...")
+print("Parsing the file. Please wait...")
 cases_world, country_names = parse_data()
 
 def run_cli():
@@ -74,6 +74,14 @@ def run_cli():
 
     print(date_range)
 
-    result = transform_data(cases_world, country_names, date_range=date_range, continent=continent, country_code=country_code, sort_by_key=sort_by_key, rows_limit=rows_limit)
+    result = transform_data(
+      cases_world,
+      country_names,
+      date_range=date_range,
+      continent=continent,
+      country_code=country_code,
+      sort_by_key=sort_by_key,
+      rows_limit=rows_limit
+    )
 
-    print_result(result, country_names)
+    print(format_result(result, country_names))

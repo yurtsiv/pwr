@@ -2,10 +2,11 @@ from logic.const import SORT_BY_KEYS, DATE_FORMAT
 from logic.logic import parse_data, transform_data
 from logic.utils import get_closest_string
 from ui.const import MONTHS, YEAR
-from ui.utils import try_parse_place, print_result
+from ui.utils import try_parse_place, format_result
 from calendar import monthrange
 from datetime import datetime
 from operator import itemgetter
+import traceback
 
 help_text = """
 A command has the following format:
@@ -114,6 +115,10 @@ def parse_rows_limit(line):
     
     return ' '.join(words[2:]), rows_limit
 
+print("Parsing the file. Please wait...")
+cases_world, country_names = parse_data()
+print("You can now enter commands. Type ? for help")
+
 def exec_command(line):
     if line == "?":
         return print(help_text)
@@ -124,11 +129,7 @@ def exec_command(line):
     line_rest, rows_limit = parse_rows_limit(line_rest)
 
     result = transform_data(cases_world, country_names, date_range=date_range, continent=continent, country_code=country_code, sort_by_key=sort_by_key, rows_limit=rows_limit)
-    print_result(result, country_names)
-
-print("Prasing the file. Please wait...")
-cases_world, country_names = parse_data()
-print("You can now enter commands. Type ? for help")
+    print(format_result(result, country_names))
 
 def run_command_interpreter():
     while True:
@@ -140,4 +141,4 @@ def run_command_interpreter():
             print(e)
         except Exception as e:
             print("Invalid command. See help by typing \"?\"")
-            print(e)
+            print(traceback.format_exc())

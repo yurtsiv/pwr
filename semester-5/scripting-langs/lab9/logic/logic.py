@@ -17,7 +17,8 @@ def transform_data(cases_world, country_names, country_code=None, continent=None
     if continent is not None:
         continent_countries = country_names.countries_in_continents[continent]
 
-        result = []
+        result = [] if country_code is None else result
+
         for country in continent_countries:
             result += cases_world.get_cases_country(country).rows
 
