@@ -3,11 +3,7 @@ from logic.parse import parse_covid_file
 from operator import attrgetter
 
 def parse_data():
-    print('Please wait, parsing the file...')
-    cases_world, country_names = parse_covid_file(FILE_PATH)
-    print('Parsing complete, enter your command')
-
-    return cases_world, country_names
+    return parse_covid_file(FILE_PATH)
 
 def transform_data(cases_world, country_names, country_code=None, continent=None, date_range=None, sort_by_key=None, rows_limit=None):
     result = []
