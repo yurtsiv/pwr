@@ -1,25 +1,15 @@
-from logic import calc_edit_distance, parse_data, transform_data, SORT_BY_KEYS
-from const import MONTHS, YEAR
+from logic import parse_data, transform_data, calc_edit_distance, SORT_BY_KEYS, DATE_FORMAT
+from ui.const import MONTHS, YEAR
 from calendar import monthrange
 from datetime import datetime
 from operator import itemgetter
-
-
-# Examples
-
-# Ukraine 14 august sort by cases limit to 10
-# Europe January
-# World
-
-# Parts
-# [country name | continent | World] [[day] month] [sort by cases | deaths] [limit to number]
 
 help_text = """
 A command has the following format:
 
 <place> <date> sort by <sort_field> limit to <limit_number>
 
-<place>        - country name or "World"
+<place>        - country name or "World" (parts of the name should be joined by underscore)
 <date>         - day and month name or just month name (implicit year is 2020)
 <sort_field>   - "deaths" or "cases"
 <limit_number> - number of rows to output
@@ -28,7 +18,7 @@ Examples:
 
 > Poland 14 January
 > Poland February
-> World June sort by deaths
+> United_States_Of_America June sort by deaths
 > World 14 July sort by cases limit to 10
 """
 
@@ -44,6 +34,24 @@ def get_closest_string(strings, string):
     )
 
     return min(weighted_strings, key=itemgetter(1))[0]
+
+def print_result(result, country_names):
+    print("")
+    print("Country".ljust(20) + "Day".ljust(20) + "Cases".ljust(10) + "Deaths".ljust(10))
+    print("_" * 60)
+    print("")
+
+    for item in result:
+        country_name = country_names.get_name_by_code(item["country_code"])
+        day = item["day"].strftime(DATE_FORMAT)
+        cases = str(item["cases"])
+        deaths = str(item["deaths"])
+
+        row = country_name.ljust(20) + day.ljust(20) + cases.ljust(10) + deaths.ljust(10)
+
+        print(row)
+    
+    print("")
 
 def parse_place(line, country_names):
     words = line.split(" ")
@@ -153,20 +161,21 @@ def exec_command(line):
     line_rest, sort_by_key = parse_sort(line_rest)
     line_rest, rows_limit = parse_rows_limit(line_rest)
 
-    for i in transform_data(cases_world, country_names, date_range=date_range, continent=continent, country_code=country_code, sort_by_key=sort_by_key, rows_limit=rows_limit):
-        print(i)
+    result = transform_data(cases_world, country_names, date_range=date_range, continent=continent, country_code=country_code, sort_by_key=sort_by_key, rows_limit=rows_limit)
+    print_result(result, country_names)
 
 print("Prasing the file. Please wait...")
 cases_world, country_names = parse_data()
 print("You can now enter commands. Type ? for help")
 
-while True:
-    line = input("> ").strip()
+def run_one_line_command_interpreter():
+    while True:
+        line = input("> ").strip()
 
-    try:
-        exec_command(line)
-    except ValueError as e:
-        print(e)
-    except Exception as e:
-        print("Invalid command. See help by typing \"?\"")
-        print(e)
+        try:
+            exec_command(line)
+        except ValueError as e:
+            print(e)
+        except Exception as e:
+            print("Invalid command. See help by typing \"?\"")
+            print(e)
