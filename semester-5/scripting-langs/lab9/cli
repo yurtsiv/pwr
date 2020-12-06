@@ -2,4 +2,7 @@
 
 from ui.cli import run_cli
 
-run_cli()
+try:
+  run_cli()
+except (KeyboardInterrupt, EOFError):
+  print("Exiting")

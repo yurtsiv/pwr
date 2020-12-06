@@ -25,7 +25,7 @@ def get_place(country_names):
             place, country_names)
 
         if closest_place is not None:
-            print("Couldn't find the place called %s. Did you mean %s?" %
+            print("Couldn't find the place called %s. Did you mean %s? See help by typing \"?\"" %
                   (place, closest_place))
             continue
 
@@ -62,25 +62,24 @@ def get_rows_limit():
 
     return None if limit == "all" else limit
 
-
 print("Parsing the file. Please wait...")
 cases_world, country_names = parse_data()
 
 def run_cli():
-    while True:
-        continent, country_code = get_place(country_names)
-        date_range = get_date_range()
-        sort_by_key = get_sort()
-        rows_limit = get_rows_limit()
+  while True:
+      continent, country_code = get_place(country_names)
+      date_range = get_date_range()
+      sort_by_key = get_sort()
+      rows_limit = get_rows_limit()
 
-        result = transform_data(
-            cases_world,
-            country_names,
-            date_range=date_range,
-            continent=continent,
-            country_code=country_code,
-            sort_by_key=sort_by_key,
-            rows_limit=rows_limit
-        )
+      result = transform_data(
+          cases_world,
+          country_names,
+          date_range=date_range,
+          continent=continent,
+          country_code=country_code,
+          sort_by_key=sort_by_key,
+          rows_limit=rows_limit
+      )
 
-        print(format_result(result, country_names))
+      print(format_result(result, country_names))

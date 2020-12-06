@@ -1,3 +1,6 @@
+import signal
+import sys
+
 from logic.utils import get_closest_string
 from logic.const import DATE_FORMAT
 

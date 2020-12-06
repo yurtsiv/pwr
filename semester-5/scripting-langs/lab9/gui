@@ -2,4 +2,7 @@
 
 from ui.gui import run_gui
 
-run_gui()
+try:
+  run_gui()
+except (KeyboardInterrupt, EOFError):
+  print("Exiting")

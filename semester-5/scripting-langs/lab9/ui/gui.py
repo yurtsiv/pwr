@@ -1,19 +1,27 @@
 import sys
+from ttkwidgets import autocomplete
 import tkinter as tk
 from tkinter import ttk
 from tkcalendar import DateEntry
 from datetime import datetime
 
 from logic.logic import parse_data, transform_data
+from logic.const import SORT_BY_KEYS, DATE_FORMAT
 from ui.utils import format_result
+
 
 class Filters(tk.Frame):
     EMPTY_CHOICE = '(none)'
 
-    def __init__(self, master=None):
+    # Should be equivalent to DATE_FORMAT
+    DATE_PATTERN = 'd/m/yyyy'
+
+    def __init__(self, master, country_names):
         super().__init__(master)
 
         self.on_filter = None
+
+        self.__country_names = country_names
         self.__filters = {
             "country_name": None,
             "continent": None,
@@ -31,28 +39,17 @@ class Filters(tk.Frame):
         return self.__filters
 
     def create_widgets(self):
-        self.grid_rowconfigure(0)
-        self.grid_rowconfigure(1)
-
-        self.grid_columnconfigure(0)
-        self.grid_columnconfigure(1)
-        self.grid_columnconfigure(2)
-        self.grid_columnconfigure(3)
-        self.grid_columnconfigure(4)
-        self.grid_columnconfigure(5)
-        self.grid_columnconfigure(6)
-
         self.create_combobox(
             "Country",
             "country_name",
-            ["(none)", "Ukraine", "Poland"],
+            ["(none)"] + self.__country_names.country_names,
             0
         )
 
         self.create_combobox(
             "Continent",
             "continent",
-            ["(none)", "Asia"],
+            ["(none)"] + self.__country_names.continents,
             1
         )
 
@@ -71,7 +68,7 @@ class Filters(tk.Frame):
         self.create_combobox(
             "Sort by",
             "sort_by_key",
-            ["(none)", "cases", "deaths"],
+            ["(none)"] + SORT_BY_KEYS,
             4
         )
 
@@ -81,17 +78,20 @@ class Filters(tk.Frame):
             5
         )
 
-        tk.Button(self, text="Filter", command=lambda: self.on_filter(
-            self.__filters)).grid(row=1, column=6)
+        filter_btn = tk.Button(self, text="Filter", command=lambda: self.on_filter(
+            self.__filters))
+        filter_btn.grid(row=2, column=0, sticky="W")
 
     def create_combobox(self, label, filter_key, value, column):
         tk.Label(self, text=label).grid(row=0, column=column, sticky="W")
-        box = ttk.Combobox(self, value=value)
+
+        box = autocomplete.AutocompleteCombobox(self, completevalues=value)
         box.bind('<<ComboboxSelected>>', self.on_combobox_change(filter_key))
         box.grid(row=1, column=column)
 
     def on_combobox_change(self, filter_key):
         def handle(event):
+            print("key released")
             value = event.widget.get()
 
             if value == Filters.EMPTY_CHOICE:
@@ -105,10 +105,8 @@ class Filters(tk.Frame):
         tk.Label(self, text=label).grid(row=0, column=column, sticky="W")
 
         container = tk.Frame(self)
-        container.grid_columnconfigure(0)
-        container.grid_columnconfigure(1)
 
-        date_picker = DateEntry(container)
+        date_picker = DateEntry(container, date_pattern=Filters.DATE_PATTERN)
         date_picker.config(validate='none')
         date_picker.bind('<<DateEntrySelected>>',
                          self.on_date_pick(filter_key))
@@ -118,9 +116,9 @@ class Filters(tk.Frame):
         clear_btn = tk.Button(
             container,
             text="x",
-            command=self.on_clear_date_click(date_picker, filter_key)
+            command=self.on_clear_date_click(date_picker, filter_key),
         )
-        clear_btn.grid(row=0, column=1)
+        clear_btn.grid(row=0, column=1, sticky="N")
 
         container.grid(row=1, column=column)
 
@@ -135,7 +133,7 @@ class Filters(tk.Frame):
         def handle(event):
             value = event.widget.get()
 
-            date = datetime.strptime(value, "%m/%d/%y")
+            date = datetime.strptime(value, DATE_FORMAT)
             self.__filters[filter_key] = date
 
         return handle
@@ -179,16 +177,18 @@ class Application(tk.Frame):
 
     def create_widgets(self):
         self.grid_rowconfigure(0, weight=0)
-        self.grid_rowconfigure(1, weight=1)
+        self.grid_rowconfigure(1, weight=2)
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=0)
 
         # Filters
-        filters = Filters(self)
+        filters = Filters(self, self.country_names)
         filters.on_filter = self.on_filter
         filters.grid(row=0, sticky="wens")
 
         # Output table
         scrollbar = tk.Scrollbar(self)
-        self.text_cont = tk.Text(self, height=200)
+        self.text_cont = tk.Text(self, height=300)
         self.text_cont.config(state=tk.DISABLED)
 
         self.text_cont.grid(row=1, column=0, sticky="WENS")
@@ -226,5 +226,10 @@ cases_world, country_names = parse_data()
 def run_gui():
     root = tk.Tk()
     root.title("Covid")
+
+    # full screen
+    root.wm_attributes('-zoomed', True)
+    root.update()
+
     app = Application(root, cases_world, country_names)
     app.mainloop()

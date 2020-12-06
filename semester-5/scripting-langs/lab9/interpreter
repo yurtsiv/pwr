@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+import sys
 from ui.interpreter import run_interpreter
 
-run_interpreter()
+try:
+  run_interpreter()
+except (KeyboardInterrupt, EOFError):
+  print("Exiting")
