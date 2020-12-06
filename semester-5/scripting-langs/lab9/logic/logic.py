@@ -2,8 +2,10 @@ from logic.const import FILE_PATH
 from logic.parse import parse_covid_file
 from operator import attrgetter
 
+
 def parse_data():
     return parse_covid_file(FILE_PATH)
+
 
 def transform_data(cases_world, country_names, country_code=None, continent=None, date_range=None, sort_by_key=None, rows_limit=None):
     result = []
@@ -34,7 +36,7 @@ def transform_data(cases_world, country_names, country_code=None, continent=None
                 return row["day"] <= date_to
             else:
                 return True
- 
+
         result = list(filter(
             predicate,
             result

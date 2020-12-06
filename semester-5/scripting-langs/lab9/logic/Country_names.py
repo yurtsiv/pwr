@@ -1,13 +1,13 @@
 from logic.utils import calc_edit_distance
 from operator import itemgetter
 
-TOLERABLE_DISTANCE = 2
 
 class Country_names:
     '''
     Holds unique country codes with the
     corresponding country name and continent
     '''
+
     def __init__(self):
         # Structure
         # { "PL": { "name": "Poland", "continent": "Europe" } }
@@ -17,16 +17,8 @@ class Country_names:
         if self.__countries.get(code) is not None:
             return
 
-        country_names = map(
-            lambda n: n["name"],
-            list(self.__countries.values())
-        )
-
-        for country_name in country_names:
-            if calc_edit_distance(country_name, name) <= TOLERABLE_DISTANCE:
-                return
-
         self.__countries[code] = {"name": name, "continent": continent}
+
 
     def get_name_by_code(self, code):
         country = self.__countries.get(code)
@@ -35,7 +27,7 @@ class Country_names:
             return None
 
         return country["name"]
-    
+
     def get_code_by_name(self, name):
         for code in self.__countries.keys():
             if self.__countries[code]["name"] == name:
@@ -58,7 +50,7 @@ class Country_names:
     @property
     def continents(self):
         return list(self.countries_in_continents.keys())
-    
+
     @property
     def country_names(self):
         return list(
@@ -67,4 +59,3 @@ class Country_names:
                 self.__countries.values()
             )
         )
-

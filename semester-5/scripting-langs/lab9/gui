@@ -1,0 +1,5 @@
+#!/usr/bin/env python3
+
+from ui.gui import run_gui
+
+run_gui()

@@ -25,10 +25,10 @@ class Filters(tk.Frame):
 
         self.pack()
         self.create_widgets()
-    
+
     @property
     def filters(self):
-      return self.__filters
+        return self.__filters
 
     def create_widgets(self):
         self.grid_rowconfigure(0)
@@ -81,8 +81,9 @@ class Filters(tk.Frame):
             5
         )
 
-        tk.Button(self, text="Filter", command=lambda: self.on_filter(self.__filters)).grid(row=1, column=6)
- 
+        tk.Button(self, text="Filter", command=lambda: self.on_filter(
+            self.__filters)).grid(row=1, column=6)
+
     def create_combobox(self, label, filter_key, value, column):
         tk.Label(self, text=label).grid(row=0, column=column, sticky="W")
         box = ttk.Combobox(self, value=value)
@@ -147,16 +148,16 @@ class Filters(tk.Frame):
 
     def on_int_input_change(self, filter_key):
         def handle(event):
-          value = event.widget.get()
+            value = event.widget.get()
 
-          if not value:
-            self.__filters[filter_key] = None
-            return
+            if not value:
+                self.__filters[filter_key] = None
+                return
 
-          try:
-            self.__filters[filter_key] = int(value)
-          except:
-            pass
+            try:
+                self.__filters[filter_key] = int(value)
+            except:
+                pass
 
         return handle
 
@@ -172,9 +173,9 @@ class Application(tk.Frame):
 
         self.pack()
         self.create_widgets()
-    
+
     def on_filter(self, filters):
-      self.fill_table(filters)
+        self.fill_table(filters)
 
     def create_widgets(self):
         self.grid_rowconfigure(0, weight=0)
@@ -192,32 +193,35 @@ class Application(tk.Frame):
 
         self.text_cont.grid(row=1, column=0, sticky="WENS")
         scrollbar.grid(row=1, column=1, sticky="NS")
-      
+
         self.text_cont.config(yscrollcommand=scrollbar.set)
         scrollbar.config(command=self.text_cont.yview)
 
         self.fill_table(filters.filters)
-    
+
     def fill_table(self, filters):
-      result = transform_data(
-        self.cases_world,
-        self.country_names,
-        date_range=(filters["date_from"], filters["date_to"]),
-        continent=filters["continent"],
-        country_code=self.country_names.get_code_by_name(filters["country_name"]),
-        sort_by_key=filters["sort_by_key"],
-        rows_limit=filters["rows_limit"]
-      )
+        result = transform_data(
+            self.cases_world,
+            self.country_names,
+            date_range=(filters["date_from"], filters["date_to"]),
+            continent=filters["continent"],
+            country_code=self.country_names.get_code_by_name(
+                filters["country_name"]),
+            sort_by_key=filters["sort_by_key"],
+            rows_limit=filters["rows_limit"]
+        )
 
-      result_str = format_result(result, self.country_names)
+        result_str = format_result(result, self.country_names)
 
-      self.text_cont.config(state=tk.NORMAL)
-      self.text_cont.delete(1.0, tk.END)
-      self.text_cont.insert(tk.END, result_str)
-      self.text_cont.config(state=tk.DISABLED)
+        self.text_cont.config(state=tk.NORMAL)
+        self.text_cont.delete(1.0, tk.END)
+        self.text_cont.insert(tk.END, result_str)
+        self.text_cont.config(state=tk.DISABLED)
+
 
 print("Parsing the file. Please wait...")
 cases_world, country_names = parse_data()
+
 
 def run_gui():
     root = tk.Tk()

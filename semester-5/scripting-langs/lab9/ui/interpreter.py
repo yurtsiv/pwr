@@ -26,20 +26,22 @@ Examples:
 > World 14 July sort by cases limit to 10
 """
 
-
 def parse_place(line, country_names):
     words = line.split(" ")
     place = words[0]
 
-    continent, country_code, closest_place = try_parse_place(place, country_names)
+    continent, country_code, closest_place = try_parse_place(
+        place, country_names)
 
     if closest_place is not None:
-        raise ValueError("Couldn't find the place called %s. Did you mean %s?" % (place, closest_place))
-    
+        raise ValueError(
+            "Couldn't find the place called %s. Did you mean %s?" % (place, closest_place))
+
     line_rest = ' '.join(words[1:])
 
     return line_rest, continent, country_code
- 
+
+
 def parse_date(line):
     if line == "":
         raise ValueError("No date provided. Did you mean \"all time\"?")
@@ -54,7 +56,7 @@ def parse_date(line):
         day = int(words[0])
     except:
         pass
-    
+
     month = words[0] if day is None else words[1]
 
     if month not in MONTHS:
@@ -63,7 +65,8 @@ def parse_date(line):
             month
         )
 
-        raise ValueError("Invalid value for month: %s. Did you mean %s?" % (month, closest_month))
+        raise ValueError(
+            "Invalid value for month: %s. Did you mean %s?" % (month, closest_month))
 
     month_num = MONTHS.index(month) + 1
 
@@ -79,15 +82,16 @@ def parse_date(line):
         datetime(YEAR, month_num, day)
     )
 
+
 def parse_sort(line):
     if line == "" or not line.startswith("sort by"):
         return line, None
- 
+
     words = line.split(" ")
 
     if len(words) == 2:
         raise ValueError("Sort key is not provided")
-    
+
     sort_by_key = words[2]
 
     if sort_by_key not in SORT_BY_KEYS:
@@ -95,15 +99,16 @@ def parse_sort(line):
 
     return ' '.join(words[3:]), sort_by_key
 
+
 def parse_rows_limit(line):
     if line == "" or not line.startswith("limit to"):
         return line, None
- 
+
     words = line.split(" ")
 
     if len(words) == 2:
         raise ValueError("Limit number is not provided")
-    
+
     rows_limit = None
     try:
         rows_limit = int(words[2])
@@ -112,12 +117,14 @@ def parse_rows_limit(line):
 
     if rows_limit < 0:
         raise ValueError("Limit number can't be negative")
-    
+
     return ' '.join(words[2:]), rows_limit
+
 
 print("Parsing the file. Please wait...")
 cases_world, country_names = parse_data()
 print("You can now enter commands. Type ? for help")
+
 
 def exec_command(line):
     if line == "?":
@@ -128,10 +135,12 @@ def exec_command(line):
     line_rest, sort_by_key = parse_sort(line_rest)
     line_rest, rows_limit = parse_rows_limit(line_rest)
 
-    result = transform_data(cases_world, country_names, date_range=date_range, continent=continent, country_code=country_code, sort_by_key=sort_by_key, rows_limit=rows_limit)
+    result = transform_data(cases_world, country_names, date_range=date_range, continent=continent,
+                            country_code=country_code, sort_by_key=sort_by_key, rows_limit=rows_limit)
     print(format_result(result, country_names))
 
-def run_command_interpreter():
+
+def run_interpreter():
     while True:
         line = input("> ").strip()
 
@@ -140,5 +149,5 @@ def run_command_interpreter():
         except ValueError as e:
             print(e)
         except Exception as e:
-            print("Invalid command. See help by typing \"?\"")
+            print("Something went wrong")
             print(traceback.format_exc())
