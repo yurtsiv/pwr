@@ -1,0 +1,8 @@
+#!/usr/bin/env python3
+
+from ui.cli import run_cli
+
+try:
+  run_cli()
+except (KeyboardInterrupt, EOFError):
+  print("Exiting")
