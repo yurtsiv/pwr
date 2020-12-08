@@ -9,13 +9,13 @@ namespace task1
 {
     class Program
     {
-        static void printInfo()
+        static void PrintInfo()
         {
             WriteLine("Stepan Yurtsiv, 246437");
             WriteLine($"Computer: {Environment.MachineName}");
         }
 
-        static IEnumerable<(string, int)> top10Words(StreamReader sr)
+        static IEnumerable<(string, int)> topWords(StreamReader sr, int count)
         {
             return new Regex("[A-Za-z]+")
                 .Matches(sr.ReadToEnd())
@@ -23,10 +23,10 @@ namespace task1
                 .GroupBy(word => word)
                 .OrderByDescending(group => group.Count())
                 .Select(group => (group.Key, group.Count()))
-                .Take(10);
+                .Take(count);
         }
 
-        static void printResult(IEnumerable<(string, int)> wordsCount)
+        static void PrintResult(IEnumerable<(string, int)> wordsCount)
         {
             WriteLine();
             foreach (var (word, count) in wordsCount)
@@ -35,7 +35,7 @@ namespace task1
             }
         }
 
-        static string getFilePath()
+        static string GetFilePath()
         {
             WriteLine("File path: ");
             string path = ReadLine();
@@ -54,13 +54,13 @@ namespace task1
 
         static void Main(string[] args)
         {
-            printInfo();
+            PrintInfo();
 
             try
             {
-                string filePath = getFilePath();
+                string filePath = GetFilePath();
                 using var sr = new StreamReader(filePath);
-                printResult(top10Words(sr));
+                PrintResult(topWords(sr, 10));
             }
             catch (Exception e)
             {
