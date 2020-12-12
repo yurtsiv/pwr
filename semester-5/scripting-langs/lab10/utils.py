@@ -1,3 +1,5 @@
+import json
+
 def calc_edit_distance(s, t, costs=(1, 1, 1)):
     rows = len(s) + 1
     cols = len(t) + 1
@@ -19,3 +21,18 @@ def calc_edit_distance(s, t, costs=(1, 1, 1)):
                                  dist[row-1][col-1] + cost)  # substitution
 
     return dist[rows - 1][cols - 1]
+
+def read_json(file_path):
+    with open(file_path, 'r') as infile:
+        return json.load(infile)
+
+def is_list_of_strings(x):
+    if not isinstance(x, list):
+        return False
+    
+    for item in x:
+        if not isinstance(item, str):
+            return False
+
+    return True
+
