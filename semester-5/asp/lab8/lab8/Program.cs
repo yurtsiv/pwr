@@ -7,46 +7,54 @@ namespace lab8
 {
     class Program
     {
+        static void printPersonalInfo()
+        {
+            WriteLine("Stepan Yurtsiv, 246437");
+            WriteLine($"Computer: {Environment.MachineName}\n\n");
+        }
+
         static void Main(string[] args)
         {
-            var test = new ListOfArrayList<int>(4);
-            test.Add(1);
-            test.Add(2);
-            test.Add(3);
-            test.Add(4);
+            printPersonalInfo();
 
-            test.Add(5);
-            test.Add(6);
-            test.Add(7);
-            test.Add(8);
+            Student s1 = new Student("First", "Student", "123456", "test@test.email");
+            Student s2 = new Student("Second", "Student", "654321", "test2@test.email");
+            Student s3 = new Student("Third", "Student", "443241", "test3@test.email");
+            Student s4 = new Student("Fourth", "Student", "324793", "test4@test.email");
+            Student s5 = new Student("Fifth", "Student", "313534", "test5@test.email");
+            Student s6 = new Student("Sixth", "Student", "215343", "test6@test.email");
+            Student s7 = new Student("Seventh", "Student", "123432", "test7@test.email");
 
-            test.Add(9);
-            test.Add(10);
-            test.Add(11);
-            test.Add(12);
+            var test = new ListOfArrayList<Student>(4);
+            test.Add(s1);
+            test.Add(s2);
+            test.Add(s3);
+            test.Add(s4);
+            test.Add(s5);
+            test.Add(s6);
+            test.Add(s7);
 
-            WriteLine("\nInitial list");
+            WriteLine("\n-- Initial list --");
             WriteLine(test);
 
-            test.Remove(3);
-            test.Remove(100);
+            test.Remove(s3);
 
-            WriteLine("\nAfter removing 1 elem");
-            WriteLine(test);
-
-            test.RemoveAt(6);
-            test.RemoveAt(3);
-
-            WriteLine("\nAfter removing 2 more elems");
+            WriteLine("\n-- After removing 1 elem --");
             WriteLine(test);
 
             test.RemoveAt(1);
-            WriteLine("\nAfter removing 1 more elem");
+            test.RemoveAt(6);
+            test.RemoveAt(3);
+
+            WriteLine("\n-- After removing 3 more elems --");
             WriteLine(test);
 
             test.Trim();
-            WriteLine("\nAfter trimming");
+
+            WriteLine("\n-- After trimming --");
             WriteLine(test);
+
+            WriteLine($"\nContains s1: {test.Contains(s1)}");
 
             WriteLine("\n\n-- Concatenating lists together --\n\n");
 
@@ -56,34 +64,33 @@ namespace lab8
             l1.Add("3");
             l1.Add(4);
 
-            var l2 = new ListOfArrayList<object>(5);
-            l2.Add(1);
-            l2.Add(2);
-            l2.Add(3);
-            l2.Add("Test1");
-            l2.Add(4);
-            l2.Add("Test2");
-            l2.Add(6);
-
-            WriteLine("\nList of lists 1 (l1)");
+            WriteLine("\n-- List of lists 1 (l1) --");
             WriteLine(l1);
-            WriteLine("\nList of lists 2 (l2)");
+
+            var l2 = new ListOfArrayList<object>(5);
+            l2.Add(5);
+            l2.Add(6);
+            l2.Add(7);
+            l2.Add("Test8");
+            l2.Add(9);
+            l2.Add("Test10");
+            l2.Add(11);
+
+            WriteLine("\n-- List of lists 2 (l2) --");
             WriteLine(l2);
 
+            var l3 = new List<object> { 12, "13", 14, 15 };
 
-            var l3 = new List<object> { 10, "11", 12, 13 };
-
-            WriteLine("\nRegular list (l3)\n");
+            WriteLine("\n-- Regular list (l3) --\n");
             foreach (object e in l3)
             {
                 Write($"{e}, ");
             }
 
-            l1.Concat(l2);
-            l1.Concat(l3);
+            ListOfArrayList<object> l4 = l1 + l2 + l3;
 
-            WriteLine("\n\nl1 + l2 + l3");
-            WriteLine(l1);
+            WriteLine("\n\n-- l1 + l2 + l3 --");
+            WriteLine(l4);
         }
     }
 }

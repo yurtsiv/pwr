@@ -45,12 +45,14 @@ namespace lab8
 
             _lists[_headSubListIndex].Add(item);
         }
-        public void Concat(IEnumerable<T> list)
+        public static ListOfArrayList<T> operator +(ListOfArrayList<T> current, IEnumerable<T> other)
         {
-            foreach (var elem in list)
+            foreach (var elem in other)
             {
-                Add(elem);
+                current.Add(elem);
             }
+
+            return current;
         }
 
         private void EnsureListCapacity()
@@ -170,7 +172,7 @@ namespace lab8
                 for (int i = 0; i < _subListSize; i++)
                 {
                     string elem = i < subList.Count ? subList[i].ToString() : "null";
-                    strBld.Append($" {elem.PadRight(5)}");
+                    strBld.Append($" {elem}, ");
                 }
 
                 strBld.Append("]\n");
