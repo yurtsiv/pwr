@@ -61,7 +61,7 @@ class Tags:
 
     def to_json_file(self, file_path):
         with open(file_path, 'w') as outfile:
-            json.dump(list(self.__tags), outfile)
+            json.dump(list(self.__tags), outfile, indent=2)
 
     @classmethod
     def from_json_file(cls, file_path):

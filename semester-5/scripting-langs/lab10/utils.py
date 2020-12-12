@@ -1,5 +1,7 @@
 import json
 
+EMPTY_SET = set()
+
 def calc_edit_distance(s, t, costs=(1, 1, 1)):
     rows = len(s) + 1
     cols = len(t) + 1
