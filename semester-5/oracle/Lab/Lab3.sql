@@ -286,3 +286,169 @@ EXECUTE dodaj_bande(20, 'NOWA BANDA', 'NOWY TEREN');
 SELECT * FROM Bandy;
 ROLLBACK;
 
+-- Zadanie 42a
+CREATE OR REPLACE PACKAGE virus AS
+    running BOOLEAN := FALSE;
+    should_update BOOLEAN := FALSE;
+    odjac_w_tygrysa BOOLEAN := FALSE;
+    przydzial_tygrysa_p NUMBER;
+END;
+
+CREATE OR REPLACE TRIGGER przydzial_tygrysa_p
+BEFORE UPDATE ON Kocury
+BEGIN
+    SELECT (przydzial_myszy * 0.1) INTO virus.przydzial_tygrysa_p
+    FROM KOCURY
+    WHERE PSEUDO = 'TYGRYS';
+END;
+
+CREATE OR REPLACE TRIGGER przydzial_milus
+BEFORE UPDATE ON Kocury
+FOR EACH ROW
+BEGIN
+    IF :NEW.funkcja = 'MILUSIA' AND NOT virus.running THEN
+        virus.should_update := TRUE;
+
+        IF :NEW.przydzial_myszy < :OLD.przydzial_myszy THEN
+            :NEW.przydzial_myszy := :OLD.przydzial_myszy;
+        END IF;
+        
+        IF :NEW.przydzial_myszy - :OLD.przydzial_myszy < virus.przydzial_tygrysa_p THEN
+            virus.odjac_w_tygrysa := TRUE;
+
+            :NEW.przydzial_myszy := :NEW.przydzial_myszy + virus.przydzial_tygrysa_p;
+            :NEW.myszy_extra := NVL(:NEW.myszy_extra, 0) + 5;
+        END IF;
+    END If;
+END;
+
+CREATE OR REPLACE TRIGGER mod_przydzial_tygrysa
+AFTER UPDATE ON Kocury
+BEGIN
+    IF virus.should_update THEN
+        virus.running := TRUE;
+        virus.should_update := FALSE;
+
+        IF virus.odjac_w_tygrysa THEN
+            virus.odjac_w_tygrysa := FALSE;
+
+            UPDATE Kocury
+            SET przydzial_myszy = przydzial_myszy - virus.przydzial_tygrysa_p
+            WHERE pseudo = 'TYGRYS';
+        ELSE
+            UPDATE Kocury
+            SET myszy_extra = myszy_extra + 5
+            WHERE pseudo = 'TYGRYS';
+        END IF;
+        
+        virus.running := FALSE;
+    END IF;
+END;
+
+-- Test 1
+SELECT * FROM Kocury;
+
+UPDATE Kocury
+SET przydzial_myszy = przydzial_myszy + 1
+WHERE funkcja = 'MILUSIA';
+
+SELECT * FROM Kocury;
+
+ROLLBACK;
+
+-- Test 2
+SELECT * FROM Kocury;
+
+UPDATE Kocury
+SET przydzial_myszy = przydzial_myszy + 100
+WHERE funkcja = 'MILUSIA';
+
+SELECT * FROM Kocury;
+
+ROLLBACK;
+
+ALTER TRIGGER przydzial_tygrysa_p DISABLE;
+ALTER TRIGGER przydzial_milus DISABLE;
+ALTER TRIGGER mod_przydzial_tygrysa DISABLE;
+
+-- ALTER TRIGGER przydzial_tygrysa_p ENABLE;
+-- ALTER TRIGGER przydzial_milus ENABLE;
+-- ALTER TRIGGER mod_przydzial_tygrysa ENABLE;
+
+
+-- Zadanie 42b
+CREATE OR REPLACE TRIGGER virus
+FOR UPDATE
+ON Kocury
+COMPOUND TRIGGER
+    should_update BOOLEAN := FALSE;
+    odjac_w_tygrysa BOOLEAN := FALSE;
+    przydzial_tygrysa_p NUMBER;
+
+    BEFORE STATEMENT IS
+    BEGIN
+        SELECT (przydzial_myszy * 0.1) INTO przydzial_tygrysa_p
+        FROM KOCURY
+        WHERE PSEUDO = 'TYGRYS';
+    END BEFORE STATEMENT;
+
+    BEFORE EACH ROW IS
+    BEGIN
+        IF :NEW.funkcja = 'MILUSIA' THEN
+            should_update := TRUE;
+
+            IF :NEW.przydzial_myszy < :OLD.przydzial_myszy THEN
+                :NEW.przydzial_myszy := :OLD.przydzial_myszy;
+            END IF;
+        
+            IF :NEW.przydzial_myszy - :OLD.przydzial_myszy < przydzial_tygrysa_p THEN
+                odjac_w_tygrysa := TRUE;
+
+                :NEW.przydzial_myszy := :NEW.przydzial_myszy + przydzial_tygrysa_p;
+                :NEW.myszy_extra := NVL(:NEW.myszy_extra, 0) + 5;
+            END IF;
+        END If;
+    END BEFORE EACH ROW;
+    
+    AFTER STATEMENT IS
+    BEGIN
+        IF should_update THEN
+            should_update := FALSE;
+
+            IF odjac_w_tygrysa THEN
+                odjac_w_tygrysa := FALSE;
+
+                UPDATE Kocury
+                SET przydzial_myszy = przydzial_myszy - przydzial_tygrysa_p
+                WHERE pseudo = 'TYGRYS';
+            ELSE
+                UPDATE Kocury
+                SET myszy_extra = myszy_extra + 5
+                WHERE pseudo = 'TYGRYS';
+            END IF;
+        END IF;
+    END AFTER STATEMENT;
+END virus;
+
+-- Test 1
+SELECT * FROM Kocury;
+
+UPDATE Kocury
+SET przydzial_myszy = przydzial_myszy + 1
+WHERE funkcja = 'MILUSIA';
+
+SELECT * FROM Kocury;
+
+ROLLBACK;
+
+
+-- Test 2
+SELECT * FROM Kocury;
+
+UPDATE Kocury
+SET przydzial_myszy = przydzial_myszy + 100
+WHERE funkcja = 'MILUSIA';
+
+SELECT * FROM Kocury;
+
+ROLLBACK;
