@@ -553,3 +553,99 @@ BEGIN
     DBMS_OUTPUT.NEW_LINE();
 END;
 
+-- Zadanie 44
+CREATE OR REPLACE FUNCTION podatek(pseudonim VARCHAR2)
+RETURN NUMBER
+AS
+  podwladni NUMBER;
+  wrogowie NUMBER;
+  kocur Kocury%ROWTYPE;
+
+  podatek NUMBER := 0;
+BEGIN
+  SELECT ROUND(CEIL(0.05 * (przydzial_myszy + NVL(myszy_extra, 0)))) INTO podatek
+  FROM Kocury
+  WHERE pseudo = pseudonim;
+ 
+  SELECT COUNT(*) INTO podwladni
+  FROM Kocury
+  WHERE szef = pseudonim;
+  
+  SELECT COUNT(*) INTO wrogowie
+  FROM Wrogowie_kocurow
+  WHERE pseudo = pseudonim;
+  
+  IF kocur.plec = 'M' THEN
+    podatek := podatek + 1;
+  END IF;
+
+  IF podwladni = 0 THEN
+    podatek := podatek + 2;
+  END IF;
+
+  IF wrogowie = 0 THEN
+    podatek := podatek + 1;
+  END IF;
+
+  RETURN podatek;
+END;
+
+SELECT pseudo,
+      (przydzial_myszy + NVL(myszy_extra, 0)) "Calk. przydzial",
+      podatek(pseudo) "Podatek"
+FROM Kocury;
+
+-- Zadanie 45
+CREATE TABLE Dodatki_extra(pseudo VARCHAR2(15), dodatek NUMBER);
+
+CREATE OR REPLACE TRIGGER zemsta_tygrysa
+FOR UPDATE ON Kocury
+COMPOUND TRIGGER
+  should_update BOOLEAN := FALSE;
+  exist NUMBER;
+  CURSOR milusie_c IS
+    SELECT * FROM Kocury WHERE funkcja = 'MILUSIA';
+  
+  milusia milusie_c%ROWTYPE;
+
+  BEFORE EACH ROW IS
+  BEGIN
+    IF :NEW.funkcja = 'MILUSIA' AND
+        (
+            :NEW.przydzial_myszy > :OLD.przydzial_myszy OR
+            NVL(:NEW.myszy_extra, 0) > NVL(:OLD.myszy_extra, 0)
+        )
+        -- AND NOT SYS.LOGIN_USER = 'TYGRYS'
+    THEN
+      should_update := TRUE;
+    END IF;
+  END BEFORE EACH ROW;
+
+  AFTER STATEMENT IS
+  BEGIN
+    IF should_update THEN
+        FOR milusia IN milusie_c
+        LOOP
+            SELECT COUNT(*) INTO exist
+            FROM Dodatki_extra
+            WHERE pseudo = milusia.pseudo;
+            
+            IF exist > 0 THEN
+                EXECUTE IMMEDIATE 'UPDATE Dodatki_extra SET dodatek = dodatek - 10 WHERE pseudo = ''' || TO_CHAR(milusia.pseudo) || '''';
+            ELSE
+                EXECUTE IMMEDIATE 'INSERT INTO Dodatki_extra VALUES (''' || TO_CHAR(milusia.pseudo) ||''', -10)';
+            END IF;
+        END LOOP;
+
+        should_update := FALSE;
+    END IF;
+  END AFTER STATEMENT;
+END;
+
+UPDATE Kocury
+SET przydzial_myszy = przydzial_myszy + 1
+WHERE funkcja = 'MILUSIA';
+
+SELECT * FROM Dodatki_extra;
+
+ROLLBACK;
