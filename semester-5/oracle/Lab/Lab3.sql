@@ -649,3 +649,44 @@ WHERE funkcja = 'MILUSIA';
 SELECT * FROM Dodatki_extra;
 
 ROLLBACK;
+
+-- Zadanie 46
+CREATE TABLE Log(kto VARCHAR2(20), kiedy DATE, kotu VARCHAR2(10), operacja VARCHAR2(2000));
+
+CREATE OR REPLACE TRIGGER constrain
+BEFORE INSERT OR UPDATE ON Kocury
+FOR EACH ROW
+  DECLARE
+    funkcja Funkcje%ROWTYPE;
+    operation VARCHAR2(10);
+  BEGIN
+    SELECT * INTO funkcja
+    FROM Funkcje
+    WHERE funkcja = :NEW.funkcja;
+ 
+    operation := 'INSERTING';
+
+    IF UPDATING THEN
+      operation := 'UPDATING';
+    END IF;
+
+    IF :NEW.przydzial_myszy < funkcja.min_myszy OR
+       :NEW.przydzial_myszy > funkcja.max_myszy
+    THEN
+      INSERT INTO Log VALUES ('SYS.LOGIN_USER', CURRENT_DATE, :NEW.pseudo, operation);
+      
+      :NEW.przydzial_myszy := :OLD.przydzial_myszy;
+    END IF;
+  END;
+
+UPDATE kocury
+SET przydzial_myszy = 31
+WHERE pseudo = 'PUSZYSTA';
+SELECT * FROM Log;
+
+SELECT * FROM kocury
+NATURAL JOIN Funkcje
+WHERE pseudo = 'PUSZYSTA';
+
+DELETE FROM LOG;
+DROP TABLE Log;
