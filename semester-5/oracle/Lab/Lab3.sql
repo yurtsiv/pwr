@@ -264,9 +264,25 @@ EXCEPTION
         DBMS_OUTPUT.PUT_LINE(blad || ': juz istnieje');
 END;
 
-BEGIN
-    dodaj_bande(12, '...', '...');
-END;
+EXECUTE dodaj_bande(-1, 'nowa banda', 'nowy teren');
+-- EXECUTE dodaj_bande(1, 'SZEFOSTWO', 'POLE');
+-- EXECUTE dodaj_bande(6, 'SZEFOSTWO', 'POLE');
+-- EXECUTE dodaj_bande(6, 'NOWA BANDA', 'POLE');
+-- EXECUTE dodaj_bande(6, 'NOWA BANDA', 'NOWY TEREN');
 
 SELECT * FROM Bandy;
 ROLLBACK;
+
+-- Zadanie 41
+CREATE OR REPLACE TRIGGER nr_bandy
+BEFORE INSERT ON Bandy
+FOR EACH ROW
+BEGIN
+    SELECT MAX(nr_bandy) + 1 INTO :NEW.nr_bandy FROM Bandy;
+END;
+
+EXECUTE dodaj_bande(20, 'NOWA BANDA', 'NOWY TEREN');
+
+SELECT * FROM Bandy;
+ROLLBACK;
+
