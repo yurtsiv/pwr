@@ -154,4 +154,59 @@ BEGIN
 
         DBMS_OUTPUT.NEW_LINE();
     END LOOP;
+END; 
+
+-- Zadanie 39
+DECLARE
+    nr_b Bandy.nr_bandy%TYPE := 10; -- '&Nr'
+    nazwa_b Bandy.nazwa%TYPE := 'hello'; -- '&Nazwa'
+    teren_b Bandy.teren%TYPE := 'hello'; -- '&Teren'
+    ilosc_b NUMBER := 0;
+    blad VARCHAR(30) := '';
+
+    ZLY_NUMER EXCEPTION;
+    BANDA_ISTNIEJE EXCEPTION;
+BEGIN
+    IF nr_b <= 0 THEN
+        RAISE ZLY_NUMER;
+    END IF;
+    
+    SELECT COUNT(*) INTO ilosc_b
+    FROM Bandy
+    WHERE nr_bandy = nr_b;
+
+    IF ilosc_b > 0 THEN
+        blad := blad || nr_b;
+    END IF;
+
+    SELECT COUNT(*) INTO ilosc_b
+    FROM Bandy
+    WHERE nazwa = nazwa_b;
+
+    IF ilosc_b > 0 THEN
+        blad := blad || ' ' || nazwa_b;
+    END IF;
+
+    SELECT COUNT(*) INTO ilosc_b
+    FROM Bandy
+    WHERE teren = teren_b;
+    
+    IF ilosc_b > 0 THEN
+        blad := blad || ' ' || teren_b;
+    END IF;
+    
+    IF blad IS NOT NULL THEN
+        RAISE BANDA_ISTNIEJE;
+    END IF;
+
+    INSERT INTO Bandy (nr_bandy, nazwa, teren) values (nr_b, nazwa_b, teren_b);
+EXCEPTION
+    WHEN ZLY_NUMER THEN
+        DBMS_OUTPUT.PUT_LINE('Numer bandy musi byc > 0');
+    WHEN BANDA_ISTNIEJE THEN
+        DBMS_OUTPUT.PUT_LINE(blad || ': juz istnieje');
 END;
+
+ROLLBACK;
+
+-- Zadanie 40
