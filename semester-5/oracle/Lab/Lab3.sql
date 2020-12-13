@@ -452,3 +452,104 @@ WHERE funkcja = 'MILUSIA';
 SELECT * FROM Kocury;
 
 ROLLBACK;
+
+-- Zadanie 43
+DECLARE
+    CURSOR funkcje_c IS SELECT funkcja FROM Funkcje;
+    CURSOR bandy_c IS SELECT nr_bandy, nazwa FROM Bandy;
+    
+    column_1_width NUMBER := 20;
+    column_2_width NUMBER := 10;
+    column_3_width NUMBER := 7;
+    other_column_width NUMBER := 10;
+    last_column_width NUMBER := 10;
+
+    suma_funkcja NUMBER;
+    suma_calk NUMBER;
+
+    PROCEDURE podsumowanie_dla_bandy(
+        banda bandy_c%ROWTYPE,
+        plec_p Kocury.plec%TYPE
+    )
+    AS
+        suma_bandy NUMBER;
+        suma_calk_band NUMBER;
+        ilosc_kotow NUMBER;
+    BEGIN
+        SELECT COUNT(*) INTO ilosc_kotow
+        FROM Kocury
+        WHERE nr_bandy = banda.nr_bandy AND plec = plec_p;
+
+        DBMS_OUTPUT.PUT(RPAD(ilosc_kotow, column_3_width));
+
+        FOR f IN funkcje_c
+        LOOP
+            SELECT NVL(SUM(przydzial_myszy + NVL(myszy_extra, 0)), 0) INTO suma_bandy
+            FROM Kocury
+            WHERE nr_bandy = banda.nr_bandy AND plec = plec_p AND funkcja = f.funkcja;
+            
+            DBMS_OUTPUT.PUT(RPAD(suma_bandy, other_column_width));
+        END LOOP;
+        
+        SELECT NVL(SUM(przydzial_myszy + NVL(myszy_extra, 0)), 0) INTO suma_calk_band
+        FROM Kocury
+        WHERE nr_bandy = banda.nr_bandy AND plec = plec_p;
+        
+        DBMS_OUTPUT.PUT(RPAD(suma_calk_band, last_column_width));
+
+        DBMS_OUTPUT.NEW_LINE();
+    END;
+BEGIN
+    -- Header
+    DBMS_OUTPUT.PUT(
+        RPAD('NAZWA BANDY', column_1_width) ||
+        RPAD('PLEC', column_2_width) ||
+        RPAD('ILE', column_3_width)
+    );
+    
+    FOR f IN funkcje_c
+    LOOP
+        DBMS_OUTPUT.PUT(RPAD(f.funkcja, other_column_width));
+    END LOOP;
+    
+    DBMS_OUTPUT.PUT(RPAD('SUMA', last_column_width));
+    DBMS_OUTPUT.NEW_LINE();
+    DBMS_OUTPUT.PUT_LINE(RPAD('-', 125, '-'));
+
+    FOR banda IN bandy_c
+    LOOP
+        DBMS_OUTPUT.PUT(RPAD(banda.nazwa, column_1_width));
+        DBMS_OUTPUT.PUT(RPAD('Kotka', column_2_width));
+
+        podsumowanie_dla_bandy(banda, 'D');
+        
+        DBMS_OUTPUT.PUT(RPAD(' ', column_1_width));
+        DBMS_OUTPUT.PUT(RPAD('Kocor', column_2_width));
+        
+        podsumowanie_dla_bandy(banda, 'M');
+    END LOOP;
+    
+    DBMS_OUTPUT.PUT_LINE(RPAD('-', 125, '-'));
+    
+    DBMS_OUTPUT.PUT(RPAD('ZJADA RAZEM', column_1_width));
+    DBMS_OUTPUT.PUT(RPAD(' ', column_2_width));
+    DBMS_OUTPUT.PUT(RPAD(' ', column_3_width));
+
+    
+    FOR f IN funkcje_c
+    LOOP
+        SELECT NVL(SUM(przydzial_myszy + NVL(myszy_extra, 0)), 0) INTO suma_funkcja
+        FROM Kocury
+        WHERE funkcja = f.funkcja;
+        
+        DBMS_OUTPUT.PUT(RPAD(suma_funkcja, other_column_width));
+    END LOOP;
+    
+    SELECT NVL(SUM(przydzial_myszy + NVL(myszy_extra, 0)), 0) INTO suma_calk
+    FROM Kocury;
+    
+    DBMS_OUTPUT.PUT(RPAD(suma_calk, last_column_width));
+
+    DBMS_OUTPUT.NEW_LINE();
+END;
+
