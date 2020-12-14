@@ -1,0 +1,40 @@
+[
+  {
+    "available_tags": [
+      "orange",
+      "yellow",
+      "light_brown_2",
+      "purple",
+      "bronze",
+      "light_brown",
+      "blue",
+      "yellow_2",
+      "red"
+    ],
+    "tags": [
+      "yellow",
+      "purple",
+      "bronze",
+      "blue",
+      "red"
+    ]
+  },
+  {
+    "available_tags": [
+      "orange",
+      "yellow",
+      "light_brown_2",
+      "purple",
+      "bronze",
+      "light_brown",
+      "blue",
+      "yellow_2",
+      "red"
+    ],
+    "tags": [
+      "red",
+      "yellow",
+      "blue"
+    ]
+  }
+]
