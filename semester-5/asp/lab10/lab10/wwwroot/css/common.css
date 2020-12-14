@@ -4,10 +4,14 @@
     flex-direction: column;
 }
 
-.not-quadratic {
-    color: red;
+.error {
+    color: crimson;
 }
 
-.no-solutions {
+.warning {
     color: #ff9900;
+}
+
+.success {
+   color: #4cff00;
 }

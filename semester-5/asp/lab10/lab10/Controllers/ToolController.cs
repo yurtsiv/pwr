@@ -9,11 +9,6 @@ namespace lab10.Controllers
 {
     public class ToolController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         public IActionResult Solve(int a, int b, int c)
         {
             ViewBag.a = a;

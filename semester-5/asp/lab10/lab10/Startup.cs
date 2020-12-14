@@ -54,8 +54,24 @@ namespace lab10
                     defaults: new { controller = "Tool", action = "Solve" });
 
                 endpoints.MapControllerRoute(
+                   name: "Set",
+                   pattern: "Set,{n}",
+                   defaults: new { controller = "Game", action = "Set" });
+
+                endpoints.MapControllerRoute(
+                    name: "Draw",
+                    pattern: "Draw",
+                    defaults: new { controller = "Game", action = "Draw" });
+
+                endpoints.MapControllerRoute(
+                    name: "Guess",
+                    pattern: "Guess,{n}",
+                    defaults: new { controller = "Game", action = "Guess" });
+
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
             });
         }
     }
