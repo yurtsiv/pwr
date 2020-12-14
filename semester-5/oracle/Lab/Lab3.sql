@@ -46,11 +46,18 @@ END;
 
 -- Zadanie 36
 DECLARE
+    PRAGMA AUTONOMOUS_TRANSACTION;
+
     CURSOR do_podwyzki IS
         SELECT pseudo, przydzial_myszy, max_myszy
         FROM Kocury NATURAL JOIN Funkcje
         ORDER BY przydzial_myszy
         FOR UPDATE OF przydzial_myszy;
+    
+    CURSOR kocury_c IS
+        SELECT imie, przydzial_myszy
+        FROM Kocury
+        ORDER BY przydzial_myszy;
 
     sum_myszy NUMBER;
     next_myszy NUMBER;
@@ -66,7 +73,7 @@ BEGIN
             UPDATE Kocury
             SET przydzial_myszy = next_myszy
             WHERE pseudo = re.pseudo;
-            
+                      
             sum_myszy := sum_myszy + (next_myszy - re.przydzial_myszy);
             
             IF next_myszy <> re.przydzial_myszy THEN
@@ -76,15 +83,19 @@ BEGIN
             EXIT loop1 WHEN sum_myszy > 1050;
         END LOOP;
     END LOOP loop1;
-
+    
     DBMS_OUTPUT.PUT_LINE('Calk. przydzial w stadku ' || sum_myszy || ' Zmian - ' || sum_updates);
+
+    DBMS_OUTPUT.PUT_LINE(RPAD('IMIE', 15) || RPAD('Myszki po podwyzce', 20));
+    DBMS_OUTPUT.PUT_LINE(RPAD('-', 50, '-'));
+
+    FOR kocur IN kocury_c
+    LOOP
+        DBMS_OUTPUT.PUT_LINE(RPAD(kocur.imie, 15) || RPAD(kocur.przydzial_myszy, 20));
+    END LOOP;
+
+    ROLLBACK;
 END;
-
-SELECT imie, przydzial_myszy "Myszki po podwyzce"
-FROM Kocury
-ORDER BY przydzial_myszy;
-
-ROLLBACK;
 
 -- Zadanie 37
 DECLARE
