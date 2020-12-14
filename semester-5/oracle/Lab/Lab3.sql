@@ -117,10 +117,9 @@ BEGIN
     END LOOP;
 END;
 
-
 -- Zadanie 38
 DECLARE
-    max_depth POSITIVE := 3; -- '&Maks';
+    max_depth POSITIVE := '&LiczbaPrzelozonych';
     var_depth POSITIVE;
 
     CURSOR koty IS
@@ -169,11 +168,15 @@ END;
 
 -- Zadanie 39
 DECLARE
-    nr_b Bandy.nr_bandy%TYPE := 10; -- '&Nr'
-    nazwa_b Bandy.nazwa%TYPE := 'hello'; -- '&Nazwa'
-    teren_b Bandy.teren%TYPE := 'hello'; -- '&Teren'
+    PRAGMA AUTONOMOUS_TRANSACTION;
+
+    nr_b Bandy.nr_bandy%TYPE := '&Nr';
+    nazwa_b Bandy.nazwa%TYPE := '&Nazwa';
+    teren_b Bandy.teren%TYPE := '&Teren';
     ilosc_b NUMBER := 0;
     blad VARCHAR(30) := '';
+    
+    CURSOR bandy_c IS SELECT * FROM Bandy;
 
     ZLY_NUMER EXCEPTION;
     BANDA_ISTNIEJE EXCEPTION;
@@ -211,15 +214,22 @@ BEGIN
     END IF;
 
     INSERT INTO Bandy (nr_bandy, nazwa, teren) values (nr_b, nazwa_b, teren_b);
+    
+    DBMS_OUTPUT.PUT_LINE(RPAD('Nr bandy', 10) || RPAD('Nazwa', 20) || RPAD('Teren', 20));
+    DBMS_OUTPUT.PUT_LINE(RPAD('-', 30, '-'));
+
+    FOR b IN bandy_c
+    LOOP
+        DBMS_OUTPUT.PUT_LINE(RPAD(b.nr_bandy, 10) || RPAD(b.nazwa, 20) || RPAD(b.teren, 20)); 
+    END LOOP;
+    
+    ROLLBACK;
 EXCEPTION
     WHEN ZLY_NUMER THEN
         DBMS_OUTPUT.PUT_LINE('Numer bandy musi byc > 0');
     WHEN BANDA_ISTNIEJE THEN
         DBMS_OUTPUT.PUT_LINE(blad || ': juz istnieje');
 END;
-
-SELECT * FROM Bandy;
-ROLLBACK;
 
 -- Zadanie 40
 CREATE OR REPLACE
@@ -238,7 +248,7 @@ BEGIN
     IF nr_b <= 0 THEN
         RAISE ZLY_NUMER;
     END IF;
-    
+
     SELECT COUNT(*) INTO ilosc_b
     FROM Bandy
     WHERE nr_bandy = nr_b;
@@ -275,7 +285,8 @@ EXCEPTION
         DBMS_OUTPUT.PUT_LINE(blad || ': juz istnieje');
 END;
 
-EXECUTE dodaj_bande(-1, 'nowa banda', 'nowy teren');
+-- Testy
+-- EXECUTE dodaj_bande(-1, 'nowa banda', 'nowy teren');
 -- EXECUTE dodaj_bande(1, 'SZEFOSTWO', 'POLE');
 -- EXECUTE dodaj_bande(6, 'SZEFOSTWO', 'POLE');
 -- EXECUTE dodaj_bande(6, 'NOWA BANDA', 'POLE');
@@ -626,7 +637,7 @@ COMPOUND TRIGGER
             :NEW.przydzial_myszy > :OLD.przydzial_myszy OR
             NVL(:NEW.myszy_extra, 0) > NVL(:OLD.myszy_extra, 0)
         )
-        -- AND NOT SYS.LOGIN_USER = 'TYGRYS'
+        AND NOT SYS.LOGIN_USER = 'TYGRYS'
     THEN
       should_update := TRUE;
     END IF;
@@ -658,13 +669,12 @@ SET przydzial_myszy = przydzial_myszy + 1
 WHERE funkcja = 'MILUSIA';
 
 SELECT * FROM Dodatki_extra;
-
 ROLLBACK;
 
 -- Zadanie 46
 CREATE TABLE Log(kto VARCHAR2(20), kiedy DATE, kotu VARCHAR2(10), operacja VARCHAR2(2000));
 
-CREATE OR REPLACE TRIGGER constrain
+CREATE OR REPLACE TRIGGER log_activity
 BEFORE INSERT OR UPDATE ON Kocury
 FOR EACH ROW
   DECLARE
@@ -684,20 +694,21 @@ FOR EACH ROW
     IF :NEW.przydzial_myszy < funkcja.min_myszy OR
        :NEW.przydzial_myszy > funkcja.max_myszy
     THEN
-      INSERT INTO Log VALUES ('SYS.LOGIN_USER', CURRENT_DATE, :NEW.pseudo, operation);
+      INSERT INTO Log VALUES (SYS.LOGIN_USER, CURRENT_DATE, :NEW.pseudo, operation);
       
       :NEW.przydzial_myszy := :OLD.przydzial_myszy;
     END IF;
   END;
 
 UPDATE kocury
-SET przydzial_myszy = 31
+SET przydzial_myszy = 20
 WHERE pseudo = 'PUSZYSTA';
+
 SELECT * FROM Log;
 
 SELECT * FROM kocury
 NATURAL JOIN Funkcje
 WHERE pseudo = 'PUSZYSTA';
 
-DELETE FROM LOG;
+ROLLBACK;
 DROP TABLE Log;
