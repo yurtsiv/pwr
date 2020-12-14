@@ -1,0 +1,13 @@
+﻿.main-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.not-quadratic {
+    color: red;
+}
+
+.no-solutions {
+    color: #ff9900;
+}
