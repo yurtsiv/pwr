@@ -1,14 +1,12 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 
 namespace lab10.Controllers
 {
     public class ToolController : Controller
     {
+        [Route("Tool/Solve/{a}/{b}/{c}")]
         public IActionResult Solve(int a, int b, int c)
         {
             ViewBag.a = a;
@@ -22,6 +20,7 @@ namespace lab10.Controllers
             equationStr.Append($"{a}x^2");
             equationStr.Append(b < 0 ? $"{b}x" : $"+{b}x");
             equationStr.Append(c < 0 ? $"{c}" : $"+{c}");
+            equationStr.Append(" = 0");
 
             ViewBag.equationStr = equationStr.ToString();
 
@@ -36,7 +35,8 @@ namespace lab10.Controllers
             if (d < 0)
             {
                 ViewBag.rootsCount = 0;
-            } else
+            }
+            else
             {
                 float x1 = (-1 * b + (float)Math.Sqrt(d)) / (2 * a);
                 float x2 = (-1 * b - (float)Math.Sqrt(d)) / (2 * a);

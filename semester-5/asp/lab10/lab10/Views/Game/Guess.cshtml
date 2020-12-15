@@ -1,13 +1,13 @@
 ﻿@if (ViewBag.errorMsg != null)
 {
-    <h1 class="error">@ViewBag.errorMsg</h1>
+    <h2 class="error">@ViewBag.errorMsg</h2>
 } else if (ViewBag.guessedX == ViewBag.x)
 {
-    <h1 class="success">YOU WIN!</h1>
+    <h2 class="success">Wygrałeś!</h2>
 } else if (ViewBag.guessedX < ViewBag.x)
 {
-    <h1 class="warning">Więcej!</h1>
+    <h2 class="warning">Więcej!</h2>
 } else
 {
-    <h1 class="warning">Mniej!</h1>
+    <h2 class="warning">Mniej!</h2>
 }

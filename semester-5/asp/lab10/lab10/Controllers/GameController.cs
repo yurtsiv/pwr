@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace lab10.Controllers
 {
@@ -33,7 +30,8 @@ namespace lab10.Controllers
             if (limit == -1)
             {
                 ViewBag.errorMsg = "Najpierw ustaw limit";
-            } else
+            }
+            else
             {
                 ViewBag.n = limit;
                 GenerateNumber();
@@ -47,10 +45,12 @@ namespace lab10.Controllers
             if (limit == -1)
             {
                 ViewBag.errorMsg = "Najpierw ustaw limit i wygeneruj liczbę";
-            } else if (nextNumber == -1)
+            }
+            else if (nextNumber == -1)
             {
                 ViewBag.errorMsg = "Najpierw wygeneruj liczbę";
-            } else
+            }
+            else
             {
                 ViewBag.guessedX = n;
                 ViewBag.X = nextNumber;

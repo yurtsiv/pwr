@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -48,11 +43,7 @@ namespace lab10
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "TS",
-                    pattern: "Tool/Solve/{a}/{b}/{c}",
-                    defaults: new { controller = "Tool", action = "Solve" });
-
+                // Dla odmiany definiuje routy tu
                 endpoints.MapControllerRoute(
                    name: "Set",
                    pattern: "Set,{n}",

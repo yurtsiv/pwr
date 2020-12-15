@@ -1,8 +1,9 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewBag.CompName = Environment.MachineName;
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Stepan Yurtsiv</h1>
+    <h4 >246437</h4>
+    <h4>@ViewBag.CompName</h4>
 </div>
