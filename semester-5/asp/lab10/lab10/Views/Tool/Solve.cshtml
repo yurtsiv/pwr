@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "Równanie";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<h3 class="font-weight-normal">@ViewBag.equationStr</h3>
+
+@if (ViewBag.rootsCount == -1)
+{
+    <h4 class="error">To nie jest równanie kwadratowe</h4>
+} else if (ViewBag.rootsCount == 0) {
+    <h4 class="warning">Nie ma rozwiązań</h4>
+} else if (ViewBag.rootsCount == 1)
+{
+    <h4 class="font-weight-normal warning"><b>x</b> = @ViewBag.x1</h4>
+} else
+{
+    <h4 class="font-weight-normal success"><b>x1</b> = @ViewBag.x1 , <b>x2</b> = @ViewBag.x2</h4>
+}
+

@@ -1,0 +1,17 @@
+﻿.main-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.error {
+    color: crimson;
+}
+
+.warning {
+    color: #ff9900;
+}
+
+.success {
+   color: #4cff00;
+}
