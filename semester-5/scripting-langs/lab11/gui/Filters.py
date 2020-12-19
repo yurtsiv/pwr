@@ -14,12 +14,14 @@ class Filters(tk.Frame):
         self.__app_state = app_state
         self.__country_names = country_names
 
-        self.__country_combobox = None
-        self.__continent_combobox = None
-        self.__month_combobox = None
+        self.__country_sv = tk.StringVar()
+        self.__continent_sv = tk.StringVar()
+        self.__month_sv = tk.StringVar()
+        self.__day_sv = tk.StringVar()
+        self.__sort_by_sv = tk.StringVar()
+        self.__rows_limit_sv = tk.StringVar()
+
         self.__day_combobox = None
-        self.__sort_by_combobox = None
-        self.__rows_limit_sv = None
 
         self.pack()
         self.create_widgets()
@@ -28,24 +30,27 @@ class Filters(tk.Frame):
             lambda state: self.on_app_state_filters_change(state['filters']))
 
     def create_widgets(self):
-        self.__country_combobox = self.create_combobox(
+        self.create_autocomplete(
             "Country",
             "country_name",
             [Filters.EMPTY_CHOICE] + self.__country_names.country_names,
+            self.__country_sv,
             0
         )
 
-        self.__continent_combobox = self.create_combobox(
+        self.create_autocomplete(
             "Continent",
             "continent",
             [Filters.EMPTY_CHOICE] + self.__country_names.continents,
+            self.__continent_sv,
             1
         )
 
-        self.__month_combobox = self.create_combobox(
+        self.create_combobox(
             "Month",
             "month",
             [Filters.EMPTY_CHOICE] + MONTHS,
+            self.__month_sv,
             2,
         )
 
@@ -53,41 +58,53 @@ class Filters(tk.Frame):
             "Day",
             "day",
             [Filters.EMPTY_CHOICE],
+            self.__day_sv,
             3,
         )
 
-        self.__sort_by_combobox = self.create_combobox(
+        self.create_combobox(
             "Sort by",
             "sort_by",
             [Filters.EMPTY_CHOICE] + SORT_BY_KEYS,
+            self.__sort_by_sv,
             4
         )
 
-        self.__rows_limit_sv = self.create_int_input(
+        self.create_int_input(
             "Rows limit",
             "rows_limit",
+            self.__rows_limit_sv,
             5
         )
 
     def on_app_state_filters_change(self, filters):
-        self.__country_combobox.set(filters['country_name'] or Filters.EMPTY_CHOICE)
-        self.__continent_combobox.set(filters['continent'] or Filters.EMPTY_CHOICE)
-        self.__month_combobox.set(filters['month'] or Filters.EMPTY_CHOICE)
-        self.__day_combobox.set(filters['day'] or Filters.EMPTY_CHOICE)
-        self.__sort_by_combobox.set(filters['sort_by'] or Filters.EMPTY_CHOICE)
+        self.__country_sv.set(filters['country_name'] or Filters.EMPTY_CHOICE)
+        self.__continent_sv.set(filters['continent'] or Filters.EMPTY_CHOICE)
+        self.__month_sv.set(filters['month'] or Filters.EMPTY_CHOICE)
+        self.__day_sv.set(filters['day'] or Filters.EMPTY_CHOICE)
+        self.__sort_by_sv.set(filters['sort_by'] or Filters.EMPTY_CHOICE)
         self.__rows_limit_sv.set(str(filters['rows_limit'] or ''))
 
-    def create_combobox(self, label, filter_key, value, column):
+    def create_autocomplete(self, label, filter_key, values, sv, column):
         tk.Label(self, text=label).grid(row=0, column=column, sticky="W")
 
-        box = autocomplete.AutocompleteCombobox(self, completevalues=value)
-        box.bind('<<ComboboxSelected>>', self.on_combobox_change(filter_key))
+        sv.trace("w", lambda name, index, mode, sv=sv: self.on_combobox_change(filter_key, sv))
+        box = autocomplete.AutocompleteCombobox(self, completevalues=values, textvariable=sv)
+        box.grid(row=1, column=column)
+
+        return box
+    
+    def create_combobox(self, label, filter_key, values, sv, column):
+        tk.Label(self, text=label).grid(row=0, column=column, sticky="W")
+
+        sv.trace("w", lambda name, index, mode, sv=sv: self.on_combobox_change(filter_key, sv))
+        box = tk.ttk.Combobox(self, values=values, textvariable=sv)
         box.grid(row=1, column=column)
 
         return box
     
     def on_month_change(self, month):
-        if month == Filters.EMPTY_CHOICE:
+        if month is None:
             return self.__app_state.merge_filters({
                 'month': None,
                 'day': None
@@ -97,8 +114,8 @@ class Filters(tk.Frame):
         (_, days_in_month) = monthrange(YEAR, month_num)
 
         days = [str(e) for e in list(range(1, days_in_month + 1))]
-        self.__day_combobox.set_completion_list(
-            [Filters.EMPTY_CHOICE] + days
+        self.__day_combobox.configure(
+            values=[Filters.EMPTY_CHOICE] + days
         )
 
         day = self.__app_state.state['filters']['day']
@@ -112,53 +129,51 @@ class Filters(tk.Frame):
                 'day': day
             })
 
-    def on_combobox_change(self, filter_key):
-        def handle(event):
-            value = event.widget.get()
+    def on_combobox_change(self, filter_key, sv):
+        raw_value = sv.get()
+        value = None if raw_value == Filters.EMPTY_CHOICE else raw_value
 
-            if filter_key == 'month':
-                self.on_month_change(value)
-            elif value == Filters.EMPTY_CHOICE:
-                self.__app_state.set_filter(filter_key, None)
-            elif filter_key == 'country_name':
-                self.__app_state.merge_filters({
-                  'country_name': value,
-                  'continent': None
-                })
-            elif filter_key == 'continent':
-                self.__app_state.merge_filters({
-                  'continent': value,
-                  'country_name': None
-                })
-            else:
-                self.__app_state.set_filter(filter_key, value)
+        if self.__app_state.filters[filter_key] == value:
+            return;
 
-        return handle
+        if filter_key == 'month':
+            self.on_month_change(value)
+        elif filter_key == 'country_name':
+            self.__app_state.merge_filters({
+                'country_name': value,
+                'continent': None
+            })
+        elif filter_key == 'continent':
+            self.__app_state.merge_filters({
+                'continent': value,
+                'country_name': None
+            })
+        else:
+            self.__app_state.set_filter(filter_key, value)
 
-    def create_int_input(self, label, filter_key, column):
+
+    def create_int_input(self, label, filter_key, sv, column):
         tk.Label(self, text=label).grid(row=0, column=column, sticky="W")
 
-        sv = tk.StringVar()
-        sv.trace("w", lambda name, index, mode, sv=sv: self.on_int_input_change(filter_key)(sv))
-
         entry = tk.Entry(self, textvariable=sv)
+        sv.trace("w", lambda name, index, mode, sv=sv: self.on_int_input_change(filter_key, sv))
         entry.grid(row=1, column=column)
 
         return sv
 
-    def on_int_input_change(self, filter_key):
-        def handle(sv):
-            value = sv.get()
+    def on_int_input_change(self, filter_key, sv):
+        value = sv.get()
 
-            if not value:
-                self.__app_state.set_filter(filter_key, None)
-                return
+        if self.__app_state.filters[filter_key] == value:
+            return;
 
-            try:
-              value = int(value) 
-            except:
-              return
+        if not value:
+            self.__app_state.set_filter(filter_key, None)
+            return
 
-            self.__app_state.set_filter(filter_key, value)
+        try:
+            value = int(value) 
+        except:
+            return
 
-        return handle
+        self.__app_state.set_filter(filter_key, value)

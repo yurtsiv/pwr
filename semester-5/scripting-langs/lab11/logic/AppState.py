@@ -16,6 +16,10 @@ class AppState:
     @property
     def state(self):
         return self.__state
+ 
+    @property
+    def filters(self):
+        return self.__state['filters']
 
     def on_change(self, cb):
         self.__listeners.append(cb)
