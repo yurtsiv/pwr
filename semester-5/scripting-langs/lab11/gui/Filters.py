@@ -34,7 +34,7 @@ class Filters(tk.Frame):
         self._icon_imgs = []
 
         self.create_widgets()
-        self.app_state.on_change(self.on_app_state_change)
+        self.app_state.register_listener(self.on_app_state_change)
 
     def create_widgets(self):
         country_names = []
@@ -115,9 +115,9 @@ class Filters(tk.Frame):
 
         return btn
 
-    def on_app_state_change(self, app_state):
-        filters = app_state['filters']
-        country_names_obj = app_state['country_names']
+    def on_app_state_change(self):
+        filters = self.app_state.state['filters']
+        country_names_obj = self.app_state.state['country_names']
 
         if country_names_obj is not None:
             country_names = country_names_obj.country_names

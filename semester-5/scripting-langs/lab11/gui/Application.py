@@ -17,7 +17,7 @@ class Application(tk.Frame):
 
         self.pack()
         self.create_widgets()
-        self.app_state.on_change(lambda _: self.refresh_table_content())
+        self.app_state.register_listener(self.refresh_table_content)
 
     def create_widgets(self):
         self.grid_rowconfigure(0, weight=0)

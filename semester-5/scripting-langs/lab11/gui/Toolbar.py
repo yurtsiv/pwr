@@ -4,7 +4,7 @@ from tkinter import filedialog
 from tkinter import messagebox
 from PIL import Image, ImageTk
 
-from logic.logic import parse_data, transform_data
+from logic.logic import parse_data
 from gui.Saved import Saved
 
 class Toolbar(Frame):

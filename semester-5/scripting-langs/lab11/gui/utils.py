@@ -1,3 +1,4 @@
+import json
 from calendar import monthrange
 from datetime import datetime
 
@@ -49,3 +50,21 @@ def date_range_from_filters(filters):
         datetime(YEAR, month_num, day),
         datetime(YEAR, month_num, day)
     )
+
+def parse_saved_filters(file_name):
+    with open(file_name, 'r') as file:
+        data = json.load(file)        
+
+        res = []
+
+        for item in data:
+            res.append({
+                'country_name': item['country_name'],
+                'continent': item['continent'],
+                'month': item['month'],
+                'day': item['day'],
+                'sort_by': item['sort_by'],
+                'rows_limit': item['rows_limit']
+            })
+
+        return data

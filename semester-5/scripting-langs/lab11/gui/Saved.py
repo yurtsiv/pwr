@@ -1,52 +1,117 @@
-from os import WEXITED
+import json
 from tkinter import *
+from tkinter import filedialog
+from tkinter import messagebox
+
+from gui.utils import parse_saved_filters
+
 
 class Saved(Frame):
-  def __init__(self, master, app_state, **kwargs):
-      super().__init__(master, **kwargs)
+    FILE_TYPES = [
+        ('JSON files', '*.json'),
+    ]
 
-      self.on_close = None
-      self.app_state = app_state 
+    def __init__(self, master, app_state, **kwargs):
+        super().__init__(master, **kwargs)
 
-      self.create_widgets()
+        self.on_close = None
+        self.app_state = app_state
 
-  def create_widgets(self):
-    self.grid_columnconfigure(0, weight=1)
-    self.grid_rowconfigure(0, weight=1)
+        self.listbox = None
+        self.create_widgets()
 
-    self.create_filters_list()
-  
-  def filters_to_str(self, filters):
-    res = ''
+        self.app_state.register_listener(self.on_state_change)
 
-    for key in ['country_name', 'continent', 'month', 'day']:
-      if filters[key]:
-        res += filters[key] + ' '
-      
-    if filters['sort_by']:
-      res += ', sort by ' + filters['sort_by']
+    def destroy(self):
+        self.app_state.unregister_listener(self.on_state_change)
+        return super().destroy()
 
-    if filters['rows_limit']:
-      res += ', limit to ' + str(filters['rows_limit'])
+    def on_state_change(self):
+        saved_filters = self.app_state.saved_filters
 
-    return res
-  
-  def on_list_box_double_click(self, event):
-    selected_idx, = event.widget.curselection()
+        self.listbox.delete(0, END)
+        for i in range(0, len(saved_filters)):
+            self.listbox.insert(i, self.filters_to_str(saved_filters[i]))
 
-    self.app_state.merge_filters(
-      self.app_state.saved_filters[selected_idx]
-    )
+    def create_widgets(self):
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
 
-    self.on_close()
+        self.create_filters_list()
+        self.create_menu()
 
-  def create_filters_list(self):
-    listbox = Listbox(self)
-    saved_filters = self.app_state.saved_filters
+    def filters_to_str(self, filters):
+        res = ''
 
-    for i in range(0, len(saved_filters)):
-      listbox.insert(i, self.filters_to_str(saved_filters[i]))
-    
-    listbox.bind('<Double-1>', self.on_list_box_double_click)
+        for key in ['country_name', 'continent', 'month', 'day']:
+            if filters[key]:
+                res += filters[key] + ' '
 
-    listbox.grid(row=0, sticky="wens")
+        if filters['sort_by']:
+            res += ', sort by ' + filters['sort_by']
+
+        if filters['rows_limit']:
+            res += ', limit to ' + str(filters['rows_limit'])
+
+        return res
+
+    def on_list_box_double_click(self, event):
+        selected_idx, = event.widget.curselection()
+
+        self.app_state.merge_filters(
+            self.app_state.saved_filters[selected_idx]
+        )
+
+        self.on_close()
+
+    def create_filters_list(self):
+        listbox = Listbox(self)
+        self.listbox = listbox
+
+        saved_filters = self.app_state.saved_filters
+
+        for i in range(0, len(saved_filters)):
+            listbox.insert(i, self.filters_to_str(saved_filters[i]))
+
+        listbox.bind('<Double-1>', self.on_list_box_double_click)
+
+        listbox.grid(row=0, sticky="wens")
+
+    def on_file_open(self):
+        file_name = filedialog.askopenfilename(
+            filetypes=Saved.FILE_TYPES, parent=self)
+
+        if not file_name or file_name == ():
+            return
+
+        try:
+            filters = parse_saved_filters(file_name)
+            self.app_state.set_saved_filters(filters)
+        except Exception:
+            messagebox.showerror("Error", "Couldn't parse the file")
+
+    def on_save_as(self):
+        file_name = filedialog.asksaveasfilename(parent=self)
+
+        if not file_name or file_name == ():
+            return
+
+        if not file_name.endswith('json'):
+            file_name += '.json'
+
+        try:
+            with open(file_name, 'w') as file:
+                json.dump(self.app_state.saved_filters, file)
+        except Exception as e:
+            messagebox.showerror("Error", "Failed to save the file")
+
+    def create_menu(self):
+        menu = Menu(self.master)
+
+        self.master.config(menu=menu)
+
+        fileMenu = Menu(menu, tearoff=0)
+        menu.add_cascade(label="File", menu=fileMenu)
+
+        fileMenu.add_command(label="Open", command=self.on_file_open)
+        fileMenu.add_command(label="Save as", command=self.on_save_as)
