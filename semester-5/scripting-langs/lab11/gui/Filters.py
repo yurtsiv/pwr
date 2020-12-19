@@ -1,6 +1,9 @@
+import os
 from ttkwidgets import autocomplete
 import tkinter as tk
+from tkinter import *
 from calendar import monthrange
+from PIL import Image, ImageTk
 
 from logic.const import SORT_BY_KEYS
 from gui.const import MONTHS, YEAR
@@ -8,6 +11,7 @@ from gui.const import MONTHS, YEAR
 
 class Filters(tk.Frame):
     EMPTY_CHOICE = '(empty)'
+    BTN_SIZE = 20
 
     def __init__(self, master, app_state):
         super().__init__(master)
@@ -24,9 +28,12 @@ class Filters(tk.Frame):
         self.country_combobox = None
         self.continent_combobox = None
         self.day_combobox = None
+        self.save_filters_btn = None
+
+        # Keep images from being garbage collected
+        self._icon_imgs = []
 
         self.create_widgets()
-
         self.app_state.on_change(self.on_app_state_change)
 
     def create_widgets(self):
@@ -85,6 +92,29 @@ class Filters(tk.Frame):
             5
         )
 
+        self.save_filters_btn = self.create_icon_btn(
+            "star",
+            self.on_save_filters_click,
+            6
+        )
+
+        self.save_filters_btn.config(state='disabled')
+
+    def on_save_filters_click(self):
+        self.app_state.save_current_filters()
+
+    def create_icon_btn(self, icon_name, on_click, column):
+        size = Filters.BTN_SIZE
+        image = Image.open(os.getcwd() + '/gui/icons/' + icon_name + '.png')
+        image = image.resize((size, size), Image.ANTIALIAS)
+        image_tk = ImageTk.PhotoImage(image)
+        self._icon_imgs.append(image_tk)
+        btn = Button(self, command=on_click, image=image_tk,
+                     width=size, height=size)
+        btn.grid(row=1, column=column)
+
+        return btn
+
     def on_app_state_change(self, app_state):
         filters = app_state['filters']
         country_names_obj = app_state['country_names']
@@ -107,6 +137,9 @@ class Filters(tk.Frame):
         self.day_sv.set(filters['day'] or Filters.EMPTY_CHOICE)
         self.sort_by_sv.set(filters['sort_by'] or Filters.EMPTY_CHOICE)
         self.rows_limit_sv.set(str(filters['rows_limit'] or ''))
+
+        save_btn_state = 'active' if any(filters.values()) else 'disabled'
+        self.save_filters_btn.config(state=save_btn_state)
 
     def create_autocomplete(self, label, filter_key, values, sv, column):
         tk.Label(self, text=label).grid(row=0, column=column, sticky="W")

@@ -5,6 +5,7 @@ from tkinter import messagebox
 from PIL import Image, ImageTk
 
 from logic.logic import parse_data, transform_data
+from gui.Saved import Saved
 
 class Toolbar(Frame):
     FILE_TYPES = [
@@ -23,6 +24,20 @@ class Toolbar(Frame):
 
         self.create_widgets()
 
+    def create_widgets(self):
+        self.create_button('open-file', self.on_open_file_click, 0)
+        self.create_button('saved', self.on_saved_click, 1)
+
+    def create_button(self, icon_name, on_click, column):
+        size = Toolbar.BTN_SIZE
+        image = Image.open(os.getcwd() + '/gui/icons/' + icon_name + '.png')
+        image = image.resize((size, size), Image.ANTIALIAS)
+        image_tk = ImageTk.PhotoImage(image)
+        self._icon_imgs.append(image_tk)
+        btn = Button(self, command=on_click, image=image_tk,
+                     width=size, height=size)
+        btn.grid(row=0, column=column)
+
     def on_open_file_click(self):
         file_name = filedialog.askopenfilename(
             filetypes=Toolbar.FILE_TYPES)
@@ -36,15 +51,11 @@ class Toolbar(Frame):
         except Exception as e:
             messagebox.showerror("Error", "Couldn't parse the file")
 
-    def create_widgets(self):
-        self.create_button('open-file', self.on_open_file_click, 0)
+    def on_saved_click(self):
+        tl = Toplevel(self)
+        tl.wm_title("Saved filters")
+        tl.wm_geometry("500x500")
 
-    def create_button(self, icon_name, on_click, column):
-        size = Toolbar.BTN_SIZE
-        image = Image.open(os.getcwd() + '/gui/icons/' + icon_name + '.png')
-        image = image.resize((size, size), Image.ANTIALIAS)
-        image_tk = ImageTk.PhotoImage(image)
-        self._icon_imgs.append(image_tk)
-        btn = Button(self, command=on_click, image=image_tk,
-                     width=size, height=size)
-        btn.grid(row=0, column=column)
+        saved = Saved(tl, self.app_state, background="black")
+        saved.on_close = lambda: tl.destroy()
+        saved.pack(expand=1, fill=BOTH)
