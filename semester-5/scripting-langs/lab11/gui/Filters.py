@@ -6,7 +6,7 @@ from logic.const import SORT_BY_KEYS
 from gui.const import MONTHS, YEAR
 
 class Filters(tk.Frame):
-    EMPTY_CHOICE = 'Not selected...'
+    EMPTY_CHOICE = '(empty)'
 
     def __init__(self, master, country_names, app_state):
         super().__init__(master)
@@ -23,7 +23,6 @@ class Filters(tk.Frame):
 
         self.__day_combobox = None
 
-        self.pack()
         self.create_widgets()
 
         self.__app_state.on_change(

@@ -1,12 +1,10 @@
-import sys
 import tkinter as tk
-from tkinter import ttk
-from datetime import datetime
 
 from logic.AppState import AppState
 from logic.logic import parse_data, transform_data
 from gui.utils import format_result, date_range_from_filters
 from gui.Filters import Filters
+from gui.Toolbar import Toolbar
 
 class Application(tk.Frame):
     def __init__(self, master, cases_world, country_names):
@@ -26,21 +24,26 @@ class Application(tk.Frame):
 
     def create_widgets(self):
         self.grid_rowconfigure(0, weight=0)
-        self.grid_rowconfigure(1, weight=2)
+        self.grid_rowconfigure(1, weight=0)
+        self.grid_rowconfigure(2, weight=1)
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=0)
 
+        # Toolbar
+        toolbar = Toolbar(self)
+        toolbar.grid(row=0, sticky="wens")
+
         # Filters
         filters = Filters(self, self.country_names, self.app_state)
-        filters.grid(row=0, sticky="wens")
+        filters.grid(row=1, sticky="wens")
 
         # Output table
         scrollbar = tk.Scrollbar(self)
         self.text_cont = tk.Text(self, height=300)
         self.text_cont.config(state=tk.DISABLED)
 
-        self.text_cont.grid(row=1, column=0, sticky="WENS")
-        scrollbar.grid(row=1, column=1, sticky="NS")
+        self.text_cont.grid(row=2, column=0, sticky="WENS")
+        scrollbar.grid(row=2, column=1, sticky="NS")
 
         self.text_cont.config(yscrollcommand=scrollbar.set)
         scrollbar.config(command=self.text_cont.yview)
