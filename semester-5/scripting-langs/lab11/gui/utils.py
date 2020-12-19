@@ -1,33 +1,9 @@
-import signal
-import sys
+from calendar import monthrange
+from datetime import datetime
 
 from logic.utils import get_closest_string
 from logic.const import DATE_FORMAT
-
-
-def try_parse_place(place, country_names):
-    """
-    Returns continent, country code, closest place
-    """
-    continents = country_names.continents
-
-    if place == "World":
-        return None, None, None
-
-    if place in continents:
-        return place, None, None
-
-    country_code = country_names.get_code_by_name(place)
-    if country_code is not None:
-        return None, country_code, None
-
-    closest_place = get_closest_string(
-        list(continents) + country_names.country_names + ["World"],
-        place
-    )
-
-    return None, None, closest_place
-
+from gui.const import MONTHS, YEAR
 
 def format_result(result, country_names):
     res = "\n"
@@ -51,3 +27,25 @@ def format_result(result, country_names):
     res += "\n"
 
     return res
+
+def date_range_from_filters(filters):
+    month_name, day_str = filters['month'], filters['day']
+
+    if not month_name:
+        return None
+
+    day = None if day_str is None else int(day_str)
+
+    month_num = MONTHS.index(month_name) + 1
+
+    if day is None:
+        (_, days_in_month) = monthrange(YEAR, month_num)
+        return (
+            datetime(YEAR, month_num, 1),
+            datetime(YEAR, month_num, days_in_month)
+        )
+
+    return (
+        datetime(YEAR, month_num, day),
+        datetime(YEAR, month_num, day)
+    )

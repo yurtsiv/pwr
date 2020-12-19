@@ -5,7 +5,7 @@ from datetime import datetime
 
 from logic.AppState import AppState
 from logic.logic import parse_data, transform_data
-from gui.utils import format_result
+from gui.utils import format_result, date_range_from_filters
 from gui.Filters import Filters
 
 class Application(tk.Frame):
@@ -54,7 +54,7 @@ class Application(tk.Frame):
         result = transform_data(
             self.cases_world,
             self.country_names,
-            # date_range=(filters["date_from"], filters["date_to"]),
+            date_range=date_range_from_filters(filters),
             continent=filters["continent"],
             country_code=self.country_names.get_code_by_name(
                 filters["country_name"]),
