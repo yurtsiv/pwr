@@ -479,7 +479,7 @@ ROLLBACK;
 DECLARE
     CURSOR funkcje_c IS SELECT funkcja FROM Funkcje;
     CURSOR bandy_c IS SELECT nr_bandy, nazwa FROM Bandy;
-    
+
     column_1_width NUMBER := 20;
     column_2_width NUMBER := 10;
     column_3_width NUMBER := 7;
@@ -488,6 +488,8 @@ DECLARE
 
     suma_funkcja NUMBER;
     suma_calk NUMBER;
+    dynamic_query VARCHAR(1000) := '';
+    last_row_res VARCHAR(200) := '';
 
     PROCEDURE podsumowanie_dla_bandy(
         banda bandy_c%ROWTYPE,
@@ -509,14 +511,14 @@ DECLARE
             SELECT NVL(SUM(przydzial_myszy + NVL(myszy_extra, 0)), 0) INTO suma_bandy
             FROM Kocury
             WHERE nr_bandy = banda.nr_bandy AND plec = plec_p AND funkcja = f.funkcja;
-            
+
             DBMS_OUTPUT.PUT(RPAD(suma_bandy, other_column_width));
         END LOOP;
-        
+
         SELECT NVL(SUM(przydzial_myszy + NVL(myszy_extra, 0)), 0) INTO suma_calk_band
         FROM Kocury
         WHERE nr_bandy = banda.nr_bandy AND plec = plec_p;
-        
+
         DBMS_OUTPUT.PUT(RPAD(suma_calk_band, last_column_width));
 
         DBMS_OUTPUT.NEW_LINE();
@@ -558,20 +560,23 @@ BEGIN
     DBMS_OUTPUT.PUT(RPAD(' ', column_3_width));
 
     
+    dynamic_query := 'SELECT ';
+
     FOR f IN funkcje_c
     LOOP
-        SELECT NVL(SUM(przydzial_myszy + NVL(myszy_extra, 0)), 0) INTO suma_funkcja
-        FROM Kocury
-        WHERE funkcja = f.funkcja;
-        
-        DBMS_OUTPUT.PUT(RPAD(suma_funkcja, other_column_width));
+        dynamic_query := dynamic_query || 'RPAD(TO_CHAR(SUM(DECODE(funkcja,''' || f.funkcja || ''', NVL(przydzial_myszy, 0) + NVL(myszy_extra, 0), 0))), ' || other_column_width || ') ||';
     END LOOP;
     
+
     SELECT NVL(SUM(przydzial_myszy + NVL(myszy_extra, 0)), 0) INTO suma_calk
     FROM Kocury;
-    
-    DBMS_OUTPUT.PUT(RPAD(suma_calk, last_column_width));
 
+
+    dynamic_query := dynamic_query || 'RPAD(TO_CHAR(SUM(NVL(przydzial_myszy, 0) + NVL(myszy_extra, 0))), ' || last_column_width || ')';
+    dynamic_query := dynamic_query || ' FROM Kocury NATURAL JOIN Bandy';
+    EXECUTE IMMEDIATE dynamic_query INTO last_row_res;
+
+    DBMS_OUTPUT.PUT(last_row_res);
     DBMS_OUTPUT.NEW_LINE();
 END;
 
