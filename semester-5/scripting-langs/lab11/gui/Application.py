@@ -5,6 +5,7 @@ from logic.logic import transform_data
 from gui.AppState import AppState
 from gui.Filters import Filters
 from gui.Toolbar import Toolbar
+from gui.StatusBar import StatusBar
 from gui.utils import format_result, date_range_from_filters
 
 class Application(tk.Frame):
@@ -23,6 +24,7 @@ class Application(tk.Frame):
         self.grid_rowconfigure(0, weight=0)
         self.grid_rowconfigure(1, weight=0)
         self.grid_rowconfigure(2, weight=1)
+        self.grid_rowconfigure(3, weight=0)
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=0)
 
@@ -44,6 +46,10 @@ class Application(tk.Frame):
 
         self.text_cont.config(yscrollcommand=scrollbar.set)
         scrollbar.config(command=self.text_cont.yview)
+
+        # Status bar
+        status_bar = StatusBar(self, self.app_state)
+        status_bar.grid(row=3, sticky="wens")
 
     def refresh_table_content(self):
         if self.app_state.cases_world is None:

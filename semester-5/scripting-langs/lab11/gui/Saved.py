@@ -48,10 +48,16 @@ class Saved(Frame):
                 res += filters[key] + ' '
 
         if filters['sort_by']:
-            res += ', sort by ' + filters['sort_by']
+            if res:
+                res += ', '
+
+            res += 'sort by ' + filters['sort_by']
 
         if filters['rows_limit']:
-            res += ', limit to ' + str(filters['rows_limit'])
+            if res:
+                res += ', '
+
+            res += 'limit to ' + str(filters['rows_limit'])
 
         return res
 
@@ -103,6 +109,8 @@ class Saved(Frame):
         try:
             with open(file_name, 'w') as file:
                 json.dump(self.app_state.saved_filters, file)
+                self.app_state.set_info_status('Filters saved to a file')
+                self.on_close()
         except Exception as e:
             messagebox.showerror("Error", "Failed to save the file")
     
@@ -133,4 +141,3 @@ class Saved(Frame):
         menu.add_cascade(label="Edit", menu=editMenu)
         editMenu.add_command(label="Remove", command=self.on_remove_item)
         editMenu.add_command(label="Remove all", command=self.on_remove_all)
-

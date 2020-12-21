@@ -48,13 +48,14 @@ class Toolbar(Frame):
         try:
             cases_world, country_names = parse_data(file_name)
             self.app_state.set_parsed_data(cases_world, country_names)
+            self.app_state.set_info_status('File loaded')
         except Exception as e:
             messagebox.showerror("Error", "Couldn't parse the file")
 
     def on_saved_click(self):
         tl = Toplevel(self)
         tl.wm_title("Saved filters")
-        tl.wm_geometry("500x500")
+        tl.wm_minsize(500, 500)
 
         saved = Saved(tl, self.app_state, background="black")
         saved.on_close = lambda: tl.destroy()

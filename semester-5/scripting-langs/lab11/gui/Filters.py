@@ -102,7 +102,7 @@ class Filters(tk.Frame):
         self.clear_filters_btn.config(state='disabled')
 
         self.save_filters_btn = self.create_icon_btn(
-            "star",
+            "saved",
             self.on_save_filters_click,
             7
         )
@@ -111,6 +111,7 @@ class Filters(tk.Frame):
 
     def on_save_filters_click(self):
         self.app_state.save_current_filters()
+        self.app_state.set_info_status('Filters saved')
     
     def on_clear_filters_click(self):
         self.app_state.clear_current_filters()
