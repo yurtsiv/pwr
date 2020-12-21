@@ -74,6 +74,7 @@ class Saved(Frame):
             listbox.insert(i, self.filters_to_str(saved_filters[i]))
 
         listbox.bind('<Double-1>', self.on_list_box_double_click)
+        listbox.bind('<Delete>', lambda _ : self.on_remove_item())
 
         listbox.grid(row=0, sticky="wens")
 
