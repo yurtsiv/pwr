@@ -104,6 +104,18 @@ class Saved(Frame):
                 json.dump(self.app_state.saved_filters, file)
         except Exception as e:
             messagebox.showerror("Error", "Failed to save the file")
+    
+    def on_remove_item(self):
+        sel = self.listbox.curselection()
+
+        if sel == ():
+            return
+        
+        selected_idx, = sel
+        self.app_state.remove_saved_filter(selected_idx)
+    
+    def on_remove_all(self):
+        self.app_state.remove_all_saved_filters()
 
     def create_menu(self):
         menu = Menu(self.master)
@@ -112,6 +124,12 @@ class Saved(Frame):
 
         fileMenu = Menu(menu, tearoff=0)
         menu.add_cascade(label="File", menu=fileMenu)
-
         fileMenu.add_command(label="Open", command=self.on_file_open)
         fileMenu.add_command(label="Save as", command=self.on_save_as)
+        fileMenu.add_command(label="Exit", command=lambda: self.on_close())
+
+        editMenu = Menu(menu, tearoff=0)
+        menu.add_cascade(label="Edit", menu=editMenu)
+        editMenu.add_command(label="Remove", command=self.on_remove_item)
+        editMenu.add_command(label="Remove all", command=self.on_remove_all)
+

@@ -7,7 +7,7 @@ from logic.const import DATE_FORMAT
 from gui.const import MONTHS, YEAR
 
 def format_result(result, country_names):
-    padding = ' ' * 30
+    padding = ' ' * 35
     res = "\n"
     res += padding + "Country".ljust(30) + "Day".ljust(20) + \
         "Cases".ljust(10) + "Deaths".ljust(10)

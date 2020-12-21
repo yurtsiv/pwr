@@ -67,11 +67,15 @@ class AppState:
     def set_saved_filters(self, filters):
         self.state['saved_filters'] = filters
         self._notify_listeners()
+    
+    def remove_all_saved_filters(self):
+        self.state['saved_filters'] = []
+        self._notify_listeners()
  
-    def remove_saved_filters(self, idx):
+    def remove_saved_filter(self, idx):
         del self.state['saved_filters'][idx]
         self._notify_listeners()
-    
+
     def clear_current_filters(self):
         self.state['filters'] = {**AppState.INITIAL_FILTERS}
         self._notify_listeners()
