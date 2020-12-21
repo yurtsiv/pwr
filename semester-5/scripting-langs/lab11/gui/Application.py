@@ -80,6 +80,7 @@ class Application(tk.Frame):
 def run_gui():
     root = tk.Tk()
     root.title("Covid")
+    root.wm_minsize(1000, 500)
 
     # full screen
     root.wm_attributes('-zoomed', True)
