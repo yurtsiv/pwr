@@ -1,4 +1,13 @@
 class AppState:
+    INITIAL_FILTERS = {
+        'country_name': None,
+        'continent': None,
+        'month': None,
+        'day': None,
+        'sort_by': None,
+        'rows_limit': None
+    }
+
     def __init__(self):
         self.listeners = []
 
@@ -6,14 +15,7 @@ class AppState:
             'cases_world': None,
             'country_names': None,
             'saved_filters': [],
-            'filters': {
-                'country_name': None,
-                'continent': None,
-                'month': None,
-                'day': None,
-                'sort_by': None,
-                'rows_limit': None
-            }
+            'filters': {**AppState.INITIAL_FILTERS}
         }
 
     @property
@@ -68,5 +70,9 @@ class AppState:
  
     def remove_saved_filters(self, idx):
         del self.state['saved_filters'][idx]
+        self._notify_listeners()
+    
+    def clear_current_filters(self):
+        self.state['filters'] = {**AppState.INITIAL_FILTERS}
         self._notify_listeners()
  

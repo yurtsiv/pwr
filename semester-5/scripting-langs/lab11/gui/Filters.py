@@ -29,6 +29,7 @@ class Filters(tk.Frame):
         self.continent_combobox = None
         self.day_combobox = None
         self.save_filters_btn = None
+        self.clear_filters_btn = None
 
         # Keep images from being garbage collected
         self._icon_imgs = []
@@ -92,16 +93,27 @@ class Filters(tk.Frame):
             5
         )
 
+        self.clear_filters_btn = self.create_icon_btn(
+            "clear",
+            self.on_clear_filters_click,
+            6
+        )
+
+        self.clear_filters_btn.config(state='disabled')
+
         self.save_filters_btn = self.create_icon_btn(
             "star",
             self.on_save_filters_click,
-            6
+            7
         )
 
         self.save_filters_btn.config(state='disabled')
 
     def on_save_filters_click(self):
         self.app_state.save_current_filters()
+    
+    def on_clear_filters_click(self):
+        self.app_state.clear_current_filters()
 
     def create_icon_btn(self, icon_name, on_click, column):
         size = Filters.BTN_SIZE
@@ -138,8 +150,9 @@ class Filters(tk.Frame):
         self.sort_by_sv.set(filters['sort_by'] or Filters.EMPTY_CHOICE)
         self.rows_limit_sv.set(str(filters['rows_limit'] or ''))
 
-        save_btn_state = 'active' if any(filters.values()) else 'disabled'
-        self.save_filters_btn.config(state=save_btn_state)
+        btns_state = 'active' if any(filters.values()) else 'disabled'
+        self.save_filters_btn.config(state=btns_state)
+        self.clear_filters_btn.config(state=btns_state)
 
     def create_autocomplete(self, label, filter_key, values, sv, column):
         tk.Label(self, text=label).grid(row=0, column=column, sticky="W")
