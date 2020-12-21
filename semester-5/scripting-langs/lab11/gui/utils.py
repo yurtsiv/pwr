@@ -7,11 +7,12 @@ from logic.const import DATE_FORMAT
 from gui.const import MONTHS, YEAR
 
 def format_result(result, country_names):
+    padding = ' ' * 30
     res = "\n"
-    res += "Country".ljust(30) + "Day".ljust(20) + \
+    res += padding + "Country".ljust(30) + "Day".ljust(20) + \
         "Cases".ljust(10) + "Deaths".ljust(10)
     res += "\n"
-    res += "_" * 70
+    res += padding + "_" * 70
     res += "\n"
 
     for item in result:
@@ -23,7 +24,7 @@ def format_result(result, country_names):
 
         row = country_name.ljust(30) + day.ljust(20) + \
             cases.ljust(10) + deaths.ljust(10)
-        res += row + "\n"
+        res += padding + row + "\n"
 
     res += "\n"
 
