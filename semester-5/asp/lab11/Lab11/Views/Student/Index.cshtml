@@ -1,0 +1,61 @@
+﻿@model Dictionary<int, StudentViewModel>
+
+@{
+    ViewData["Title"] = "Students";
+}
+
+<h1>Students</h1>
+
+<p>
+    <a asp-action="Create">Add</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Zip code
+            </th>
+            <th>
+                Category
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Key)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Value.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Value.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Value.ZipCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Value.Category)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Key }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Key }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Key })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

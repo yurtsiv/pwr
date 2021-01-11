@@ -1,0 +1,59 @@
+﻿@model KeyValuePair<int,StudentViewModel>
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>StudentViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div class="form-group">
+                <label class="control-label">Id</label>
+                <input asp-for="Key" class="form-control" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Value.Email" class="control-label"></label>
+                <input asp-for="Value.Email" class="form-control" />
+                <span asp-validation-for="Value.Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Value.Name" class="control-label"></label>
+                <input asp-for="Value.Name" class="form-control" />
+                <span asp-validation-for="Value.Name" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="Value.ZipCode" class="control-label"></label>
+                <input asp-for="Value.ZipCode" class="form-control" />
+                <span asp-validation-for="Value.ZipCode" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Value.Category" class="control-label"></label>
+                <select asp-for="Value.Category" class="custom-select" asp-items="Html.GetEnumSelectList<Category>()">
+                    <option value="">Please select</option>
+                </select>
+                <span asp-validation-for="Value.Category" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
