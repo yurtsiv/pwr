@@ -393,4 +393,43 @@ BEGIN
 END;
 /
 
-SELECT COUNT(*) FROM Myszy;
+CREATE OR REPLACE PROCEDURE dodaj_myszy(kocur_pseudo Kocury.pseudo%TYPE, data_zlow DATE) AS
+    TYPE MyszyTable IS TABLE OF MYSZY%ROWTYPE INDEX BY BINARY_INTEGER;
+    myszy_do_dodania MyszyTable;
+
+    TYPE MyszyKotaType IS RECORD (
+        nr_myszy Myszy.nr_myszy%TYPE,
+        waga_myszy Myszy.waga_myszy%TYPE,
+        data_zlowienia Myszy.data_zlowienia%TYPE
+    );
+    TYPE MyszyKotaTable IS TABLE OF MyszyKotaType INDEX BY BINARY_INTEGER;
+    upolowane_myszy MyszyKotaTable;
+
+    next_nr_myszy NUMBER;
+BEGIN
+    SELECT MAX(nr_myszy) + 1 INTO next_nr_myszy FROM Myszy;
+
+    EXECUTE IMMEDIATE 'SELECT * FROM MYSZY_' || kocur_pseudo || ' WHERE data_zlowienia=''' || data_zlow || ''''
+    BULK COLLECT INTO upolowane_myszy;
+
+    FOR i IN 1 .. upolowane_myszy.COUNT
+    LOOP
+        myszy_do_dodania(i).nr_myszy := next_nr_myszy;
+        myszy_do_dodania(i).waga_myszy := upolowane_myszy(i).waga_myszy;
+        myszy_do_dodania(i).data_zlowienia := upolowane_myszy(i).data_zlowienia;
+        next_nr_myszy := next_nr_myszy + 1;
+    END LOOP;
+
+    FORALL i IN 1..myszy_do_dodania.COUNT
+    INSERT INTO Myszy VALUES(
+        myszy_do_dodania(i).nr_myszy,
+        kocur_pseudo,
+        NULL,
+        myszy_do_dodania(i).waga_myszy,
+        myszy_do_dodania(i).data_zlowienia,
+        NULL
+    );
+
+    EXECUTE IMMEDIATE 'DELETE FROM MYSZY_' || kocur_pseudo || ' WHERE data_zlowienia=''' || TO_CHAR(data_zlow, 'YYYY-MM-DD') || '''';
+END;
+
