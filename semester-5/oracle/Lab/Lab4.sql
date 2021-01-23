@@ -261,33 +261,21 @@ CREATE TABLE Myszy(
 );
 /
 
-CREATE TABLE Myszy_tmp(
-    nr_myszy NUMBER CONSTRAINT myszy_tmp_pk PRIMARY KEY,
-    lowca VARCHAR2(10) CONSTRAINT lowca_tmp_fk REFERENCES Kocury(pseudo),
-    zjadacz VARCHAR2(10) CONSTRAINT zjadacz_tmp_fk REFERENCES Kocury(pseudo),
-    waga_myszy NUMBER(3),
-    data_zlowienia DATE,
-    data_wydania DATE
-);
-/
-
-
-DROP TABLE Myszy CASCADE CONSTRAINTS;
-/
-DROP TABLE Myszy_tmp CASCADE CONSTRAINTS;
+DELETE FROM Myszy;
 /
 
 DECLARE
-    from_date DATE := TO_DATE('2004-01-01');
-    cat_date DATE;
-    cat_date_record DATE;
-    current_date DATE := TO_DATE('2018-01-16');
-    max_month_diff INTEGER := MONTHS_BETWEEN(current_date, from_date);
-    months_b INTEGER;
+    waga_myszy_min INTEGER := 1;
+    waga_myszy_max INTEGER := 10;
+    start_date DATE := TO_DATE('2004-01-01');
+    start_date_for_kocur DATE;
+--    current_date DATE := TO_DATE('2018-01-16');
+    max_month_diff INTEGER := MONTHS_BETWEEN(SYSDATE, start_date);
+    months_num_for_kocur INTEGER;
     extra_pseudo VARCHAR2(10) := 'TYGRYS';
-    kocur_przydzial INTEGER;
-    randFromDate DATE;
-    randToDate DATE;
+    kot_przydzial INTEGER;
+    random_from_date DATE;
+    random_to_date DATE;
     kot_max INTEGER;
 
     suma INTEGER := 0;
@@ -304,7 +292,7 @@ DECLARE
 
     TYPE myszyCT IS REF CURSOR;
     myszyC myszyCT;
-    tmpMysz myszy_tmp%ROWTYPE;
+    tmpMysz Myszy%ROWTYPE;
 
     CURSOR avgsC IS (
         SELECT (
@@ -335,28 +323,25 @@ DECLARE
 
     sroda DATE;
 BEGIN
-  DELETE FROM myszy_Tmp;
-
   OPEN kocuryC;
 
   LOOP
     FETCH kocuryC INTO kocur;
     EXIT WHEN kocuryC%NOTFOUND;
 
-    IF kocur.w_stadku_od < from_date THEN
-      cat_date := from_date;
+    IF kocur.w_stadku_od < start_date THEN
+      start_date_for_kocur := start_date;
     ELSE
-      cat_date := kocur.w_stadku_od;
+      start_date_for_kocur := kocur.w_stadku_od;
     END IF;
 
-    cat_date_record := cat_date;
-    months_b := MONTHS_BETWEEN(current_date, cat_date);
-    kocur_przydzial := kocur.przydzial_myszy + NVL(kocur.myszy_extra, 0);
+    months_num_for_kocur := MONTHS_BETWEEN(SYSDATE, start_date_for_kocur);
+    kot_przydzial := kocur.przydzial_myszy + NVL(kocur.myszy_extra, 0);
 
     OPEN avgsC;
     OPEN srodyC;
 
-    FOR i IN 0..(months_b-1)
+    FOR i IN 0..(months_num_for_kocur-1)
     LOOP
       FETCH avgsC INTO avgs;
       FETCH srodyC INTO sroda;
@@ -364,87 +349,36 @@ BEGIN
       EXIT WHEN avgsC%NOTFOUND;
       EXIT WHEN srodyC%NOTFOUND;
 
-      IF i = (months_b-1) AND TRUNC(ADD_MONTHS(current_date, -i), 'MONTH') = TRUNC(kocur.w_stadku_od, 'MONTH') THEN
-        randFromDate := kocur.w_stadku_od;
+      IF i = (months_num_for_kocur - 1) AND TRUNC(ADD_MONTHS(SYSDATE, -i), 'MONTH') = TRUNC(kocur.w_stadku_od, 'MONTH') THEN
+        random_from_date := kocur.w_stadku_od;
       ELSE
-        randFromDate := TRUNC(ADD_MONTHS(current_date, -i), 'MONTH');
+        random_from_date := TRUNC(ADD_MONTHS(SYSDATE, -i), 'MONTH');
       END IF;
 
       IF i = 0 THEN
-        randToDate := current_date;
+        random_to_date := SYSDATE;
       ELSE
-        randToDate := sroda;
-      END IF;
-
-      --       Ile kot moze wytworzyc i zjesc
-      IF kocur_przydzial <= avgs THEN
-        kot_max := kocur_przydzial;
-      ELSE
-        kot_max := avgs;
+        random_to_date := sroda;
       END IF;
 
       --  Własna produkcja
-      FOR j IN 1..kot_max
+      FOR j IN 1..avgs
       LOOP
-        --          Dla siebie
+        -- Dla siebie
         myszyTmpTable(myszyTmpIndex).nr_myszy := numer_myszy;
         myszyTmpTable(myszyTmpIndex).zjadacz := kocur.pseudo;
         myszyTmpTable(myszyTmpIndex).lowca := kocur.pseudo;
-        myszyTmpTable(myszyTmpIndex).waga_myszy := CEIL(DBMS_RANDOM.VALUE(16, 60));
-        myszyTmpTable(myszyTmpIndex).data_zlowienia := randFromDate + DBMS_RANDOM.VALUE(0, randToDate - randFromDate);
+        myszyTmpTable(myszyTmpIndex).waga_myszy := CEIL(DBMS_RANDOM.VALUE(waga_myszy_min, waga_myszy_max));
+        myszyTmpTable(myszyTmpIndex).data_zlowienia := random_from_date + DBMS_RANDOM.VALUE(0, random_to_date - random_from_date);
         myszyTmpTable(myszyTmpIndex).data_wydania := sroda;
 
         myszyTmpIndex := myszyTmpIndex + 1;
         numer_myszy := numer_myszy + 1;
       END LOOP;
-
-      IF avgs >= kocur_przydzial THEN
-        suma := suma + (avgs - kocur_przydzial);
-        --         Powyzej przydzialu kota
-        FOR k IN 1..(avgs - kocur_przydzial)
-        LOOP
-          INSERT INTO myszy_tmp VALUES(numer_myszy, kocur.pseudo, NULL,
-                                       CEIL(DBMS_RANDOM.VALUE(16, 60)),
-                                       randFromDate + DBMS_RANDOM.VALUE(0, randToDate - randFromDate), sroda);
-          numer_myszy := numer_myszy + 1;
-        END LOOP;
-      ELSE
-        --         Ponizej przydzilu kota
-        OPEN myszyC FOR SELECT * FROM myszy_tmp WHERE TRUNC(data_zlowienia, 'MONTH') = TRUNC(randFromDate, 'MONTH')
-                                                      AND TRUNC(data_wydania, 'MONTH') = TRUNC(randToDate, 'MONTH');
-        FOR k IN 1..(kocur_przydzial - avgs)
-        LOOP
-          FETCH myszyC INTO tmpMysz;
-          EXIT WHEN myszyC%NOTFOUND;
-          myszyTmpTable(myszyTmpIndex).nr_myszy := tmpMysz.nr_myszy;
-          myszyTmpTable(myszyTmpIndex).zjadacz := kocur.pseudo;
-          myszyTmpTable(myszyTmpIndex).lowca := tmpMysz.lowca;
-          myszyTmpTable(myszyTmpIndex).waga_myszy := tmpmysz.waga_myszy;
-          myszyTmpTable(myszyTmpIndex).data_zlowienia := tmpmysz.data_zlowienia;
-          myszyTmpTable(myszyTmpIndex).data_wydania := tmpmysz.data_wydania;
-          myszyTmpIndex := myszyTmpIndex + 1;
-          DELETE FROM myszy_tmp WHERE nr_myszy = tmpmysz.nr_myszy;
-        END LOOP;
-      END IF;
     END LOOP;
+
     CLOSE avgsC;
     CLOSE srodyC;
-  END LOOP;
-
-
-  OPEN myszyC FOR SELECT *  FROM myszy_tmp;
-  LOOP
-    FETCH myszyC INTO tmpMysz;
-    EXIT WHEN myszyC%NOTFOUND;
-
-    myszyTmpTable(myszyTmpIndex).nr_myszy := tmpMysz.nr_myszy;
-    myszyTmpTable(myszyTmpIndex).zjadacz := extra_pseudo;
-    myszyTmpTable(myszyTmpIndex).lowca := tmpMysz.lowca;
-    myszyTmpTable(myszyTmpIndex).waga_myszy := tmpmysz.waga_myszy;
-    myszyTmpTable(myszyTmpIndex).data_zlowienia := tmpmysz.data_zlowienia;
-    myszyTmpTable(myszyTmpIndex).data_wydania := tmpmysz.data_wydania;
-    myszyTmpIndex := myszyTmpIndex + 1;
-    DELETE FROM myszy_tmp WHERE nr_myszy = tmpmysz.nr_myszy;
   END LOOP;
 
   FORALL i IN 1 .. myszyTmpTable.COUNT
@@ -458,3 +392,5 @@ BEGIN
   );
 END;
 /
+
+SELECT COUNT(*) FROM Myszy;
