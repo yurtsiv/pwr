@@ -433,3 +433,61 @@ BEGIN
     EXECUTE IMMEDIATE 'DELETE FROM MYSZY_' || kocur_pseudo || ' WHERE data_zlowienia=''' || TO_CHAR(data_zlow, 'YYYY-MM-DD') || '''';
 END;
 
+                                                                          
+CREATE OR REPLACE PROCEDURE wyplac_myszy AS
+    koty_indeks NUMBER:=1;
+    myszy_indeks NUMBER:=1;
+    suma_przydzialow NUMBER:=0;
+    przydzielono_mysz BOOLEAN;
+
+    najblizsza_sroda DATE;
+
+    TYPE MyszyTable IS TABLE OF Myszy%ROWTYPE INDEX BY BINARY_INTEGER;
+    lista_myszy MyszyTable;
+
+    TYPE Pair IS RECORD (pseudo Kocury.pseudo%TYPE, myszy NUMBER(3));
+    TYPE PairTable IS TABLE OF Pair INDEX BY BINARY_INTEGER;
+    lista_kotow PairTable;
+BEGIN
+    SELECT * BULK COLLECT INTO lista_myszy
+    FROM Myszy
+    WHERE zjadacz IS NULL;
+
+    SELECT NEXT_DAY(LAST_DAY(SYSDATE) - 7, 3) INTO najblizsza_sroda FROM Dual;
+
+    SELECT pseudo, przydzial_myszy + NVL(myszy_extra, 0) BULK COLLECT INTO lista_kotow
+    FROM kocury
+    WHERE w_stadku_od <= NEXT_DAY(LAST_DAY(ADD_MONTHS(SYSDATE, -1)) - 7, 3)
+    START WITH szef IS NULL
+    CONNECT BY PRIOR pseudo = szef
+    ORDER BY LEVEL ASC;
+
+    FOR i IN 1..lista_kotow.COUNT
+    LOOP
+      suma_przydzialow := suma_przydzialow + lista_kotow(i).myszy;
+    END LOOP;
+
+    WHILE myszy_indeks <= lista_myszy.COUNT AND suma_przydzialow> 0
+    LOOP
+      przydzielono_mysz:=FALSE;
+      WHILE NOT przydzielono_mysz
+      LOOP
+        IF lista_kotow(koty_indeks).myszy > 0 THEN
+          lista_myszy(myszy_indeks).zjadacz       := lista_kotow(koty_indeks).pseudo;
+          lista_myszy(myszy_indeks).data_wydania  := najblizsza_sroda;
+          lista_kotow(koty_indeks).myszy          := lista_kotow(koty_indeks).myszy-1;
+          suma_przydzialow := suma_przydzialow - 1;
+          przydzielono_mysz := true;
+          myszy_indeks := myszy_indeks + 1;
+        END IF;
+        koty_indeks := MOD(koty_indeks, lista_kotow.COUNT) + 1;
+      END LOOP;
+    END LOOP;
+
+    FORALL i IN 1..lista_myszy.COUNT
+    UPDATE  Myszy
+    SET     data_wydania = lista_myszy(i).data_wydania,
+      zjadacz = lista_myszy(i).zjadacz
+    WHERE   nr_myszy = lista_myszy(i).nr_myszy;
+END;
+
