@@ -8,13 +8,14 @@ DROP TABLE Plebs CASCADE CONSTRAINTS;
 DROP TABLE Kocury_t CASCADE CONSTRAINTS; 
 DROP TABLE Konta CASCADE CONSTRAINTS;
 
+-- Zadanie 48
 CREATE OR REPLACE TYPE KotO AS OBJECT
 (
     imie VARCHAR2(15),
     plec VARCHAR2(1),
     pseudo VARCHAR2(15),
     funkcja VARCHAR2(10),
-    szef VARCHAR2(15),
+    szef REF KotO,
     w_stadku_od DATE,
     przydzial_myszy NUMBER(3),
     myszy_extra NUMBER(3),
@@ -22,6 +23,7 @@ CREATE OR REPLACE TYPE KotO AS OBJECT
     MEMBER FUNCTION calk_przydzial RETURN NUMBER
 );
 /
+
 CREATE OR REPLACE TYPE BODY KotO AS
     MEMBER FUNCTION calk_przydzial RETURN NUMBER IS
     BEGIN
@@ -114,25 +116,34 @@ CREATE TABLE Konta OF KontoWpisO(
 /
 
 INSERT ALL
-  INTO Kocury_t VALUES (KotO('JACEK','M','PLACEK','LOWCZY','LYSY','2008-12-01',67,NULL))
-  INTO Kocury_t VALUES (KotO('BARI','M','RURA','LAPACZ','LYSY','2009-09-01',56,NULL))
-  INTO Kocury_t VALUES (KotO('MICKA','D','LOLA','MILUSIA','TYGRYS','2009-10-14',25,47))
-  INTO Kocury_t VALUES (KotO('LUCEK','M','ZERO','KOT','KURKA','2010-03-01',43,NULL))
-  INTO Kocury_t VALUES (KotO('SONIA','D','PUSZYSTA','MILUSIA','ZOMBI','2010-11-18',20,35))
-  INTO Kocury_t VALUES (KotO('LATKA','D','UCHO','KOT','RAFA','2011-01-01',40,NULL))
-  INTO Kocury_t VALUES (KotO('DUDEK','M','MALY','KOT','RAFA','2011-05-15',40,NULL))
+  INTO Kocury_t VALUES (KotO('JACEK','M','PLACEK','LOWCZY', NULL,'2008-12-01',67,NULL))
+  INTO Kocury_t VALUES (KotO('BARI','M','RURA','LAPACZ',NULL,'2009-09-01',56,NULL))
+  INTO Kocury_t VALUES (KotO('MICKA','D','LOLA','MILUSIA', NULL,'2009-10-14',25,47))
+  INTO Kocury_t VALUES (KotO('LUCEK','M','ZERO','KOT', NULL,'2010-03-01',43,NULL))
+  INTO Kocury_t VALUES (KotO('SONIA','D','PUSZYSTA','MILUSIA', NULL,'2010-11-18',20,35))
+  INTO Kocury_t VALUES (KotO('LATKA','D','UCHO','KOT', NULL,'2011-01-01',40,NULL))
+  INTO Kocury_t VALUES (KotO('DUDEK','M','MALY','KOT', NULL,'2011-05-15',40,NULL))
   INTO Kocury_t VALUES (KotO('MRUCZEK','M','TYGRYS','SZEFUNIO',NULL,'2002-01-01',103,33))
-  INTO Kocury_t VALUES (KotO('CHYTRY','M','BOLEK','DZIELCZY','TYGRYS','2002-05-05',50,NULL))
-  INTO Kocury_t VALUES (KotO('KOREK','M','ZOMBI','BANDZIOR','TYGRYS','2004-03-16',75,13))
-  INTO Kocury_t VALUES (KotO('BOLEK','M','LYSY','BANDZIOR','TYGRYS','2006-08-15',72,21))
-  INTO Kocury_t VALUES (KotO('ZUZIA','D','SZYBKA','LOWCZY','LYSY','2006-07-21',65,NULL))
-  INTO Kocury_t VALUES (KotO('RUDA','D','MALA','MILUSIA','TYGRYS','2006-09-17',22,42))
-  INTO Kocury_t VALUES (KotO('PUCEK','M','RAFA','LOWCZY','TYGRYS','2006-10-15',65,NULL))
-  INTO Kocury_t VALUES (KotO('PUNIA','D','KURKA','LOWCZY','ZOMBI','2008-01-01',61,NULL))
-  INTO Kocury_t VALUES (KotO('BELA','D','LASKA','MILUSIA','LYSY','2008-02-01',24,28))
-  INTO Kocury_t VALUES (KotO('KSAWERY','M','MAN','LAPACZ','RAFA','2008-07-12',51,NULL))
-  INTO Kocury_t VALUES (KotO('MELA','D','DAMA','LAPACZ','RAFA','2008-11-01',51,NULL))
+  INTO Kocury_t VALUES (KotO('CHYTRY','M','BOLEK','DZIELCZY', NULL,'2002-05-05',50,NULL))
+  INTO Kocury_t VALUES (KotO('KOREK','M','ZOMBI','BANDZIOR', NULL,'2004-03-16',75,13))
+  INTO Kocury_t VALUES (KotO('BOLEK','M','LYSY','BANDZIOR', NULL,'2006-08-15',72,21))
+  INTO Kocury_t VALUES (KotO('ZUZIA','D','SZYBKA','LOWCZY', NULL,'2006-07-21',65,NULL))
+  INTO Kocury_t VALUES (KotO('RUDA','D','MALA','MILUSIA', NULL,'2006-09-17',22,42))
+  INTO Kocury_t VALUES (KotO('PUCEK','M','RAFA','LOWCZY', NULL,'2006-10-15',65,NULL))
+  INTO Kocury_t VALUES (KotO('PUNIA','D','KURKA','LOWCZY', NULL,'2008-01-01',61,NULL))
+  INTO Kocury_t VALUES (KotO('BELA','D','LASKA','MILUSIA', NULL,'2008-02-01',24,28))
+  INTO Kocury_t VALUES (KotO('KSAWERY','M','MAN','LAPACZ', NULL,'2008-07-12',51,NULL))
+  INTO Kocury_t VALUES (KotO('MELA','D','DAMA','LAPACZ', NULL,'2008-11-01',51,NULL))
 SELECT * FROM dual;
+/
+
+UPDATE Kocury_t
+SET szef = (
+    SELECT REF(K)
+    FROM Kocury_t K
+    WHERE K.pseudo = 'TRYGRYS'
+)
+WHERE pseudo IN ('LOLA', 'BOLEK', 'ZOMBI', 'LYSY', 'MALA', 'RAFA');
 /
 
 INSERT INTO Plebs
@@ -164,12 +175,13 @@ BEGIN
     FOR e IN elita_c
     LOOP
         SELECT dbms_random.value INTO sluga_rand FROM dual;
-        
+
         UPDATE Elita
         SET sluga = (
-            SELECT * FROM
-            (SELECT REF(P) FROM Plebs P
-                ORDER BY dbms_random.value
+            SELECT *
+            FROM (
+                SELECT REF(P) FROM Plebs P
+                ORDER BY sluga_rand
             )
             WHERE rownum = 1
         )
@@ -178,14 +190,13 @@ BEGIN
 END;
 /
 
-
 -- REF w JOIN (elita i ich sługi)
 SELECT K.pseudo, E.sluga.pseudo() "Sluga"
 FROM Kocury_t K JOIN Elita E ON E.kot = REF(K);
 /
 
 -- Podzapytanie (sługi)
-SELECT ("sluga").pseudo()
+SELECT ("sluga").pseudo() "Sluga"
 FROM Kocury_t K JOIN (
     SELECT DEREF(E.sluga) "sluga" FROM Elita E
 ) ON ("sluga").kot = REF(k);
@@ -269,10 +280,8 @@ DECLARE
     waga_myszy_max INTEGER := 10;
     start_date DATE := TO_DATE('2004-01-01');
     start_date_for_kocur DATE;
---    current_date DATE := TO_DATE('2018-01-16');
     max_month_diff INTEGER := MONTHS_BETWEEN(SYSDATE, start_date);
     months_num_for_kocur INTEGER;
-    extra_pseudo VARCHAR2(10) := 'TYGRYS';
     kot_przydzial INTEGER;
     random_from_date DATE;
     random_to_date DATE;
@@ -286,34 +295,28 @@ DECLARE
     myszyTmpIndex BINARY_INTEGER := 1;
     numer_myszy NUMBER := 1;
 
+    CURSOR kocury_c IS SELECT * FROM Kocury ORDER BY przydzial_myszy + NVL(myszy_extra, 0), w_stadku_od;
 
-    CURSOR kocuryC IS SELECT * FROM Kocury ORDER BY przydzial_myszy + NVL(myszy_extra, 0), w_stadku_od;
-    kocur Kocury%ROWTYPE;
-
-    TYPE myszyCT IS REF CURSOR;
-    myszyC myszyCT;
-    tmpMysz Myszy%ROWTYPE;
-
-    CURSOR avgsC IS (
+    CURSOR avg_for_each_month IS (
         SELECT (
             SELECT CEIL(AVG(przydzial_myszy + NVL(myszy_extra, 0)))
-            FROM kocury
-            WHERE w_stadku_od < "dat"
+            FROM Kocury
+            WHERE w_stadku_od < "data"
         )
         FROM (
-            SELECT trunc(LAST_DAY(ADD_MONTHS(SYSDATE, -rn + 1))) "dat"
+            SELECT TRUNC(LAST_DAY(ADD_MONTHS(SYSDATE, -rn + 1))) "data"
             FROM (
                 SELECT rownum rn
                 FROM dual
                 CONNECT BY level <= max_month_diff + 1
-            ) dates
+            )
         )
     );
 
-    avgs INTEGER;
+    curr_avg INTEGER;
 
-    CURSOR srodyC IS (
-        SELECT NEXT_DAY(LAST_DAY(ADD_MONTHS(SYSDATE, -rn + 1)) - 7, 3) "dat"
+    CURSOR all_wdnesdays IS (
+        SELECT NEXT_DAY(LAST_DAY(ADD_MONTHS(SYSDATE, -rn + 1)) - 7, 3)
         FROM (
             SELECT rownum rn
             FROM dual
@@ -321,14 +324,10 @@ DECLARE
         )
     );
 
-    sroda DATE;
+    curr_wednesday DATE;
 BEGIN
-  OPEN kocuryC;
-
+  FOR kocur IN kocury_c
   LOOP
-    FETCH kocuryC INTO kocur;
-    EXIT WHEN kocuryC%NOTFOUND;
-
     IF kocur.w_stadku_od < start_date THEN
       start_date_for_kocur := start_date;
     ELSE
@@ -338,16 +337,16 @@ BEGIN
     months_num_for_kocur := MONTHS_BETWEEN(SYSDATE, start_date_for_kocur);
     kot_przydzial := kocur.przydzial_myszy + NVL(kocur.myszy_extra, 0);
 
-    OPEN avgsC;
-    OPEN srodyC;
+    OPEN avg_for_each_month;
+    OPEN all_wdnesdays;
 
     FOR i IN 0..(months_num_for_kocur-1)
     LOOP
-      FETCH avgsC INTO avgs;
-      FETCH srodyC INTO sroda;
+      FETCH avg_for_each_month INTO curr_avg;
+      FETCH all_wdnesdays INTO curr_wednesday;
 
-      EXIT WHEN avgsC%NOTFOUND;
-      EXIT WHEN srodyC%NOTFOUND;
+      EXIT WHEN avg_for_each_month%NOTFOUND;
+      EXIT WHEN all_wdnesdays%NOTFOUND;
 
       IF i = (months_num_for_kocur - 1) AND TRUNC(ADD_MONTHS(SYSDATE, -i), 'MONTH') = TRUNC(kocur.w_stadku_od, 'MONTH') THEN
         random_from_date := kocur.w_stadku_od;
@@ -358,27 +357,25 @@ BEGIN
       IF i = 0 THEN
         random_to_date := SYSDATE;
       ELSE
-        random_to_date := sroda;
+        random_to_date := curr_wednesday;
       END IF;
 
-      --  Własna produkcja
-      FOR j IN 1..avgs
+      FOR j IN 1..curr_avg
       LOOP
-        -- Dla siebie
         myszyTmpTable(myszyTmpIndex).nr_myszy := numer_myszy;
         myszyTmpTable(myszyTmpIndex).zjadacz := kocur.pseudo;
         myszyTmpTable(myszyTmpIndex).lowca := kocur.pseudo;
         myszyTmpTable(myszyTmpIndex).waga_myszy := CEIL(DBMS_RANDOM.VALUE(waga_myszy_min, waga_myszy_max));
         myszyTmpTable(myszyTmpIndex).data_zlowienia := random_from_date + DBMS_RANDOM.VALUE(0, random_to_date - random_from_date);
-        myszyTmpTable(myszyTmpIndex).data_wydania := sroda;
+        myszyTmpTable(myszyTmpIndex).data_wydania := curr_wednesday;
 
         myszyTmpIndex := myszyTmpIndex + 1;
         numer_myszy := numer_myszy + 1;
       END LOOP;
     END LOOP;
 
-    CLOSE avgsC;
-    CLOSE srodyC;
+    CLOSE avg_for_each_month;
+    CLOSE all_wdnesdays;
   END LOOP;
 
   FORALL i IN 1 .. myszyTmpTable.COUNT
@@ -432,15 +429,14 @@ BEGIN
 
     EXECUTE IMMEDIATE 'DELETE FROM MYSZY_' || kocur_pseudo || ' WHERE data_zlowienia=''' || TO_CHAR(data_zlow, 'YYYY-MM-DD') || '''';
 END;
-
-                                                                          
+                                                           
 CREATE OR REPLACE PROCEDURE wyplac_myszy AS
     koty_indeks NUMBER:=1;
     myszy_indeks NUMBER:=1;
     suma_przydzialow NUMBER:=0;
     przydzielono_mysz BOOLEAN;
 
-    najblizsza_sroda DATE;
+    nearest_wednesday DATE;
 
     TYPE MyszyTable IS TABLE OF Myszy%ROWTYPE INDEX BY BINARY_INTEGER;
     lista_myszy MyszyTable;
@@ -453,10 +449,10 @@ BEGIN
     FROM Myszy
     WHERE zjadacz IS NULL;
 
-    SELECT NEXT_DAY(LAST_DAY(SYSDATE) - 7, 3) INTO najblizsza_sroda FROM Dual;
+    SELECT NEXT_DAY(LAST_DAY(SYSDATE) - 7, 3) INTO nearest_wednesday FROM Dual;
 
     SELECT pseudo, przydzial_myszy + NVL(myszy_extra, 0) BULK COLLECT INTO lista_kotow
-    FROM kocury
+    FROM Kocury
     WHERE w_stadku_od <= NEXT_DAY(LAST_DAY(ADD_MONTHS(SYSDATE, -1)) - 7, 3)
     START WITH szef IS NULL
     CONNECT BY PRIOR pseudo = szef
@@ -467,15 +463,16 @@ BEGIN
       suma_przydzialow := suma_przydzialow + lista_kotow(i).myszy;
     END LOOP;
 
-    WHILE myszy_indeks <= lista_myszy.COUNT AND suma_przydzialow> 0
+    WHILE myszy_indeks <= lista_myszy.COUNT AND suma_przydzialow > 0
     LOOP
       przydzielono_mysz:=FALSE;
       WHILE NOT przydzielono_mysz
       LOOP
         IF lista_kotow(koty_indeks).myszy > 0 THEN
           lista_myszy(myszy_indeks).zjadacz       := lista_kotow(koty_indeks).pseudo;
-          lista_myszy(myszy_indeks).data_wydania  := najblizsza_sroda;
+          lista_myszy(myszy_indeks).data_wydania  := nearest_wednesday;
           lista_kotow(koty_indeks).myszy          := lista_kotow(koty_indeks).myszy-1;
+
           suma_przydzialow := suma_przydzialow - 1;
           przydzielono_mysz := true;
           myszy_indeks := myszy_indeks + 1;
@@ -486,8 +483,7 @@ BEGIN
 
     FORALL i IN 1..lista_myszy.COUNT
     UPDATE  Myszy
-    SET     data_wydania = lista_myszy(i).data_wydania,
-      zjadacz = lista_myszy(i).zjadacz
-    WHERE   nr_myszy = lista_myszy(i).nr_myszy;
+    SET data_wydania = lista_myszy(i).data_wydania,
+        zjadacz = lista_myszy(i).zjadacz
+    WHERE  nr_myszy = lista_myszy(i).nr_myszy;
 END;
-
