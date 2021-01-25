@@ -8,7 +8,7 @@ DROP TABLE Plebs CASCADE CONSTRAINTS;
 DROP TABLE Kocury_t CASCADE CONSTRAINTS; 
 DROP TABLE Konta CASCADE CONSTRAINTS;
 
--- Zadanie 48
+-- Zadanie 47
 CREATE OR REPLACE TYPE KotO AS OBJECT
 (
     imie VARCHAR2(15),
@@ -43,6 +43,28 @@ CREATE OR REPLACE TYPE PlebsO AS OBJECT
 
 CREATE OR REPLACE TYPE BODY PlebsO AS
     MEMBER FUNCTION pseudo RETURN VARCHAR2 IS
+        ps VARCHAR(15);
+    BEGIN
+        SELECT DEREF(kot).pseudo INTO ps FROM dual;
+        RETURN ps;
+    END;
+END;
+/
+
+CREATE OR REPLACE TYPE Incydent AS OBJECT
+(
+    idn NUMBER(3),
+    kot REF KotO,
+    imie_wroga VARCHAR2(15),
+    data_incydentu DATE,
+    opis_incydentu VARCHAR2(50),
+
+    MEMBER FUNCTION psedo_kota RETURN VARCHAR2
+);
+/
+
+CREATE OR REPLACE TYPE BODY Incydent AS
+    MEMBER FUNCTION psedo_kota RETURN VARCHAR2 IS
         ps VARCHAR(15);
     BEGIN
         SELECT DEREF(kot).pseudo INTO ps FROM dual;
@@ -136,14 +158,55 @@ INSERT ALL
   INTO Kocury_t VALUES (KotO('MELA','D','DAMA','LAPACZ', NULL,'2008-11-01',51,NULL))
 SELECT * FROM dual;
 /
+                             
+UPDATE Kocury_t
+SET szef = (
+    SELECT REF(K)
+    FROM Kocury_t K
+    WHERE K.pseudo = 'TYGRYS'
+)
+WHERE pseudo IN ('LOLA', 'BOLEK', 'ZOMBI', 'LYSY', 'MALA', 'RAFA');
+/
 
 UPDATE Kocury_t
 SET szef = (
     SELECT REF(K)
     FROM Kocury_t K
-    WHERE K.pseudo = 'TRYGRYS'
+    WHERE K.pseudo = 'LYSY'
 )
-WHERE pseudo IN ('LOLA', 'BOLEK', 'ZOMBI', 'LYSY', 'MALA', 'RAFA');
+WHERE pseudo IN ('PLACEK', 'RURA', 'SZYBKA', 'LASKA');
+/
+
+UPDATE Kocury_t
+SET szef = (
+    SELECT REF(K)
+    FROM Kocury_t K
+    WHERE K.pseudo = 'ZOMBI'
+)
+WHERE pseudo IN ('PUSZYSTA', 'KURKA', 'MILUSIA');
+/
+
+UPDATE Kocury_t
+SET szef = (
+    SELECT REF(K)
+    FROM Kocury_t K
+    WHERE K.pseudo = 'RAFA'
+)
+WHERE pseudo IN ('UCHO', 'MALY', 'MAN', 'DAMA');
+/
+
+UPDATE Kocury_t
+SET szef = (
+    SELECT REF(K)
+    FROM Kocury_t K
+    WHERE K.pseudo = 'KURKA'
+)
+WHERE pseudo IN ('ZERO');
+/
+
+INSERT INTO Incydenty
+    SELECT Incydent(ROWNUM, REF(K), 'Wrog', SYSDATE, 'Opis...')
+    FROM Kocury_t K;
 /
 
 INSERT INTO Plebs
@@ -191,15 +254,16 @@ END;
 /
 
 -- REF w JOIN (elita i ich sługi)
-SELECT K.pseudo, E.sluga.pseudo() "Sluga"
-FROM Kocury_t K JOIN Elita E ON E.kot = REF(K);
+-- REF zamiast JOIN
+SELECT E.pseudo() "Pseudo", DEREF(E.sluga).pseudo() "Sluga"
+FROM Elita E;
 /
 
 -- Podzapytanie (sługi)
 SELECT ("sluga").pseudo() "Sluga"
 FROM Kocury_t K JOIN (
     SELECT DEREF(E.sluga) "sluga" FROM Elita E
-) ON ("sluga").kot = REF(k);
+) ON ("sluga").kot = REF(K);
 /
 
 -- Grupowanie
@@ -208,13 +272,23 @@ FROM Kocury_t K
 GROUP BY K.funkcja;
 /
 
--- Zadanie 18
+-- Zadanie 18 (przerobione)
 SELECT K1.imie, K1.w_stadku_od "POLUJE OD"
 FROM Kocury_t K1, Kocury_t K2
 WHERE K2.imie = 'JACEK' AND K1.w_stadku_od < K2.w_stadku_od
 ORDER BY K1.w_stadku_od DESC;
 
--- Zadanie 19c
+-- Zadanie 19a (przerobione) 
+SELECT K.imie "Imie",
+       K.funkcja "Funkcja",
+       K.szef.pseudo "Szef 1",
+       K.szef.szef.pseudo "Szef 2",
+       K.szef.szef.szef.pseudo "Szef 3"
+FROM Kocury_t K
+WHERE K.funkcja in ('KOT', 'MILUSIA');
+
+                      
+-- Zadanie 19c (przerobione)
 SELECT imie, funkcja, SUBSTR(MAX(szefowie), 17) "Imiona kolejnych szefów"
 FROM (
     SELECT CONNECT_BY_ROOT imie imie,
@@ -226,7 +300,7 @@ FROM (
 )
 GROUP BY imie, funkcja;
 
--- Zadanie 34
+-- Zadanie 34 (przerobione)
 DECLARE
     var_funkcja Kocury.funkcja%TYPE := '&Funkcja';
     kocury_num NUMBER;
@@ -240,7 +314,7 @@ BEGIN
     END IF;
 END;
 
--- Zadanie 37
+-- Zadanie 37 (przerobione)
 DECLARE
     CURSOR koty IS
         SELECT (przydzial_myszy + NVL(myszy_extra, 0)) zjada, pseudo
