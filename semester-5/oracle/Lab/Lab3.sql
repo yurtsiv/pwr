@@ -295,33 +295,28 @@ DECLARE
     myszyTmpIndex BINARY_INTEGER := 1;
     numer_myszy NUMBER := 1;
 
-    CURSOR kocuryC IS SELECT * FROM Kocury ORDER BY przydzial_myszy + NVL(myszy_extra, 0), w_stadku_od;
-    kocur Kocury%ROWTYPE;
+    CURSOR kocury_c IS SELECT * FROM Kocury ORDER BY przydzial_myszy + NVL(myszy_extra, 0), w_stadku_od;
 
-    TYPE myszyCT IS REF CURSOR;
-    myszyC myszyCT;
-    tmpMysz Myszy%ROWTYPE;
-
-    CURSOR avgsC IS (
+    CURSOR avg_for_each_month IS (
         SELECT (
             SELECT CEIL(AVG(przydzial_myszy + NVL(myszy_extra, 0)))
-            FROM kocury
-            WHERE w_stadku_od < "dat"
+            FROM Kocury
+            WHERE w_stadku_od < "data"
         )
         FROM (
-            SELECT trunc(LAST_DAY(ADD_MONTHS(SYSDATE, -rn + 1))) "dat"
+            SELECT TRUNC(LAST_DAY(ADD_MONTHS(SYSDATE, -rn + 1))) "data"
             FROM (
                 SELECT rownum rn
                 FROM dual
                 CONNECT BY level <= max_month_diff + 1
-            ) dates
+            )
         )
     );
 
-    avgs INTEGER;
+    curr_avg INTEGER;
 
-    CURSOR srodyC IS (
-        SELECT NEXT_DAY(LAST_DAY(ADD_MONTHS(SYSDATE, -rn + 1)) - 7, 3) "dat"
+    CURSOR all_wdnesdays IS (
+        SELECT NEXT_DAY(LAST_DAY(ADD_MONTHS(SYSDATE, -rn + 1)) - 7, 3)
         FROM (
             SELECT rownum rn
             FROM dual
@@ -329,14 +324,10 @@ DECLARE
         )
     );
 
-    sroda DATE;
+    curr_wednesday DATE;
 BEGIN
-  OPEN kocuryC;
-
+  FOR kocur IN kocury_c
   LOOP
-    FETCH kocuryC INTO kocur;
-    EXIT WHEN kocuryC%NOTFOUND;
-
     IF kocur.w_stadku_od < start_date THEN
       start_date_for_kocur := start_date;
     ELSE
@@ -346,16 +337,16 @@ BEGIN
     months_num_for_kocur := MONTHS_BETWEEN(SYSDATE, start_date_for_kocur);
     kot_przydzial := kocur.przydzial_myszy + NVL(kocur.myszy_extra, 0);
 
-    OPEN avgsC;
-    OPEN srodyC;
+    OPEN avg_for_each_month;
+    OPEN all_wdnesdays;
 
     FOR i IN 0..(months_num_for_kocur-1)
     LOOP
-      FETCH avgsC INTO avgs;
-      FETCH srodyC INTO sroda;
+      FETCH avg_for_each_month INTO curr_avg;
+      FETCH all_wdnesdays INTO curr_wednesday;
 
-      EXIT WHEN avgsC%NOTFOUND;
-      EXIT WHEN srodyC%NOTFOUND;
+      EXIT WHEN avg_for_each_month%NOTFOUND;
+      EXIT WHEN all_wdnesdays%NOTFOUND;
 
       IF i = (months_num_for_kocur - 1) AND TRUNC(ADD_MONTHS(SYSDATE, -i), 'MONTH') = TRUNC(kocur.w_stadku_od, 'MONTH') THEN
         random_from_date := kocur.w_stadku_od;
@@ -366,27 +357,25 @@ BEGIN
       IF i = 0 THEN
         random_to_date := SYSDATE;
       ELSE
-        random_to_date := sroda;
+        random_to_date := curr_wednesday;
       END IF;
 
-      --  Własna produkcja
-      FOR j IN 1..avgs
+      FOR j IN 1..curr_avg
       LOOP
-        -- Dla siebie
         myszyTmpTable(myszyTmpIndex).nr_myszy := numer_myszy;
         myszyTmpTable(myszyTmpIndex).zjadacz := kocur.pseudo;
         myszyTmpTable(myszyTmpIndex).lowca := kocur.pseudo;
         myszyTmpTable(myszyTmpIndex).waga_myszy := CEIL(DBMS_RANDOM.VALUE(waga_myszy_min, waga_myszy_max));
         myszyTmpTable(myszyTmpIndex).data_zlowienia := random_from_date + DBMS_RANDOM.VALUE(0, random_to_date - random_from_date);
-        myszyTmpTable(myszyTmpIndex).data_wydania := sroda;
+        myszyTmpTable(myszyTmpIndex).data_wydania := curr_wednesday;
 
         myszyTmpIndex := myszyTmpIndex + 1;
         numer_myszy := numer_myszy + 1;
       END LOOP;
     END LOOP;
 
-    CLOSE avgsC;
-    CLOSE srodyC;
+    CLOSE avg_for_each_month;
+    CLOSE all_wdnesdays;
   END LOOP;
 
   FORALL i IN 1 .. myszyTmpTable.COUNT
@@ -448,7 +437,7 @@ CREATE OR REPLACE PROCEDURE wyplac_myszy AS
     suma_przydzialow NUMBER:=0;
     przydzielono_mysz BOOLEAN;
 
-    najblizsza_sroda DATE;
+    najblizsza_curr_wednesday DATE;
 
     TYPE MyszyTable IS TABLE OF Myszy%ROWTYPE INDEX BY BINARY_INTEGER;
     lista_myszy MyszyTable;
@@ -461,7 +450,7 @@ BEGIN
     FROM Myszy
     WHERE zjadacz IS NULL;
 
-    SELECT NEXT_DAY(LAST_DAY(SYSDATE) - 7, 3) INTO najblizsza_sroda FROM Dual;
+    SELECT NEXT_DAY(LAST_DAY(SYSDATE) - 7, 3) INTO najblizsza_curr_wednesday FROM Dual;
 
     SELECT pseudo, przydzial_myszy + NVL(myszy_extra, 0) BULK COLLECT INTO lista_kotow
     FROM kocury
@@ -482,7 +471,7 @@ BEGIN
       LOOP
         IF lista_kotow(koty_indeks).myszy > 0 THEN
           lista_myszy(myszy_indeks).zjadacz       := lista_kotow(koty_indeks).pseudo;
-          lista_myszy(myszy_indeks).data_wydania  := najblizsza_sroda;
+          lista_myszy(myszy_indeks).data_wydania  := najblizsza_curr_wednesday;
           lista_kotow(koty_indeks).myszy          := lista_kotow(koty_indeks).myszy-1;
           suma_przydzialow := suma_przydzialow - 1;
           przydzielono_mysz := true;
