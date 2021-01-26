@@ -16,7 +16,6 @@ namespace Lab11.ViewModels
         [MinLength(2, ErrorMessage="To short name")]
         [Display(Name="Name")]
         [MaxLength(30, ErrorMessage ="Name should be at most 30 characters long")]
-        [RegularExpression(@"[A-Z][a-z]{3,}", ErrorMessage = "Invalid name format")]
         public string Name { get; set; }
 
         [Required]
@@ -24,7 +23,6 @@ namespace Lab11.ViewModels
         public string Email { get; set; }
 
         [Display(Name = "Postal Code")]
-        [RegularExpression(@"[0-9]{2}-[0-9]{3}", ErrorMessage = "Invalid postal code")]
         public string ZipCode { get; set; }
 
         public Category Category { get; set; }

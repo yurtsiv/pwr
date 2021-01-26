@@ -1,4 +1,3 @@
--- TODO REVERT THIS
 DROP TYPE KotO FORCE;
 DROP TYPE PlebsO FORCE;
 DROP TYPE ElitaO FORCE;
@@ -9,7 +8,7 @@ DROP TABLE Plebs CASCADE CONSTRAINTS;
 DROP TABLE Kocury_t CASCADE CONSTRAINTS; 
 DROP TABLE Konta CASCADE CONSTRAINTS;
 
--- Zadanie 48
+-- Zadanie 47
 CREATE OR REPLACE TYPE KotO AS OBJECT
 (
     imie VARCHAR2(15),
@@ -44,6 +43,28 @@ CREATE OR REPLACE TYPE PlebsO AS OBJECT
 
 CREATE OR REPLACE TYPE BODY PlebsO AS
     MEMBER FUNCTION pseudo RETURN VARCHAR2 IS
+        ps VARCHAR(15);
+    BEGIN
+        SELECT DEREF(kot).pseudo INTO ps FROM dual;
+        RETURN ps;
+    END;
+END;
+/
+
+CREATE OR REPLACE TYPE Incydent AS OBJECT
+(
+    idn NUMBER(3),
+    kot REF KotO,
+    imie_wroga VARCHAR2(15),
+    data_incydentu DATE,
+    opis_incydentu VARCHAR2(50),
+
+    MEMBER FUNCTION psedo_kota RETURN VARCHAR2
+);
+/
+
+CREATE OR REPLACE TYPE BODY Incydent AS
+    MEMBER FUNCTION psedo_kota RETURN VARCHAR2 IS
         ps VARCHAR(15);
     BEGIN
         SELECT DEREF(kot).pseudo INTO ps FROM dual;
@@ -137,14 +158,55 @@ INSERT ALL
   INTO Kocury_t VALUES (KotO('MELA','D','DAMA','LAPACZ', NULL,'2008-11-01',51,NULL))
 SELECT * FROM dual;
 /
+                             
+UPDATE Kocury_t
+SET szef = (
+    SELECT REF(K)
+    FROM Kocury_t K
+    WHERE K.pseudo = 'TYGRYS'
+)
+WHERE pseudo IN ('LOLA', 'BOLEK', 'ZOMBI', 'LYSY', 'MALA', 'RAFA');
+/
 
 UPDATE Kocury_t
 SET szef = (
     SELECT REF(K)
     FROM Kocury_t K
-    WHERE K.pseudo = 'TRYGRYS'
+    WHERE K.pseudo = 'LYSY'
 )
-WHERE pseudo IN ('LOLA', 'BOLEK', 'ZOMBI', 'LYSY', 'MALA', 'RAFA');
+WHERE pseudo IN ('PLACEK', 'RURA', 'SZYBKA', 'LASKA');
+/
+
+UPDATE Kocury_t
+SET szef = (
+    SELECT REF(K)
+    FROM Kocury_t K
+    WHERE K.pseudo = 'ZOMBI'
+)
+WHERE pseudo IN ('PUSZYSTA', 'KURKA', 'MILUSIA');
+/
+
+UPDATE Kocury_t
+SET szef = (
+    SELECT REF(K)
+    FROM Kocury_t K
+    WHERE K.pseudo = 'RAFA'
+)
+WHERE pseudo IN ('UCHO', 'MALY', 'MAN', 'DAMA');
+/
+
+UPDATE Kocury_t
+SET szef = (
+    SELECT REF(K)
+    FROM Kocury_t K
+    WHERE K.pseudo = 'KURKA'
+)
+WHERE pseudo IN ('ZERO');
+/
+
+INSERT INTO Incydenty
+    SELECT Incydent(ROWNUM, REF(K), 'Wrog', SYSDATE, 'Opis...')
+    FROM Kocury_t K;
 /
 
 INSERT INTO Plebs
@@ -192,15 +254,16 @@ END;
 /
 
 -- REF w JOIN (elita i ich sługi)
-SELECT K.pseudo, E.sluga.pseudo() "Sluga"
-FROM Kocury_t K JOIN Elita E ON E.kot = REF(K);
+-- REF zamiast JOIN
+SELECT E.pseudo() "Pseudo", DEREF(E.sluga).pseudo() "Sluga"
+FROM Elita E;
 /
 
 -- Podzapytanie (sługi)
 SELECT ("sluga").pseudo() "Sluga"
 FROM Kocury_t K JOIN (
     SELECT DEREF(E.sluga) "sluga" FROM Elita E
-) ON ("sluga").kot = REF(k);
+) ON ("sluga").kot = REF(K);
 /
 
 -- Grupowanie
@@ -209,13 +272,23 @@ FROM Kocury_t K
 GROUP BY K.funkcja;
 /
 
--- Zadanie 18
+-- Zadanie 18 (przerobione)
 SELECT K1.imie, K1.w_stadku_od "POLUJE OD"
 FROM Kocury_t K1, Kocury_t K2
 WHERE K2.imie = 'JACEK' AND K1.w_stadku_od < K2.w_stadku_od
 ORDER BY K1.w_stadku_od DESC;
 
--- Zadanie 19c
+-- Zadanie 19a (przerobione) 
+SELECT K.imie "Imie",
+       K.funkcja "Funkcja",
+       K.szef.pseudo "Szef 1",
+       K.szef.szef.pseudo "Szef 2",
+       K.szef.szef.szef.pseudo "Szef 3"
+FROM Kocury_t K
+WHERE K.funkcja in ('KOT', 'MILUSIA');
+
+                      
+-- Zadanie 19c (przerobione)
 SELECT imie, funkcja, SUBSTR(MAX(szefowie), 17) "Imiona kolejnych szefów"
 FROM (
     SELECT CONNECT_BY_ROOT imie imie,
@@ -227,7 +300,7 @@ FROM (
 )
 GROUP BY imie, funkcja;
 
--- Zadanie 34
+-- Zadanie 34 (przerobione)
 DECLARE
     var_funkcja Kocury.funkcja%TYPE := '&Funkcja';
     kocury_num NUMBER;
@@ -241,7 +314,7 @@ BEGIN
     END IF;
 END;
 
--- Zadanie 37
+-- Zadanie 37 (przerobione)
 DECLARE
     CURSOR koty IS
         SELECT (przydzial_myszy + NVL(myszy_extra, 0)) zjada, pseudo
@@ -430,15 +503,14 @@ BEGIN
 
     EXECUTE IMMEDIATE 'DELETE FROM MYSZY_' || kocur_pseudo || ' WHERE data_zlowienia=''' || TO_CHAR(data_zlow, 'YYYY-MM-DD') || '''';
 END;
-
-                                                                          
+                                                           
 CREATE OR REPLACE PROCEDURE wyplac_myszy AS
     koty_indeks NUMBER:=1;
     myszy_indeks NUMBER:=1;
     suma_przydzialow NUMBER:=0;
     przydzielono_mysz BOOLEAN;
 
-    najblizsza_curr_wednesday DATE;
+    nearest_wednesday DATE;
 
     TYPE MyszyTable IS TABLE OF Myszy%ROWTYPE INDEX BY BINARY_INTEGER;
     lista_myszy MyszyTable;
@@ -451,10 +523,10 @@ BEGIN
     FROM Myszy
     WHERE zjadacz IS NULL;
 
-    SELECT NEXT_DAY(LAST_DAY(SYSDATE) - 7, 3) INTO najblizsza_curr_wednesday FROM Dual;
+    SELECT NEXT_DAY(LAST_DAY(SYSDATE) - 7, 3) INTO nearest_wednesday FROM Dual;
 
     SELECT pseudo, przydzial_myszy + NVL(myszy_extra, 0) BULK COLLECT INTO lista_kotow
-    FROM kocury
+    FROM Kocury
     WHERE w_stadku_od <= NEXT_DAY(LAST_DAY(ADD_MONTHS(SYSDATE, -1)) - 7, 3)
     START WITH szef IS NULL
     CONNECT BY PRIOR pseudo = szef
@@ -465,15 +537,16 @@ BEGIN
       suma_przydzialow := suma_przydzialow + lista_kotow(i).myszy;
     END LOOP;
 
-    WHILE myszy_indeks <= lista_myszy.COUNT AND suma_przydzialow> 0
+    WHILE myszy_indeks <= lista_myszy.COUNT AND suma_przydzialow > 0
     LOOP
       przydzielono_mysz:=FALSE;
       WHILE NOT przydzielono_mysz
       LOOP
         IF lista_kotow(koty_indeks).myszy > 0 THEN
           lista_myszy(myszy_indeks).zjadacz       := lista_kotow(koty_indeks).pseudo;
-          lista_myszy(myszy_indeks).data_wydania  := najblizsza_curr_wednesday;
+          lista_myszy(myszy_indeks).data_wydania  := nearest_wednesday;
           lista_kotow(koty_indeks).myszy          := lista_kotow(koty_indeks).myszy-1;
+
           suma_przydzialow := suma_przydzialow - 1;
           przydzielono_mysz := true;
           myszy_indeks := myszy_indeks + 1;
@@ -484,7 +557,7 @@ BEGIN
 
     FORALL i IN 1..lista_myszy.COUNT
     UPDATE  Myszy
-    SET     data_wydania = lista_myszy(i).data_wydania,
-      zjadacz = lista_myszy(i).zjadacz
-    WHERE   nr_myszy = lista_myszy(i).nr_myszy;
+    SET data_wydania = lista_myszy(i).data_wydania,
+        zjadacz = lista_myszy(i).zjadacz
+    WHERE  nr_myszy = lista_myszy(i).nr_myszy;
 END;

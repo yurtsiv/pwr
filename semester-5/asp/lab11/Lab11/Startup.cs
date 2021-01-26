@@ -26,6 +26,9 @@ namespace Lab11
         {
             services.AddControllersWithViews();
             services.AddSingleton<IDataContext, MockDataContext>();
+            //services.AddScoped<IDataContext, MockDataContext>();
+            //services.AddTransient<IDataContext, MockDataContext>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

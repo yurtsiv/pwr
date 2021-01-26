@@ -13,21 +13,14 @@ namespace Lab11.DataContext
             { 0, new StudentViewModel("Mayble", "email0@test.com", "21-212", Category.ComputerScience) },
             { 1, new StudentViewModel("Rick", "email1@test.com", "22-322", Category.Chemistry)},
             { 2, new StudentViewModel("Morty", "email2@test.com", "14-858", Category.Physics)},
+            { 3, new StudentViewModel("Lila", "email3@test.com", "19-345", Category.ComputerScience)},
         };
        
 
         public void AddStudent(StudentViewModel student)
         {
-            int nextId;
-            if (testData.Values.Count() == 0)
-            {
-                nextId = 0;
-            } else
-            {
-                nextId = testData.Max(s => s.Key) + 1;
-            }
-
-            testData.Add(nextId, student);
+            int nextNumber = testData.Values.Count();
+            testData.Add(nextNumber, student);
         }
 
         public KeyValuePair<int,StudentViewModel> GetStudent(int id)
