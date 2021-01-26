@@ -1,0 +1,75 @@
+﻿@model Lab12.Models.ShopViewModel
+
+
+
+<div class="container">
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td>
+                            <a asp-area="" asp-controller="Shop" asp-action="Index">All</a>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Categories)
+                    {
+                        <tr>
+                            <td>
+                                @{
+                                    string categoryURL = "/shop/" + item.CategoryId;
+                                }
+                                @if (ViewData["Title"].ToString() != item.CategoryName)
+                                {
+                                    <a href="@categoryURL">@item.CategoryName</a>
+                                }
+                                else
+                                {
+                                    @item.CategoryName
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-8">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Articles[0].ArticleName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Articles[0].ArticlePrice)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Articles[0].ArticleImage)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Articles)
+                    {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ArticleName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ArticlePrice)
+                        </td>
+                        <td>
+                            <img src="@item.ArticleImage" width=50/>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

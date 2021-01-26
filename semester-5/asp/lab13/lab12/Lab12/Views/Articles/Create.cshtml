@@ -1,0 +1,71 @@
+﻿@model Lab12.Models.ArticleViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Article</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form enctype="multipart/form-data" asp-action="Create"> 
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ArticleName" class="control-label"></label>
+                <input asp-for="ArticleName" class="form-control" />
+                <span asp-validation-for="ArticleName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ArticlePrice" class="control-label"></label>
+                <input asp-for="ArticlePrice" class="form-control" />
+                <span asp-validation-for="ArticlePrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ArticleCategoryId" class="control-label"></label>
+                <select asp-for="ArticleCategoryId" class="form-control" asp-items="ViewBag.ArticleCategoryId"></select>
+            </div>
+
+            <div class="form-group-row">
+                <label asp-for="ArticleImage" class="col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="ArticleImage" type="file" class="custom-file-input" onchange="previewFile(event)" />
+                    <label id="fileName" class="custom-file-label">chose a file...</label>
+                </div>
+                <img id="preview" />
+            </div>
+
+            
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script>
+    var previewFile = function (event) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            var output = document.getElementById('preview');
+            output.src = reader.result;
+
+            var labelText = document.getElementById('fileName');
+            labelText.innerHTML = "image";
+        };
+        reader.readAsDataURL(event.target.files[0]);
+
+        
+        
+    }
+</script>

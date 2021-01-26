@@ -1,0 +1,21 @@
+﻿
+
+@if (!ViewBag.GoodLimit)
+{
+    <h2><font color="red">Najpierw ustaw limit i wygeneruj liczbę</font></h2>
+}
+else
+{
+    if (ViewBag.PlayerX < ViewBag.X)
+    {
+        <h2 style="color:orange">Więcej</h2>
+    }
+    else if (ViewBag.PlayerX > ViewBag.X)
+    {
+        <h2 style="color:orange">Mniej</h2>
+    }
+    else
+    {
+        <h2 style="color:green">Wygrałeś!</h2>
+    }
+}
