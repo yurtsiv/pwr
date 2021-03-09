@@ -1,0 +1,68 @@
+﻿@model Lab12.Models.BasketViewModel
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h1>Basket</h1>
+
+@if (ViewBag.CartIsEmpty)
+{
+    <h3>The basket is empty</h3>
+}
+else
+{
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Article
+            </th>
+            <th>
+                Price 
+            </th>
+            <th>
+                Count
+            </th>
+            <th>
+                Total price
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.BasketItems)
+        {
+        <tr>
+            <th>
+                @Html.DisplayFor(modelItem => item.Name)
+                <img src="@item.Image" width=50 />
+            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Count)
+            </td>
+            <td>
+                @{ 
+                    double totalPrice = item.Count * item.Price;
+                }
+                @totalPrice 
+            </td>
+            <td>
+                <a asp-action="Add" asp-route-id="@item.Id">+</a> <span>|</span>
+                @if (item.Count > 1)
+                {
+                    <a asp-action="Sub" asp-route-id="@item.Id">-</a> <span>|</span>
+                }
+                <a asp-action="Delete" asp-route-id="@item.Id">Remove</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+<h2>Total: @Model.Total</h2>
+}

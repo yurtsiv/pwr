@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Lab12.Models.Article>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ArticleName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ArticlePrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ArticleImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ArticleCategoryId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ArticleName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ArticlePrice)
+            </td>
+            <td>
+                <img src="@item.ArticleImage" width=50/>
+            </td>
+            <th>
+                @Html.DisplayFor(modelItem => item.ArticleCategoryId)
+            </th>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ArticleId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ArticleId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ArticleId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
