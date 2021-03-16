@@ -1,6 +1,7 @@
 import org.apache.xmlrpc.XmlRpcClient;
 
 import java.util.List;
+import java.util.Scanner;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
@@ -46,11 +47,11 @@ public class ClientRPC {
 
     public static void main(String[] args) {
         try {
-//            Scanner sc = new Scanner(System.in);
-//            System.out.println("Server url: ");
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Server url: ");
 
-//            String url = sc.nextLine();
-            XmlRpcClient srv = new XmlRpcClient("http://localhost:3000");
+            String url = sc.nextLine();
+            XmlRpcClient srv = new XmlRpcClient(url);
 
             Vector<Vector<String>> methods = (Vector<Vector<String>>) srv.execute(SERVER_NAME + ".show", new Vector<>());
             mainMenu(methods, srv);
