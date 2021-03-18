@@ -14,6 +14,10 @@ namespace Memo
   public class GameController : MonoBehaviour
   {
     public Board board { get; set; }
+    public void Reset()
+    {
+      board = null;
+    }
 
     void Awake()
     {
@@ -26,6 +30,7 @@ namespace Memo
 
       DontDestroyOnLoad(this.gameObject);
     }
+
 
     void Start()
     {

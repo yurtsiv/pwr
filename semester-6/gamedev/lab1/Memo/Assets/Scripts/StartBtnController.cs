@@ -29,7 +29,7 @@ namespace Memo
       }
 
       gameController.board = board;
-      SceneManager.LoadScene("GameScene");
+      SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
   }
 }
