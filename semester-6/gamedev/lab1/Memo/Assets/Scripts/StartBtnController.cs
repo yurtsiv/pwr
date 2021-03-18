@@ -7,8 +7,13 @@ namespace Memo
 {
   public class StartBtnController : MonoBehaviour, IPointerClickHandler
   {
-    public GameController gameController;
     public Button btn;
+    private GameController gameController;
+
+    void Awake()
+    {
+      gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+    }
 
     public void OnPointerClick(PointerEventData d)
     {

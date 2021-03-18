@@ -23,9 +23,25 @@ namespace Memo
     private Sprite defaultSprite;
     private List<Sprite> sprites = new List<Sprite>();
 
-    void OnClick()
+    private Card firstCard;
+    private Card secondCard;
+
+    private void MarkCardsAsGuessed()
     {
-      Debug.Log("Clicked");
+      firstCard.Guessed = true;
+      secondCard.Guessed = true;
+      firstCard = null;
+      secondCard = null;
+      gameController.OnGuessed();
+    }
+
+    private void CloseCards()
+    {
+      firstCard.Opened = false;
+      secondCard.Opened = false;
+      firstCard = null;
+      secondCard = null;
+      gameController.OnNotGuessed();
     }
 
     private void InitBoardState()
@@ -42,7 +58,30 @@ namespace Memo
       foreach (Card card in cards)
       {
         var cardObj = Instantiate(cardPrefab);
-        cardObj.GetComponent<Button>().onClick.AddListener(OnClick);
+        cardObj.GetComponent<Button>().onClick.AddListener(() =>
+        {
+          if (card.Guessed) return;
+
+          if (firstCard == null)
+          {
+            card.Opened = true;
+            firstCard = card;
+          }
+          else if (secondCard == null)
+          {
+            card.Opened = true;
+            secondCard = card;
+
+            if (firstCard.Index == card.Index)
+            {
+              Invoke("MarkCardsAsGuessed", 0.5f);
+            }
+            else
+            {
+              Invoke("CloseCards", 0.5f);
+            }
+          }
+        });
 
         cardObj.transform.SetParent(cardsContainer.transform, false);
         cardsObjs.Add(cardObj);
@@ -83,7 +122,15 @@ namespace Memo
       for (int i = 0; i < cards.Count; i++)
       {
         var card = cards[i];
-        cardsObjs[i].GetComponent<Image>().sprite = card.Guessed || card.Opened ? sprites[card.Index] : defaultSprite;
+        if (card.Guessed)
+        {
+          cardsObjs[i].transform.localScale = new Vector3(0, 0, 0);
+        }
+        else
+        {
+          cardsObjs[i].GetComponent<Image>().sprite = card.Guessed || card.Opened ? sprites[card.Index] : defaultSprite;
+        }
+
       }
     }
   }
