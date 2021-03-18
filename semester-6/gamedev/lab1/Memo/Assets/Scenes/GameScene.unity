@@ -336,6 +336,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae43e35e1d0ea516e87bb72eb0c9945d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actions:
+    m_Name: Actions
+    m_Id: a5c1dfb1-b352-456d-91be-88767bce0e12
+    m_Asset: {fileID: 0}
+    m_Actions:
+    - m_Name: restart
+      m_Type: 1
+      m_ExpectedControlType: Button
+      m_Id: 81991440-3190-4a2f-ad79-191c0d023426
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+    m_Bindings:
+    - m_Name: 
+      m_Id: 0b1c8da1-bc6d-4034-b31c-6a2b07272d05
+      m_Path: <Keyboard>/r
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: restart
+      m_Flags: 0
   btn: {fileID: 256815233}
 --- !u!1 &346805607
 GameObject:
@@ -581,8 +602,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -8, y: -36}
-  m_SizeDelta: {x: 1044.6688, y: 547.63904}
+  m_AnchoredPosition: {x: -8, y: -43.3}
+  m_SizeDelta: {x: 1044.6688, y: 533.005}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &505016763
 MonoBehaviour:

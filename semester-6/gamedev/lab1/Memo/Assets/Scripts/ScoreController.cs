@@ -15,7 +15,6 @@ namespace Memo
       scoreTextMesh = scoreText.GetComponent<TMPro.TextMeshProUGUI>();
     }
 
-
     void Update()
     {
       scoreTextMesh.text = gameController.score.ToString();
