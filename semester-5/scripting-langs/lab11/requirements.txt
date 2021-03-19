@@ -1,2 +1,2 @@
-Pillow==2.2.2
+Pillow==8.1.1
 ttkwidgets
