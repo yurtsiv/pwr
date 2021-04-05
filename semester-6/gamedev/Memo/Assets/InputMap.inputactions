@@ -1,0 +1,33 @@
+{
+    "name": "InputMap",
+    "maps": [
+        {
+            "name": "MainMap",
+            "id": "b6f3f9ac-dc7e-4ac4-bc80-456fa60435e0",
+            "actions": [
+                {
+                    "name": "Restart",
+                    "type": "Button",
+                    "id": "5e67cd29-de4a-4f0d-8804-e5f843bf0887",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "e5970a37-1fcf-46e1-90d6-fbcec50416fc",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Restart",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
