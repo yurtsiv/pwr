@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package mygrpcproto;
+
+service MyGrpcSrv {
+  rpc sub(SubRequest) returns (SubReply) {}
+  rpc repeatStr(RepeatStrRequest) returns (RepeatStrReply) {}
+  rpc asyncEcho(AsyncEchoRequest) returns (AsyncEchoReply) {}
+  rpc show(ShowRequest) returns (ShowReply) {}
+}
+
+message SubRequest {
+  int32 num1 = 1;
+  int32 num2 = 2;
+}
+
+message SubReply { int32 result = 1; }
+
+message RepeatStrRequest {
+  string string = 1;
+  uint32 times = 2;
+}
+
+message RepeatStrReply { string result = 1; }
+
+message AsyncEchoRequest {
+  string message = 1;
+  uint32 delay = 2;
+}
+
+message AsyncEchoReply { string message = 1; }
+
+message ShowRequest {}
+
+message ShowReply { repeated MethodDefinition methods = 1; }
+
+message MethodDefinition {
+  string name = 1;
+  repeated MethodParamDefinition params = 2;
+}
+
+message MethodParamDefinition {
+  string name = 1;
+  enum Type {
+    UINT = 0;
+    INT = 1;
+    STRING = 2;
+  };
+  Type type = 2;
+}
