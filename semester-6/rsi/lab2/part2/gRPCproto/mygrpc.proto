@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package mygrpcproto;
+
+service MyGrpcSrv {
+  rpc show(ShowRequest) returns (ShowReply) {}
+  rpc callMethod(MethodDefinition) returns (CallMethodReply) {}
+}
+
+message ShowRequest {}
+
+message ShowReply { repeated MethodDefinition methods = 1; }
+
+message MethodDefinition {
+  string name = 1;
+  repeated MethodParamDefinition params = 2;
+}
+
+message MethodParamDefinition {
+  string name = 1;
+  enum Type {
+    UINT = 0;
+    INT = 1;
+    STRING = 2;
+  };
+  Type type = 2;
+  string value = 3;
+}
+
+message CallMethodReply { string result = 1; }
