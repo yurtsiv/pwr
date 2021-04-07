@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 769057540355010872}
   - component: {fileID: 769057540355010871}
   - component: {fileID: 769057540355010875}
+  - component: {fileID: -6919540405533239844}
   m_Layer: 0
   m_Name: Frog
   m_TagString: Untagged
@@ -152,3 +153,21 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-6919540405533239844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 769057540355010870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7325c0075aa75e4d7acacaa94e279b34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+  deathEffect: {fileID: 6121923824083347148, guid: 13ff5d0c5d9c796bea173fce4dab783b,
+    type: 3}
+  gem: {fileID: 8126530514003770768, guid: 3239f60e44a0bd06c98173354dc1e1a6, type: 3}
+  explosion: {fileID: 751063595769588860, guid: 0e14d0fb76010b4449f5117e8b5c8c87,
+    type: 3}
