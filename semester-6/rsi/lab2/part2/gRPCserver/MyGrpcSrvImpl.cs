@@ -46,7 +46,6 @@ namespace gRPCserver
             });
         }
 
-
         public override Task<ShowReply> show(ShowRequest req, ServerCallContext ctx)
         {
             var reply = new ShowReply();
