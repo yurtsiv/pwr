@@ -5,6 +5,12 @@ public class Player : MonoBehaviour
 {
     public int gems = 0;
     public GameObject settingsPanel;
+    public Transform respawnPoint;
+
+    void Start()
+    {
+        Respawn();
+    }
 
     public void ReceiveGem()
     {
@@ -15,7 +21,20 @@ public class Player : MonoBehaviour
     {
         if (ctx.performed)
         {
-            settingsPanel.SetActive(!settingsPanel.active);    
+            settingsPanel.SetActive(!settingsPanel.active);
+        }
+    }
+
+    void Respawn()
+    {
+        gameObject.transform.position = respawnPoint.position;
+    }
+
+    void OnTriggerEnter2D(Collider2D hitInfo)
+    {
+        if (hitInfo.gameObject.tag == "DeathZone")
+        {
+            Respawn();
         }
     }
 }

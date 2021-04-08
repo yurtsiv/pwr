@@ -23,7 +23,8 @@ public class MovingPlatform : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "PlatformStop") {
+        if (other.gameObject.tag == "PlatformStop")
+        {
             velocity.x = -velocity.x;
         }
     }
