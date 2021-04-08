@@ -6,6 +6,7 @@ TagManager:
   tags:
   - PlatformStop
   - DeathZone
+  - Enemy
   layers:
   - Default
   - TransparentFX

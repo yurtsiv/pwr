@@ -39,7 +39,9 @@ public class Player : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D hitInfo)
     {
-        if (hitInfo.gameObject.tag == "DeathZone")
+        if (
+            hitInfo.gameObject.tag == "DeathZone"
+        )
         {
             Respawn();
         }
@@ -48,8 +50,15 @@ public class Player : MonoBehaviour
         {
             currentScene = (currentScene + 1) % numOfScenes;
 
-            Debug.Log($"LOADING SCENE: {currentScene}");
             SceneManager.LoadScene($"Level{currentScene}", LoadSceneMode.Single);
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D info)
+    {
+        if (info.gameObject.tag == "Enemy")
+        {
+            Respawn();
         }
     }
 }

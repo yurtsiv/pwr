@@ -951,7 +951,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -13.5374365, y: 2.5855994, z: -10}
+  m_LocalPosition: {x: -1.5205922, y: 0.1645996, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 680698934}
@@ -2075,6 +2075,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1060651315}
   m_CullTransparentMesh: 1
+--- !u!1 &1062133063
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1062133065}
+  - component: {fileID: 1062133064}
+  m_Layer: 0
+  m_Name: GameState
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1062133064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1062133063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: deeeffa16fe580d8281465f188065f62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  paused: 0
+--- !u!4 &1062133065
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1062133063}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 27
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1066785303
 GameObject:
   m_ObjectHideFlags: 0
@@ -3061,6 +3105,7 @@ MonoBehaviour:
   controller: {fileID: 1590052810}
   runSpeed: 60
   animator: {fileID: 1590052811}
+  gameState: {fileID: 1062133064}
 --- !u!114 &1590052813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3192,6 +3237,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 9210331547316356447, guid: f956ef24abae59c5e954c571f11f5e5a,
     type: 3}
   shootSound: {fileID: 1590052816}
+  gameState: {fileID: 1062133064}
 --- !u!114 &1590052815
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3207,6 +3253,7 @@ MonoBehaviour:
   gems: 0
   settingsPanel: {fileID: 1508496219}
   respawnPoint: {fileID: 1763364579}
+  gameState: {fileID: 1062133064}
 --- !u!82 &1590052816
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3587,7 +3634,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.8713768, y: 1}
+    m_SensorSize: {x: 2.937355, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -3604,7 +3651,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1657548503}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -13.5374365, y: 2.5855994, z: -10}
+  m_LocalPosition: {x: -12.305592, y: 2.5855994, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1464879067}

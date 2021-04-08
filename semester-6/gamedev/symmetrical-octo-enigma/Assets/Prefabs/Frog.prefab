@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -6919540405533239844}
   m_Layer: 0
   m_Name: Frog
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -171,3 +171,4 @@ MonoBehaviour:
   gem: {fileID: 8126530514003770768, guid: 3239f60e44a0bd06c98173354dc1e1a6, type: 3}
   explosion: {fileID: 751063595769588860, guid: 0e14d0fb76010b4449f5117e8b5c8c87,
     type: 3}
+  gemsDrop: 3
