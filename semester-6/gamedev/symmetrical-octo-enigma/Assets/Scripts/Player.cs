@@ -36,5 +36,10 @@ public class Player : MonoBehaviour
         {
             Respawn();
         }
+
+        if (hitInfo.gameObject.tag == "Finish")
+        {
+
+        }
     }
 }
