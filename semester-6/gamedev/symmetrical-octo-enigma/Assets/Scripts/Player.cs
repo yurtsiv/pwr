@@ -8,6 +8,8 @@ public class Player : MonoBehaviour
     public GameObject settingsPanel;
     public Transform respawnPoint;
 
+    public GameState gameState;
+
     int numOfScenes = 2;
     int currentScene = 0;
 
@@ -25,6 +27,7 @@ public class Player : MonoBehaviour
     {
         if (ctx.performed)
         {
+            gameState.paused = !gameState.paused;
             settingsPanel.SetActive(!settingsPanel.active);
         }
     }
@@ -43,8 +46,9 @@ public class Player : MonoBehaviour
 
         if (hitInfo.gameObject.tag == "Finish")
         {
-            currentScene = (currentScene + 1) % (numOfScenes + 1);
+            currentScene = (currentScene + 1) % numOfScenes;
 
+            Debug.Log($"LOADING SCENE: {currentScene}");
             SceneManager.LoadScene($"Level{currentScene}", LoadSceneMode.Single);
         }
     }
