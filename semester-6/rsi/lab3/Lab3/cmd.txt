@@ -1,0 +1,1 @@
+java -Djava.security.policy=srv.policy Main //127.0.0.1/service1 //127.0.0.1/service2
