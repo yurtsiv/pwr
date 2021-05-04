@@ -7,9 +7,12 @@ using System.Text;
 
 namespace WcfServiceContract1
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
+
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class MyCalculator : ICalculator
     {
+        double sum = 0;
+
         public double Add(double n1, double n2)
         {
             Console.WriteLine($"Adding {n1} and {n2}");
@@ -30,6 +33,12 @@ namespace WcfServiceContract1
             var res = n1 + n2;
             Console.WriteLine($"Result is {res}");
             return res;
+        }
+
+        public double Summarize(double n1)
+        {
+            sum += n1;
+            return sum;
         }
     }
 }

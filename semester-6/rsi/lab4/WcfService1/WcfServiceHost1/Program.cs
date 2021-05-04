@@ -11,14 +11,16 @@ namespace WcfServiceHost1
 {
     class Program
     {
+        static string port = "10000";
+        static string baseUri = $"http://localhost:{port}/MyCalculator";
         static void Main(string[] args)
         {
-            Uri baseAddress = new Uri("http://localhost:10000/MyCalculator");
+            Uri baseAddress = new Uri(baseUri);
             ServiceHost myHost = new ServiceHost(typeof(MyCalculator), baseAddress);
 
             WSHttpBinding myBinding = new WSHttpBinding();
 
-            ServiceEndpoint endpoint = myHost.AddServiceEndpoint(typeof(ICalculator), myBinding, "endpoint1");
+            ServiceEndpoint endpoint1 = myHost.AddServiceEndpoint(typeof(ICalculator), myBinding, "endpoint1");
 
             ServiceMetadataBehavior smb = new ServiceMetadataBehavior();
             smb.HttpGetEnabled = true;
@@ -26,6 +28,25 @@ namespace WcfServiceHost1
 
             try
             {
+                BasicHttpBinding binding2 = new BasicHttpBinding();
+                ServiceEndpoint endpoint2 = myHost.AddServiceEndpoint(typeof(ICalculator), binding2, "endpoint2");
+                ServiceEndpoint endpoint3 = myHost.Description.Endpoints.Find(
+                    new Uri($"{baseUri}/endpoint3")
+                );
+
+                Console.WriteLine("\n----> Endpointy");
+                Console.WriteLine($"\nService endpoint {endpoint1.Name}");
+                Console.WriteLine($"Binding: {endpoint1.Binding.ToString()}");
+                Console.WriteLine($"ListenUri: {endpoint1.ListenUri.ToString()}");
+
+                Console.WriteLine($"\nService endpoint {endpoint2.Name}");
+                Console.WriteLine($"Binding: {endpoint2.Binding.ToString()}");
+                Console.WriteLine($"ListenUri: {endpoint2.ListenUri.ToString()}");
+
+                Console.WriteLine($"\nService endpoint {endpoint3.Name}");
+                Console.WriteLine($"Binding: {endpoint3.Binding.ToString()}");
+                Console.WriteLine($"ListenUri: {endpoint3.ListenUri.ToString()}");
+
                 myHost.Open();
                 Console.WriteLine("Serwis jest uruchomiony.");
                 Console.WriteLine("Necisnij <ENTER> aby zakonczyc.");

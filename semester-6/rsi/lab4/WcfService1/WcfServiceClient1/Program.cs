@@ -9,23 +9,43 @@ namespace WcfServiceClient1
 {
     class Program
     {
-        static void Main(string[] args)
+        static void TestClient(CalculatorClient client)
         {
-            CalculatorClient myClient = new CalculatorClient();
+            Console.WriteLine($"\nTesting {client.Endpoint.ListenUri}");
 
             double value1 = 10;
             double value2 = 20;
 
-            double result1 = myClient.Add(value1, value2);
+            double result1 = client.Add(value1, value2);
             Console.WriteLine($"Add: {result1}");
 
-            double result2 = myClient.Sub(value1, value2);
+            double result2 = client.Sub(value1, value2);
             Console.WriteLine($"Sub: {result2}");
 
-            double result3 = myClient.Multiply(value1, value2);
+            double result3 = client.Multiply(value1, value2);
             Console.WriteLine($"Mul: {result3}");
 
-            myClient.Close();
+            double result4 = client.Summarize(value1);
+            Console.WriteLine($"Summarize {value1}: {result4}");
+
+            double result5 = client.Summarize(value2);
+            Console.WriteLine($"Summarize {value2}: {result5}");
+
+            client.Close();
+        }
+
+        static void Main(string[] args)
+        {
+            // CalculatorClient myClient = new CalculatorClient();
+
+            CalculatorClient client1 = new CalculatorClient("WSHttpBinding_ICalculator");
+            CalculatorClient client2 = new CalculatorClient("BasicHttpBinding_ICalculator");
+            CalculatorClient client3 = new CalculatorClient("myEndpoint3");
+
+            TestClient(client1);
+            TestClient(client2);
+            TestClient(client3);
         }
     }
 }
+

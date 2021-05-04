@@ -32,6 +32,12 @@ namespace WcfServiceClient1.ServiceReference1 {
         
         [System.ServiceModel.OperationContractAttribute(ProtectionLevel=System.Net.Security.ProtectionLevel.None, Action="http://tempuri.org/ICalculator/Multiply", ReplyAction="http://tempuri.org/ICalculator/MultiplyResponse")]
         System.Threading.Tasks.Task<double> MultiplyAsync(double n1, double n2);
+        
+        [System.ServiceModel.OperationContractAttribute(ProtectionLevel=System.Net.Security.ProtectionLevel.None, Action="http://tempuri.org/ICalculator/Summarize", ReplyAction="http://tempuri.org/ICalculator/SummarizeResponse")]
+        double Summarize(double n1);
+        
+        [System.ServiceModel.OperationContractAttribute(ProtectionLevel=System.Net.Security.ProtectionLevel.None, Action="http://tempuri.org/ICalculator/Summarize", ReplyAction="http://tempuri.org/ICalculator/SummarizeResponse")]
+        System.Threading.Tasks.Task<double> SummarizeAsync(double n1);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -83,6 +89,14 @@ namespace WcfServiceClient1.ServiceReference1 {
         
         public System.Threading.Tasks.Task<double> MultiplyAsync(double n1, double n2) {
             return base.Channel.MultiplyAsync(n1, n2);
+        }
+        
+        public double Summarize(double n1) {
+            return base.Channel.Summarize(n1);
+        }
+        
+        public System.Threading.Tasks.Task<double> SummarizeAsync(double n1) {
+            return base.Channel.SummarizeAsync(n1);
         }
     }
 }
