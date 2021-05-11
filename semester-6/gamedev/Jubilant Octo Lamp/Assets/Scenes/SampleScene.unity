@@ -20607,7 +20607,7 @@ MonoBehaviour:
   - {fileID: 1535571641}
   - {fileID: 644297210}
   - {fileID: 1625824719}
-  numOfEnemies: 10
+  numOfEnemies: 1
 --- !u!4 &925917091 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2497406903890568550, guid: 7ba64c0944716c24f911914e2e6af7a4,
@@ -72896,7 +72896,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: d8003de4be5900347a2c96ef75315675, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.119
+  m_Volume: 0.385
   m_Pitch: 1
   Loop: 1
   Mute: 0
