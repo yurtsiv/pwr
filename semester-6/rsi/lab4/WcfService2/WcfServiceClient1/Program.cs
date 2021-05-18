@@ -31,6 +31,9 @@ namespace WcfServiceClient1
             var result5 = client.AppendAccum(value2);
             Console.WriteLine($"AppendAccum: {result5}");
 
+            var result6 = client.AverageStrLen(new []{ "ala", "ma", "kota" });
+            Console.WriteLine($"\nAverageStrLen: {result6}");
+
             client.Close();
         }
 

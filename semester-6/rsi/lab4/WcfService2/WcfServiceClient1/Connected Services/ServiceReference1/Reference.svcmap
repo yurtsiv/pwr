@@ -23,6 +23,7 @@
   </MetadataSources>
   <Metadata>
     <MetadataFile FileName="MyStringOps.wsdl" MetadataType="Wsdl" ID="c467d9c7-c781-458f-b778-47b63057651e" SourceId="1" SourceUrl="http://localhost:10001/MyStringOps?wsdl" />
+    <MetadataFile FileName="MyStringOps2.xsd" MetadataType="Schema" ID="76f1bd5e-f8c4-45be-8622-c45200aa4235" SourceId="1" SourceUrl="http://localhost:10001/MyStringOps?xsd=xsd2" />
     <MetadataFile FileName="MyStringOps.xsd" MetadataType="Schema" ID="48d91aa6-03cd-40a7-b876-f4aadd63dc20" SourceId="1" SourceUrl="http://localhost:10001/MyStringOps?xsd=xsd1" />
     <MetadataFile FileName="MyStringOps.disco" MetadataType="Disco" ID="1dcb5d04-02ce-4a25-b2e6-e8e58e169b80" SourceId="1" SourceUrl="http://localhost:10001/MyStringOps?disco" />
     <MetadataFile FileName="MyStringOps1.xsd" MetadataType="Schema" ID="c426cfd2-e2a1-437f-906e-0f5c548b5d24" SourceId="1" SourceUrl="http://localhost:10001/MyStringOps?xsd=xsd0" />

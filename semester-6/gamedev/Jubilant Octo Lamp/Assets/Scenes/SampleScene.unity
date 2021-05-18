@@ -20607,7 +20607,7 @@ MonoBehaviour:
   - {fileID: 1535571641}
   - {fileID: 644297210}
   - {fileID: 1625824719}
-  numOfEnemies: 1
+  numOfEnemies: 5
 --- !u!4 &925917091 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2497406903890568550, guid: 7ba64c0944716c24f911914e2e6af7a4,

@@ -38,6 +38,12 @@ namespace WcfServiceClient1.ServiceReference1 {
         
         [System.ServiceModel.OperationContractAttribute(ProtectionLevel=System.Net.Security.ProtectionLevel.None, Action="http://tempuri.org/IStringOps/AppendAccum", ReplyAction="http://tempuri.org/IStringOps/AppendAccumResponse")]
         System.Threading.Tasks.Task<string> AppendAccumAsync(string s);
+        
+        [System.ServiceModel.OperationContractAttribute(ProtectionLevel=System.Net.Security.ProtectionLevel.None, Action="http://tempuri.org/IStringOps/AverageStrLen", ReplyAction="http://tempuri.org/IStringOps/AverageStrLenResponse")]
+        string AverageStrLen(string[] l);
+        
+        [System.ServiceModel.OperationContractAttribute(ProtectionLevel=System.Net.Security.ProtectionLevel.None, Action="http://tempuri.org/IStringOps/AverageStrLen", ReplyAction="http://tempuri.org/IStringOps/AverageStrLenResponse")]
+        System.Threading.Tasks.Task<string> AverageStrLenAsync(string[] l);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -97,6 +103,14 @@ namespace WcfServiceClient1.ServiceReference1 {
         
         public System.Threading.Tasks.Task<string> AppendAccumAsync(string s) {
             return base.Channel.AppendAccumAsync(s);
+        }
+        
+        public string AverageStrLen(string[] l) {
+            return base.Channel.AverageStrLen(l);
+        }
+        
+        public System.Threading.Tasks.Task<string> AverageStrLenAsync(string[] l) {
+            return base.Channel.AverageStrLenAsync(l);
         }
     }
 }

@@ -19,6 +19,8 @@ namespace WcfServiceContract1
 
         [OperationContract]
         string AppendAccum(string s);
+        [OperationContract]
+        string AverageStrLen(string[] l);
     }
 
     // Use a data contract as illustrated in the sample below to add composite types to service operations.

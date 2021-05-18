@@ -42,5 +42,8 @@ namespace WcfServiceContract1
             accum += s;
             return accum;
         }
+
+        public string AverageStrLen(string[] l) =>
+            l.Average(s => s.Length).ToString();
     }
 }
