@@ -64,7 +64,7 @@
     <None Include="Connected Services\TaskRef\AsyncTask2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\TaskRef\client.TaskRef.Task.datasource">
+    <None Include="Connected Services\TaskRef\client.TaskRef.Todo.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\TaskRef\ServiceTask.wsdl" />

@@ -8,16 +8,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace asyncClient.TaskRef {
+namespace client.TaskRef {
     using System.Runtime.Serialization;
     using System;
     
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="Task", Namespace="http://schemas.datacontract.org/2004/07/contract")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Todo", Namespace="http://schemas.datacontract.org/2004/07/Todos")]
     [System.SerializableAttribute()]
-    public partial class Task : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class Todo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -91,112 +91,112 @@ namespace asyncClient.TaskRef {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="TaskRef.IAsyncTask", CallbackContract=typeof(asyncClient.TaskRef.IAsyncTaskCallback), SessionMode=System.ServiceModel.SessionMode.Required)]
-    public interface IAsyncTask {
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="TaskRef.IAsyncTodos", CallbackContract=typeof(client.TaskRef.IAsyncTodosCallback), SessionMode=System.ServiceModel.SessionMode.Required)]
+    public interface IAsyncTodos {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IAsyncTask/Repeat")]
-        void Repeat(asyncClient.TaskRef.Task task);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IAsyncTodos/Repeat")]
+        void Repeat(client.TaskRef.Todo task);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IAsyncTask/Repeat")]
-        System.Threading.Tasks.Task RepeatAsync(asyncClient.TaskRef.Task task);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IAsyncTodos/Repeat")]
+        System.Threading.Tasks.Task RepeatAsync(client.TaskRef.Todo task);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAsyncTask/GetTaskById", ReplyAction="http://tempuri.org/IAsyncTask/GetTaskByIdResponse")]
-        asyncClient.TaskRef.Task GetTaskById(int id);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAsyncTodos/GetTaskById", ReplyAction="http://tempuri.org/IAsyncTodos/GetTaskByIdResponse")]
+        client.TaskRef.Todo GetTaskById(int id);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAsyncTask/GetTaskById", ReplyAction="http://tempuri.org/IAsyncTask/GetTaskByIdResponse")]
-        System.Threading.Tasks.Task<asyncClient.TaskRef.Task> GetTaskByIdAsync(int id);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAsyncTodos/GetTaskById", ReplyAction="http://tempuri.org/IAsyncTodos/GetTaskByIdResponse")]
+        System.Threading.Tasks.Task<client.TaskRef.Todo> GetTaskByIdAsync(int id);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAsyncTask/AddTask", ReplyAction="http://tempuri.org/IAsyncTask/AddTaskResponse")]
-        void AddTask(asyncClient.TaskRef.Task task);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAsyncTodos/AddTask", ReplyAction="http://tempuri.org/IAsyncTodos/AddTaskResponse")]
+        void AddTask(client.TaskRef.Todo task);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAsyncTask/AddTask", ReplyAction="http://tempuri.org/IAsyncTask/AddTaskResponse")]
-        System.Threading.Tasks.Task AddTaskAsync(asyncClient.TaskRef.Task task);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAsyncTodos/AddTask", ReplyAction="http://tempuri.org/IAsyncTodos/AddTaskResponse")]
+        System.Threading.Tasks.Task AddTaskAsync(client.TaskRef.Todo task);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAsyncTask/RemoveTask", ReplyAction="http://tempuri.org/IAsyncTask/RemoveTaskResponse")]
-        asyncClient.TaskRef.Task RemoveTask(int id);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAsyncTodos/RemoveTask", ReplyAction="http://tempuri.org/IAsyncTodos/RemoveTaskResponse")]
+        client.TaskRef.Todo RemoveTask(int id);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAsyncTask/RemoveTask", ReplyAction="http://tempuri.org/IAsyncTask/RemoveTaskResponse")]
-        System.Threading.Tasks.Task<asyncClient.TaskRef.Task> RemoveTaskAsync(int id);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAsyncTodos/RemoveTask", ReplyAction="http://tempuri.org/IAsyncTodos/RemoveTaskResponse")]
+        System.Threading.Tasks.Task<client.TaskRef.Todo> RemoveTaskAsync(int id);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAsyncTask/UpdateTask", ReplyAction="http://tempuri.org/IAsyncTask/UpdateTaskResponse")]
-        asyncClient.TaskRef.Task UpdateTask(int id, string text, int times);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAsyncTodos/UpdateTask", ReplyAction="http://tempuri.org/IAsyncTodos/UpdateTaskResponse")]
+        client.TaskRef.Todo UpdateTask(int id, string text, int times);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAsyncTask/UpdateTask", ReplyAction="http://tempuri.org/IAsyncTask/UpdateTaskResponse")]
-        System.Threading.Tasks.Task<asyncClient.TaskRef.Task> UpdateTaskAsync(int id, string text, int times);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAsyncTodos/UpdateTask", ReplyAction="http://tempuri.org/IAsyncTodos/UpdateTaskResponse")]
+        System.Threading.Tasks.Task<client.TaskRef.Todo> UpdateTaskAsync(int id, string text, int times);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IAsyncTaskCallback {
+    public interface IAsyncTodosCallback {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IAsyncTask/RepeatResult")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IAsyncTodos/RepeatResult")]
         void RepeatResult(string result);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IAsyncTaskChannel : asyncClient.TaskRef.IAsyncTask, System.ServiceModel.IClientChannel {
+    public interface IAsyncTodosChannel : client.TaskRef.IAsyncTodos, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class AsyncTaskClient : System.ServiceModel.DuplexClientBase<asyncClient.TaskRef.IAsyncTask>, asyncClient.TaskRef.IAsyncTask {
+    public partial class AsyncTodosClient : System.ServiceModel.DuplexClientBase<client.TaskRef.IAsyncTodos>, client.TaskRef.IAsyncTodos {
         
-        public AsyncTaskClient(System.ServiceModel.InstanceContext callbackInstance) : 
+        public AsyncTodosClient(System.ServiceModel.InstanceContext callbackInstance) : 
                 base(callbackInstance) {
         }
         
-        public AsyncTaskClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+        public AsyncTodosClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
                 base(callbackInstance, endpointConfigurationName) {
         }
         
-        public AsyncTaskClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+        public AsyncTodosClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
                 base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public AsyncTaskClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public AsyncTodosClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public AsyncTaskClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public AsyncTodosClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public void Repeat(asyncClient.TaskRef.Task task) {
+        public void Repeat(client.TaskRef.Todo task) {
             base.Channel.Repeat(task);
         }
         
-        public System.Threading.Tasks.Task RepeatAsync(asyncClient.TaskRef.Task task) {
+        public System.Threading.Tasks.Task RepeatAsync(client.TaskRef.Todo task) {
             return base.Channel.RepeatAsync(task);
         }
         
-        public asyncClient.TaskRef.Task GetTaskById(int id) {
+        public client.TaskRef.Todo GetTaskById(int id) {
             return base.Channel.GetTaskById(id);
         }
         
-        public System.Threading.Tasks.Task<asyncClient.TaskRef.Task> GetTaskByIdAsync(int id) {
+        public System.Threading.Tasks.Task<client.TaskRef.Todo> GetTaskByIdAsync(int id) {
             return base.Channel.GetTaskByIdAsync(id);
         }
         
-        public void AddTask(asyncClient.TaskRef.Task task) {
+        public void AddTask(client.TaskRef.Todo task) {
             base.Channel.AddTask(task);
         }
         
-        public System.Threading.Tasks.Task AddTaskAsync(asyncClient.TaskRef.Task task) {
+        public System.Threading.Tasks.Task AddTaskAsync(client.TaskRef.Todo task) {
             return base.Channel.AddTaskAsync(task);
         }
         
-        public asyncClient.TaskRef.Task RemoveTask(int id) {
+        public client.TaskRef.Todo RemoveTask(int id) {
             return base.Channel.RemoveTask(id);
         }
         
-        public System.Threading.Tasks.Task<asyncClient.TaskRef.Task> RemoveTaskAsync(int id) {
+        public System.Threading.Tasks.Task<client.TaskRef.Todo> RemoveTaskAsync(int id) {
             return base.Channel.RemoveTaskAsync(id);
         }
         
-        public asyncClient.TaskRef.Task UpdateTask(int id, string text, int times) {
+        public client.TaskRef.Todo UpdateTask(int id, string text, int times) {
             return base.Channel.UpdateTask(id, text, times);
         }
         
-        public System.Threading.Tasks.Task<asyncClient.TaskRef.Task> UpdateTaskAsync(int id, string text, int times) {
+        public System.Threading.Tasks.Task<client.TaskRef.Todo> UpdateTaskAsync(int id, string text, int times) {
             return base.Channel.UpdateTaskAsync(id, text, times);
         }
     }

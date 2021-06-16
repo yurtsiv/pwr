@@ -1,15 +1,11 @@
-﻿using asyncClient.TaskRef;
+﻿using client.TaskRef;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
-using Task = asyncClient.TaskRef.Task;
+using Todo = client.TaskRef.Todo;
 
 namespace asyncClient
 {
-    class AsyncTaskCallback : IAsyncTaskCallback
+    class AsyncTaskCallback : IAsyncTodosCallback
     {
         public void RepeatResult(string result)
         {
@@ -21,16 +17,16 @@ namespace asyncClient
     {
         static void Main(string[] args)
         {
-            Task task1 = new Task { id = 1, text = "hello", times = 5 };
-            Task task2 = new Task { id = 2, text = "world", times = 2 };
-            Task task3 = new Task { id = 3, text = "koala", times = 4 };
-            Task task4 = new Task { id = 4, text = "macro", times = 3 };
+            Todo task1 = new Todo { id = 1, text = "Milk", times = 5 };
+            Todo task2 = new Todo { id = 2, text = "Water", times = 2 };
+            Todo task3 = new Todo { id = 3, text = "Butter", times = 4 };
+            Todo task4 = new Todo { id = 4, text = "Bread", times = 3 };
 
             AsyncTaskCallback callback = new AsyncTaskCallback();
             InstanceContext ctx = new InstanceContext(callback);
-            AsyncTaskClient asyncClient = new AsyncTaskClient(ctx);
+            AsyncTodosClient asyncClient = new AsyncTodosClient(ctx);
 
-            Console.WriteLine("Client ServiceTask is running");
+            Console.WriteLine("Client is running");
 
             Console.WriteLine("Adding tasks");
             asyncClient.AddTask(task1);
@@ -44,13 +40,12 @@ namespace asyncClient
             Console.WriteLine("GetTaskById(3): {0}", task);
             Console.WriteLine();
 
-            Console.WriteLine("Sync requests:");
-            var exampleTask = asyncClient.GetTaskById(4);
+            var testTask = asyncClient.GetTaskById(4);
 
-            Console.WriteLine("Async requests 1");
+            Console.WriteLine("Async request 1");
             asyncClient.Repeat(task1);
-            Console.WriteLine("Async requests 2");
-            asyncClient.Repeat(exampleTask);
+            Console.WriteLine("Async request 2");
+            asyncClient.Repeat(testTask);
 
             Console.WriteLine("Press ENTER to exit");
             Console.Read();

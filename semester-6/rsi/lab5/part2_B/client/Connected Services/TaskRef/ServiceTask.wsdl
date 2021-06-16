@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="AsyncTask" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsp:Policy wsu:Id="WSDualHttpBinding_IAsyncTask_policy">
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="AsyncTodos" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="WSDualHttpBinding_IAsyncTodos_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <wsrm:RMAssertion xmlns:wsrm="http://schemas.xmlsoap.org/ws/2005/02/rm/policy">
@@ -103,7 +103,7 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsp:Policy wsu:Id="WSDualHttpBinding_IAsyncTask_Repeat_Input_policy">
+  <wsp:Policy wsu:Id="WSDualHttpBinding_IAsyncTodos_Repeat_Input_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
@@ -126,7 +126,7 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsp:Policy wsu:Id="WSDualHttpBinding_IAsyncTask_GetTaskById_Input_policy">
+  <wsp:Policy wsu:Id="WSDualHttpBinding_IAsyncTodos_GetTaskById_Input_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
@@ -149,7 +149,7 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsp:Policy wsu:Id="WSDualHttpBinding_IAsyncTask_GetTaskById_output_policy">
+  <wsp:Policy wsu:Id="WSDualHttpBinding_IAsyncTodos_GetTaskById_output_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
@@ -172,7 +172,7 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsp:Policy wsu:Id="WSDualHttpBinding_IAsyncTask_AddTask_Input_policy">
+  <wsp:Policy wsu:Id="WSDualHttpBinding_IAsyncTodos_AddTask_Input_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
@@ -195,7 +195,7 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsp:Policy wsu:Id="WSDualHttpBinding_IAsyncTask_AddTask_output_policy">
+  <wsp:Policy wsu:Id="WSDualHttpBinding_IAsyncTodos_AddTask_output_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
@@ -218,7 +218,7 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsp:Policy wsu:Id="WSDualHttpBinding_IAsyncTask_RemoveTask_Input_policy">
+  <wsp:Policy wsu:Id="WSDualHttpBinding_IAsyncTodos_RemoveTask_Input_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
@@ -241,7 +241,7 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsp:Policy wsu:Id="WSDualHttpBinding_IAsyncTask_RemoveTask_output_policy">
+  <wsp:Policy wsu:Id="WSDualHttpBinding_IAsyncTodos_RemoveTask_output_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
@@ -264,7 +264,7 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsp:Policy wsu:Id="WSDualHttpBinding_IAsyncTask_UpdateTask_Input_policy">
+  <wsp:Policy wsu:Id="WSDualHttpBinding_IAsyncTodos_UpdateTask_Input_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
@@ -287,7 +287,7 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsp:Policy wsu:Id="WSDualHttpBinding_IAsyncTask_UpdateTask_output_policy">
+  <wsp:Policy wsu:Id="WSDualHttpBinding_IAsyncTodos_UpdateTask_output_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
@@ -310,7 +310,7 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsp:Policy wsu:Id="WSDualHttpBinding_IAsyncTask_RepeatResult_output_policy">
+  <wsp:Policy wsu:Id="WSDualHttpBinding_IAsyncTodos_RepeatResult_output_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
@@ -337,127 +337,127 @@
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import schemaLocation="http://localhost:10000/AsyncTask?xsd=xsd0" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="http://localhost:10000/AsyncTask?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://localhost:10000/AsyncTask?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/contract" />
+      <xsd:import schemaLocation="http://localhost:10000/AsyncTask?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Todos" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IAsyncTask_Repeat_InputMessage">
+  <wsdl:message name="IAsyncTodos_Repeat_InputMessage">
     <wsdl:part name="parameters" element="tns:Repeat" />
   </wsdl:message>
-  <wsdl:message name="IAsyncTask_GetTaskById_InputMessage">
+  <wsdl:message name="IAsyncTodos_GetTaskById_InputMessage">
     <wsdl:part name="parameters" element="tns:GetTaskById" />
   </wsdl:message>
-  <wsdl:message name="IAsyncTask_GetTaskById_OutputMessage">
+  <wsdl:message name="IAsyncTodos_GetTaskById_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetTaskByIdResponse" />
   </wsdl:message>
-  <wsdl:message name="IAsyncTask_AddTask_InputMessage">
+  <wsdl:message name="IAsyncTodos_AddTask_InputMessage">
     <wsdl:part name="parameters" element="tns:AddTask" />
   </wsdl:message>
-  <wsdl:message name="IAsyncTask_AddTask_OutputMessage">
+  <wsdl:message name="IAsyncTodos_AddTask_OutputMessage">
     <wsdl:part name="parameters" element="tns:AddTaskResponse" />
   </wsdl:message>
-  <wsdl:message name="IAsyncTask_RemoveTask_InputMessage">
+  <wsdl:message name="IAsyncTodos_RemoveTask_InputMessage">
     <wsdl:part name="parameters" element="tns:RemoveTask" />
   </wsdl:message>
-  <wsdl:message name="IAsyncTask_RemoveTask_OutputMessage">
+  <wsdl:message name="IAsyncTodos_RemoveTask_OutputMessage">
     <wsdl:part name="parameters" element="tns:RemoveTaskResponse" />
   </wsdl:message>
-  <wsdl:message name="IAsyncTask_UpdateTask_InputMessage">
+  <wsdl:message name="IAsyncTodos_UpdateTask_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdateTask" />
   </wsdl:message>
-  <wsdl:message name="IAsyncTask_UpdateTask_OutputMessage">
+  <wsdl:message name="IAsyncTodos_UpdateTask_OutputMessage">
     <wsdl:part name="parameters" element="tns:UpdateTaskResponse" />
   </wsdl:message>
-  <wsdl:message name="IAsyncTask_RepeatResult_OutputCallbackMessage">
+  <wsdl:message name="IAsyncTodos_RepeatResult_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:RepeatResult" />
   </wsdl:message>
-  <wsdl:portType msc:usingSession="true" name="IAsyncTask">
+  <wsdl:portType msc:usingSession="true" name="IAsyncTodos">
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="Repeat">
-      <wsdl:input wsaw:Action="http://tempuri.org/IAsyncTask/Repeat" message="tns:IAsyncTask_Repeat_InputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IAsyncTodos/Repeat" message="tns:IAsyncTodos_Repeat_InputMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="GetTaskById">
-      <wsdl:input wsaw:Action="http://tempuri.org/IAsyncTask/GetTaskById" message="tns:IAsyncTask_GetTaskById_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IAsyncTask/GetTaskByIdResponse" message="tns:IAsyncTask_GetTaskById_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IAsyncTodos/GetTaskById" message="tns:IAsyncTodos_GetTaskById_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAsyncTodos/GetTaskByIdResponse" message="tns:IAsyncTodos_GetTaskById_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="AddTask">
-      <wsdl:input wsaw:Action="http://tempuri.org/IAsyncTask/AddTask" message="tns:IAsyncTask_AddTask_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IAsyncTask/AddTaskResponse" message="tns:IAsyncTask_AddTask_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IAsyncTodos/AddTask" message="tns:IAsyncTodos_AddTask_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAsyncTodos/AddTaskResponse" message="tns:IAsyncTodos_AddTask_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="RemoveTask">
-      <wsdl:input wsaw:Action="http://tempuri.org/IAsyncTask/RemoveTask" message="tns:IAsyncTask_RemoveTask_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IAsyncTask/RemoveTaskResponse" message="tns:IAsyncTask_RemoveTask_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IAsyncTodos/RemoveTask" message="tns:IAsyncTodos_RemoveTask_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAsyncTodos/RemoveTaskResponse" message="tns:IAsyncTodos_RemoveTask_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="UpdateTask">
-      <wsdl:input wsaw:Action="http://tempuri.org/IAsyncTask/UpdateTask" message="tns:IAsyncTask_UpdateTask_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IAsyncTask/UpdateTaskResponse" message="tns:IAsyncTask_UpdateTask_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IAsyncTodos/UpdateTask" message="tns:IAsyncTodos_UpdateTask_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAsyncTodos/UpdateTaskResponse" message="tns:IAsyncTodos_UpdateTask_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="RepeatResult">
-      <wsdl:output wsaw:Action="http://tempuri.org/IAsyncTask/RepeatResult" message="tns:IAsyncTask_RepeatResult_OutputCallbackMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAsyncTodos/RepeatResult" message="tns:IAsyncTodos_RepeatResult_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
-  <wsdl:binding name="WSDualHttpBinding_IAsyncTask" type="tns:IAsyncTask">
-    <wsp:PolicyReference URI="#WSDualHttpBinding_IAsyncTask_policy" />
+  <wsdl:binding name="WSDualHttpBinding_IAsyncTodos" type="tns:IAsyncTodos">
+    <wsp:PolicyReference URI="#WSDualHttpBinding_IAsyncTodos_policy" />
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="Repeat">
-      <soap12:operation soapAction="http://tempuri.org/IAsyncTask/Repeat" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IAsyncTodos/Repeat" style="document" />
       <wsdl:input>
-        <wsp:PolicyReference URI="#WSDualHttpBinding_IAsyncTask_Repeat_Input_policy" />
+        <wsp:PolicyReference URI="#WSDualHttpBinding_IAsyncTodos_Repeat_Input_policy" />
         <soap12:body use="literal" />
       </wsdl:input>
     </wsdl:operation>
     <wsdl:operation name="GetTaskById">
-      <soap12:operation soapAction="http://tempuri.org/IAsyncTask/GetTaskById" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IAsyncTodos/GetTaskById" style="document" />
       <wsdl:input>
-        <wsp:PolicyReference URI="#WSDualHttpBinding_IAsyncTask_GetTaskById_Input_policy" />
+        <wsp:PolicyReference URI="#WSDualHttpBinding_IAsyncTodos_GetTaskById_Input_policy" />
         <soap12:body use="literal" />
       </wsdl:input>
       <wsdl:output>
-        <wsp:PolicyReference URI="#WSDualHttpBinding_IAsyncTask_GetTaskById_output_policy" />
+        <wsp:PolicyReference URI="#WSDualHttpBinding_IAsyncTodos_GetTaskById_output_policy" />
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="AddTask">
-      <soap12:operation soapAction="http://tempuri.org/IAsyncTask/AddTask" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IAsyncTodos/AddTask" style="document" />
       <wsdl:input>
-        <wsp:PolicyReference URI="#WSDualHttpBinding_IAsyncTask_AddTask_Input_policy" />
+        <wsp:PolicyReference URI="#WSDualHttpBinding_IAsyncTodos_AddTask_Input_policy" />
         <soap12:body use="literal" />
       </wsdl:input>
       <wsdl:output>
-        <wsp:PolicyReference URI="#WSDualHttpBinding_IAsyncTask_AddTask_output_policy" />
+        <wsp:PolicyReference URI="#WSDualHttpBinding_IAsyncTodos_AddTask_output_policy" />
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="RemoveTask">
-      <soap12:operation soapAction="http://tempuri.org/IAsyncTask/RemoveTask" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IAsyncTodos/RemoveTask" style="document" />
       <wsdl:input>
-        <wsp:PolicyReference URI="#WSDualHttpBinding_IAsyncTask_RemoveTask_Input_policy" />
+        <wsp:PolicyReference URI="#WSDualHttpBinding_IAsyncTodos_RemoveTask_Input_policy" />
         <soap12:body use="literal" />
       </wsdl:input>
       <wsdl:output>
-        <wsp:PolicyReference URI="#WSDualHttpBinding_IAsyncTask_RemoveTask_output_policy" />
+        <wsp:PolicyReference URI="#WSDualHttpBinding_IAsyncTodos_RemoveTask_output_policy" />
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="UpdateTask">
-      <soap12:operation soapAction="http://tempuri.org/IAsyncTask/UpdateTask" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IAsyncTodos/UpdateTask" style="document" />
       <wsdl:input>
-        <wsp:PolicyReference URI="#WSDualHttpBinding_IAsyncTask_UpdateTask_Input_policy" />
+        <wsp:PolicyReference URI="#WSDualHttpBinding_IAsyncTodos_UpdateTask_Input_policy" />
         <soap12:body use="literal" />
       </wsdl:input>
       <wsdl:output>
-        <wsp:PolicyReference URI="#WSDualHttpBinding_IAsyncTask_UpdateTask_output_policy" />
+        <wsp:PolicyReference URI="#WSDualHttpBinding_IAsyncTodos_UpdateTask_output_policy" />
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="RepeatResult">
-      <soap12:operation soapAction="http://tempuri.org/IAsyncTask/RepeatResult" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IAsyncTodos/RepeatResult" style="document" />
       <wsdl:output>
-        <wsp:PolicyReference URI="#WSDualHttpBinding_IAsyncTask_RepeatResult_output_policy" />
+        <wsp:PolicyReference URI="#WSDualHttpBinding_IAsyncTodos_RepeatResult_output_policy" />
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
-  <wsdl:service name="AsyncTask">
-    <wsdl:port name="WSDualHttpBinding_IAsyncTask" binding="tns:WSDualHttpBinding_IAsyncTask">
+  <wsdl:service name="AsyncTodos">
+    <wsdl:port name="WSDualHttpBinding_IAsyncTodos" binding="tns:WSDualHttpBinding_IAsyncTodos">
       <soap12:address location="http://localhost:10000/AsyncTask/endpoint2" />
       <wsa10:EndpointReference>
         <wsa10:Address>http://localhost:10000/AsyncTask/endpoint2</wsa10:Address>
