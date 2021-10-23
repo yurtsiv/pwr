@@ -1,0 +1,27 @@
+// For zad1
+
+pub fn get_ga_params() -> GAParams {
+  GAParams {
+    epochs: 100000,
+    population_size: 10,
+    selection_alg: SelectionType::TOURNAMENT,
+    tournament_selection_size: 4,
+    mutation_chance: 0.09f32,
+    max_segment_move: 12,
+    crossover_chance: 0.5f32,
+    random_segments_max: 6,
+    split_segment_chance: 0.1f32,
+
+    // rng: rand::thread_rng(),
+    rng: StdRng::seed_from_u64(222) 
+  }
+}
+
+pub fn get_fitness_weights() -> FitnessWeights {
+  FitnessWeights {
+    intersections: 12.0,
+    paths_outside_bounds: 20.0,
+    total_len: 1.0,
+    total_segments: 1.0,
+  }
+}

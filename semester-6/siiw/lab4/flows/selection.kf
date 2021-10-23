@@ -1,0 +1,103 @@
+{
+	"flow_name" : "selection",
+	"steps" : [
+		{
+			"class" : "weka.knowledgeflow.steps.Filter",
+			"properties" : {
+				"filter" : {
+					"type" : "optionHandler",
+					"class" : "weka.filters.unsupervised.attribute.StringToWordVector",
+					"options" : "-R 1 -W 400 -prune-rate -1.0 -C -N 0 -L -stemmer weka.core.stemmers.NullStemmer -stopwords-handler weka.core.stopwords.MultiStopwords -M 1 -tokenizer \"weka.core.tokenizers.WordTokenizer -delimiters \\\" \\@@-@@r\\@@-@@n\\@@-@@t.,;:\\\\\\'\\\\\\\"()?!\\\"\""
+				},
+				"name" : "StringToWordVector"
+			},
+			"connections" : {
+				"dataSet" : [
+					"AttributeSelection"
+				]
+			},
+			"coordinates" : "461,184"
+		},
+		{
+			"class" : "weka.knowledgeflow.steps.Filter",
+			"properties" : {
+				"filter" : {
+					"type" : "optionHandler",
+					"class" : "weka.filters.unsupervised.attribute.ClassAssigner",
+					"options" : "-C 2"
+				},
+				"name" : "ClassAssigner"
+			},
+			"connections" : {
+				"dataSet" : [
+					"StringToWordVector"
+				]
+			},
+			"coordinates" : "311,184"
+		},
+		{
+			"class" : "weka.knowledgeflow.steps.Filter",
+			"properties" : {
+				"filter" : {
+					"type" : "optionHandler",
+					"class" : "weka.filters.supervised.attribute.AttributeSelection",
+					"options" : "-E \"weka.attributeSelection.CfsSubsetEval -P 1 -E 1\" -S \"weka.attributeSelection.BestFirst -D 1 -N 5\""
+				},
+				"name" : "AttributeSelection"
+			},
+			"connections" : {
+				"dataSet" : [
+					"ArffSaver",
+					"TextViewer"
+				]
+			},
+			"coordinates" : "617,186"
+		},
+		{
+			"class" : "weka.knowledgeflow.steps.Loader",
+			"properties" : {
+				"loader" : {
+					"type" : "loader",
+					"class" : "weka.core.converters.ArffLoader",
+					"filePath" : "/home/stepy/Dev/pwr-priv/semester-6/siiw/lab4/flows/attributes_data-NumericToNominal-R2-NumericToNominal-R3-NominalToString-C1.arff",
+					"useRelativePath" : false
+				},
+				"name" : "ArffLoader"
+			},
+			"connections" : {
+				"dataSet" : [
+					"ClassAssigner"
+				]
+			},
+			"coordinates" : "156,183"
+		},
+		{
+			"class" : "weka.knowledgeflow.steps.Saver",
+			"properties" : {
+				"name" : "ArffSaver",
+				"relationNameForFilename" : true,
+				"saver" : {
+					"type" : "saver",
+					"class" : "weka.core.converters.ArffSaver",
+					"filePath" : "",
+					"dir" : "/home/stepy/Dev/pwr-priv/semester-6/siiw/lab4/flows",
+					"prefix" : "selection",
+					"useRelativePath" : false,
+					"options" : "-decimal 6"
+				}
+			},
+			"connections" : {
+			},
+			"coordinates" : "772,185"
+		},
+		{
+			"class" : "weka.knowledgeflow.steps.TextViewer",
+			"properties" : {
+				"name" : "TextViewer"
+			},
+			"connections" : {
+			},
+			"coordinates" : "617,45"
+		}
+	]
+}

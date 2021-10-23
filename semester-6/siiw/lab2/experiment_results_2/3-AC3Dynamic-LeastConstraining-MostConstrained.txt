@@ -1,0 +1,54 @@
+---
+SIZE 2
+METRIC_total_time 0
+METRIC_total_until_first 0
+METRIC_states_checked 16
+METRIC_states_until_first 2
+---
+SIZE 3
+METRIC_total_time 3
+METRIC_total_until_first 0
+METRIC_states_checked 40
+METRIC_states_until_first 3
+---
+SIZE 4
+METRIC_total_time 9
+METRIC_total_until_first 0
+METRIC_states_checked 160
+METRIC_states_until_first 4
+---
+SIZE 6
+METRIC_total_time 87
+METRIC_total_until_first 1
+METRIC_states_checked 1456
+METRIC_states_until_first 6
+---
+SIZE 8
+METRIC_total_time 647
+METRIC_total_until_first 3
+METRIC_states_checked 8176
+METRIC_states_until_first 8
+---
+SIZE 9
+METRIC_total_time 1948
+METRIC_total_until_first 3
+METRIC_states_checked 24520
+METRIC_states_until_first 9
+---
+SIZE 10
+METRIC_total_time 2524
+METRIC_total_until_first 5
+METRIC_states_checked 35968
+METRIC_states_until_first 10
+---
+SIZE 12
+METRIC_total_time 18445
+METRIC_total_until_first 7
+METRIC_states_checked 219856
+METRIC_states_until_first 12
+---
+SIZE 13
+METRIC_total_time 99210
+METRIC_total_until_first 7
+METRIC_states_checked 1000396
+METRIC_states_until_first 13

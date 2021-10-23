@@ -1,0 +1,9 @@
+pub mod run;
+pub mod init;
+pub mod params;
+pub mod mutation;
+pub mod fitness;
+pub mod selection;
+pub mod crossover;
+pub mod random;
+pub mod greedy;
