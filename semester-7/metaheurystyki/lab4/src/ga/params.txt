@@ -1,0 +1,8 @@
+epochs : 5000
+population : 100
+selection : Roulette
+selection_size : 5
+crossover : Ordered
+crossover_chance : 0.7
+mutation : Swap
+muattion_chance : 0.01

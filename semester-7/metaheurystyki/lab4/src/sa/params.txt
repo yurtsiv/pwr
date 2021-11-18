@@ -1,0 +1,4 @@
+iter : 5000
+n_size : 20
+tabu_size : 500
+mutation_type : Inverse
