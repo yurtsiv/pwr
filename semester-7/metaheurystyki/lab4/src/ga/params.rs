@@ -67,12 +67,14 @@ impl GAParams {
       tournament_selection_size: parse_uint_param(lines.next()),
       crossover_type: match parse_str_param(lines.next()).as_str() {
         "Ordered" => CrossoverType::Ordered,
-        _ => CrossoverType::PartiallyMapped
+        "PartiallyMapped" => CrossoverType::PartiallyMapped,
+        _ => panic!("Invalid crossover type")
       },
       crossover_chance: parse_float_param(lines.next()),
       mutation_type: match parse_str_param(lines.next()).as_str() {
         "Swap" => MutationType::Swap,
-        _ => MutationType::Inverse
+        "Inverse" => MutationType::Inverse,
+        _ => panic!("Invalid mutation")
       },
       mutation_chance: parse_float_param(lines.next()),
 

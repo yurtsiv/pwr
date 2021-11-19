@@ -7,11 +7,10 @@ use crate::fitness::*;
 use crate::print::*;
 
 pub fn run_tabu(problem: &Problem, params_str: &String) -> Population {
-  let mut params = TabuParams::new();
+  let mut params = TabuParams::parse(params_str);
   params.print();
 
   let mut curr_ind = gen_random_individual(problem, &mut params.rng);
-  let mut best_ind = None;
   let mut tabu_list = TabuList::new(params.tabu_size);
 
   let mut best_fit = calc_fitness(&curr_ind, problem);
@@ -30,7 +29,6 @@ pub fn run_tabu(problem: &Problem, params_str: &String) -> Population {
 
     if neighbour_fit < best_fit {
       best_fit = neighbour_fit;
-      best_ind = Some(curr_ind.clone());
     } else if neighbour_fit > worst_fit {
       worst_fit = neighbour_fit;
     }
@@ -41,7 +39,6 @@ pub fn run_tabu(problem: &Problem, params_str: &String) -> Population {
   }
 
   print!("\nBest.fit:{}", best_fit);
-  print_individual(&best_ind.unwrap(), problem);
 
   vec![]
 }

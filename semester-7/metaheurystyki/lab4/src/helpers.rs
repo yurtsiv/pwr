@@ -18,10 +18,10 @@ pub fn vec_diff(v1: &Vec<i32>, v2: &Vec<i32>) -> Vec<i32> {
 }
 
 pub fn distance_between(city_1_number: i32, city_2_number: i32, problem: &Problem) -> f32 {
-  *problem
-    .distances
-    .get(city_1_number as usize)
-    .unwrap()
-    .get(city_2_number as usize)
-    .unwrap()
+  unsafe {
+    *problem
+      .distances
+      .get_unchecked(city_1_number as usize)
+      .get_unchecked(city_2_number as usize)
+  }
 }

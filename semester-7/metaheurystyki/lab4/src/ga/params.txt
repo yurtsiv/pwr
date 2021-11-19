@@ -1,8 +1,8 @@
-epochs : 5000
+epochs : 2000
 population : 100
-selection : Roulette
+selection : Tournament
 selection_size : 5
-crossover : Ordered
+crossover : PartiallyMapped
 crossover_chance : 0.7
 mutation : Swap
-muattion_chance : 0.01
+muattion_chance : 0.5

@@ -16,19 +16,6 @@ results_folder = sys.argv[1]
 iter_num = len(results[0][0])
 experiments_num = len(results[0])
 
-average = []
-worst = []
-for iter in range(0, iter_num):
-    best_sum = 0
-    worst_sum = 0
-
-    for experiment in range(0, experiments_num):
-        best_sum += results[experiment][0][iter]
-        worst_sum += results[experiment][2][iter]
-
-    average.append(best_sum / experiments_num)
-    worst.append(worst_sum / experiments_num)
-
 def plot():
     fig, ax = plt.subplots(figsize=(20, 10))
 
@@ -59,12 +46,16 @@ the_best_fit_idx = np.argmin(best_fitnesses)
 
 plot()
 
+average = int(np.average(best_fitnesses))
+worst = int(np.max(best_fitnesses))
+best = int(np.min(best_fitnesses))
+std = int(np.std(best_fitnesses))
+
 with open(results_folder + "/analysis.txt", "w") as f:
     json.dump({
         "params": params,
-        "average": np.average(average),
-        "average_std": np.std(average),
-        "worst_avg": np.average(worst),
-        "the_best": best_fitnesses[the_best_fit_idx],
-        "the_best_idx": str(the_best_fit_idx)
+        "average": average,
+        "std": std,
+        "worst": worst,
+        "best": best,
     }, f, indent=2)

@@ -14,6 +14,9 @@ pub mod greedy;
 pub mod tabu;
 pub mod sa;
 
+use crate::fitness::*;
+use crate::print::*;
+
 fn main() {
     let args: Vec<String> = env::args().collect();
 

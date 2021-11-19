@@ -1,4 +1,5 @@
-iter : 5000
-n_size : 20
-tabu_size : 500
-mutation_type : Inverse
+iter : 10000
+n_size : 60
+start_temp : 200
+mutation : Inverse
+cooling : Linear

@@ -11,19 +11,21 @@ fn ordered(parent1: &mut Individual, parent2: &mut Individual, params: &mut GAPa
 
   let mut child: Individual = Vec::new();
 
-  for i in 0..parent1.len() {
-    if i < start {
-      child.push(
-        *parent2_genome.get(i).unwrap()
-      );
-    } else if i < end {
-      child.push(
-        *parent1_genome.get(i - start).unwrap()
-      );
-    } else {
-      child.push(
-        *parent2_genome.get(i - parent1_genome.len()).unwrap()
-      );
+  unsafe {
+    for i in 0..parent1.len() {
+      if i < start {
+        child.push(
+          *parent2_genome.get_unchecked(i)
+        );
+      } else if i < end {
+        child.push(
+          *parent1_genome.get_unchecked(i - start)
+        );
+      } else {
+        child.push(
+          *parent2_genome.get_unchecked(i - parent1_genome.len())
+        );
+      }
     }
   }
 
@@ -79,6 +81,7 @@ fn partially_mapped(parent1: &mut Individual, parent2: &mut Individual, params: 
 }
 
 pub fn crossover(parent1: &mut Individual, parent2: &mut Individual, params: &mut GAParams) -> Vec<Individual> {
+  // TODO: move this out
   let crossover_alg = match params.crossover_type {
     CrossoverType::Ordered => ordered,
     CrossoverType::PartiallyMapped => partially_mapped

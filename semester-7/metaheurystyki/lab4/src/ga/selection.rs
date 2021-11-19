@@ -4,7 +4,7 @@ use rand::seq::IteratorRandom;
 use crate::types::*;
 use super::params::*;
 
-fn tournament_selection(pop: &Vec<(Individual, f32)>, params: &mut GAParams, _overall_fit: f32) -> usize {
+pub fn tournament_selection(pop: &Vec<(Individual, f32)>, params: &mut GAParams, _overall_fit: f32) -> usize {
   let sample =
     pop
       .iter()
@@ -18,7 +18,7 @@ fn tournament_selection(pop: &Vec<(Individual, f32)>, params: &mut GAParams, _ov
     .0
 }
 
-fn roulette_selection(pop: &Vec<(Individual, f32)>, params: &mut GAParams, overall_fit: f32) -> usize {
+pub fn roulette_selection(pop: &Vec<(Individual, f32)>, params: &mut GAParams, overall_fit: f32) -> usize {
   let spot = params.rng.gen::<f32>();
   let mut count = 0f32;
 
@@ -44,6 +44,7 @@ pub fn select_two_indexes(pop: &Vec<(Individual, f32)>, params: &mut GAParams, o
     return (0usize, 1usize)
   }
 
+  // TODO: move this out
   let selection_alg = match params.selection_type {
     SelectionType::Tournament => tournament_selection,
     SelectionType::Roulette => roulette_selection

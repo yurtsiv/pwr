@@ -44,7 +44,8 @@ impl TabuParams {
       aspiration_type: AspirationType::None,
       mutation_type: match parse_str_param(lines.next()).as_str() {
         "Swap" => MutationType::Swap,
-        _ => MutationType::Inverse
+        "Inverse" => MutationType::Inverse,
+        _ => panic!("Invalid mutation")
       },
 
       rng: rand::thread_rng(),

@@ -44,12 +44,14 @@ impl SAParams {
       start_temp: parse_float_param(lines.next()),
       mutation_type: match parse_str_param(lines.next()).as_str() {
         "Swap" => MutationType::Swap,
-        _ => MutationType::Inverse
+        "Inverse" => MutationType::Inverse,
+        _ => panic!("Invalid mutation")
       },
       cooling_type: match parse_str_param(lines.next()).as_str() {
         "Linear" => CoolingType::Linear,
         "Exponential" => CoolingType::Exponential,
-        _ => CoolingType::InverseExponential
+        "InverseExponential" => CoolingType::InverseExponential,
+        _ => panic!("Invalid cooling")
       },
 
       rng: rand::thread_rng(),
