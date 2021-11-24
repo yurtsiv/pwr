@@ -76,7 +76,7 @@ pub fn run_ga(problem: &Problem, params_str: &String) -> Population {
     // epoch
     print!("\n{}", epoch);
     // avg fitness,best fitness, worst fitness
-    print!("\n{},{},{}", fit_sum / params.population_size as f32, best_epoch_fit, worst_epoch_fit);
+    print!("\n{},{},{}", fit_sum / params.population_size as f32, the_best_fit, worst_epoch_fit);
 
     curr_pop = next_pop;
     fit_sum = curr_pop.iter().map(|x| x.1).sum();

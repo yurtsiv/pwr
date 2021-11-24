@@ -1,7 +1,7 @@
-alg="tabu"
-for exp in "2.1" "2.2" "2.3" "2.4"
+alg="sa"
+for exp in "3.7"
 do
-  for problem in "A-n32-k5" "A-n39-k5" "A-n45-k6" "A-n48-k7" "A-n54-k7" "A-n60-k9"
+  for problem in "A-n39-k5"
   do
     results_dir=results/experiment$exp/$problem
 
@@ -11,5 +11,5 @@ do
     echo "Finished"
   done
 
-  python3 analysis/combine_results.py results/experiment$exp $alg
+  # python3 analysis/combine_results.py results/experiment$exp $alg
 done

@@ -58,6 +58,10 @@ worst = int(np.max(best_fitnesses))
 best = int(np.min(best_fitnesses))
 std = int(np.std(best_fitnesses))
 
+best_at_iter = []
+for iter in range(0, iter_num):
+    best_at_iter.append(results[0][0][iter])
+
 with open(results_folder + "/analysis.txt", "w") as f:
     json.dump({
         "params": params,
@@ -65,4 +69,6 @@ with open(results_folder + "/analysis.txt", "w") as f:
         "std": std,
         "worst": worst,
         "best": best,
+        "best_arr": best_fitnesses,
+        "best_at_iter_first_experiment": best_at_iter
     }, f, indent=2)

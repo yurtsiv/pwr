@@ -3,7 +3,7 @@ use crate::types::*;
 fn distance(p1: Point, p2: Point) -> f32 {
   ((
     (p2.0 - p1.0).pow(2) + (p2.1 - p1.1).pow(2)
-  ) as f32).sqrt()
+  ) as f32).sqrt().round()
 }
 
 pub fn calc_distance_matrix(cities: &Vec<City>, depot: &Point) -> Vec<Vec<f32>> {

@@ -50,6 +50,7 @@ def parse_results(folder_path):
     best_fitnesses = []
 
     for i in range(0, 10):
+        print("parsing file")
         file_path = folder_path + "/log" + str(i) + ".txt"
         with open(file_path) as file:
             if i == 0:

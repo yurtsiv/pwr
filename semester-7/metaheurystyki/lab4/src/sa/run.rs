@@ -47,6 +47,7 @@ pub fn run_sa(problem: &Problem, params_str: &String) -> Population {
 
     temperature = next_temperature(i as f32, &params);
 
+
     print!("\n{}", i);
     // Best fit, current fit, worst,
     print!("\n{},{},{}", best_fit, curr_fit, worst_fit);

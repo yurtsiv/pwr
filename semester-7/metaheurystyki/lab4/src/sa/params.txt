@@ -1,5 +1,5 @@
-iter : 10000
-n_size : 60
-start_temp : 200
+iter : 10000000
+n_size : 1
+start_temp : 5.5
 mutation : Inverse
 cooling : Linear

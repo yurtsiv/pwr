@@ -1,5 +1,5 @@
-exp=2.5
-algorithm="tabu"
+exp=3.7
+algorithm="sa"
 
 if [ -d results/experiment$exp ]
 then
@@ -9,7 +9,7 @@ fi
 
 params_str=$(cat src/$algorithm/params.txt)
 
-for problem in "A-n32-k5" "A-n39-k5" "A-n45-k6" "A-n48-k7" "A-n54-k7" "A-n60-k9"
+for problem in "A-n39-k5" # "A-n32-k5" "A-n39-k5" "A-n45-k6" "A-n48-k7" "A-n54-k7" "A-n60-k9"
 do
   results_dir=results/experiment$exp/$problem
 

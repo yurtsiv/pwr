@@ -12,13 +12,13 @@ results_folder = sys.argv[1]
 
 (params, results, best_fitnesses) = parse_results(results_folder)
 
+epochs_num = len(results[0][0])
+experiments_num = len(results[0])
+
 def plot():
     average = []
     best = []
     worst = []
-
-    epochs_num = len(results[0][0])
-    experiments_num = len(results[0])
 
     for epoch in range(0, epochs_num):
         average_sum = 0
@@ -45,18 +45,26 @@ def plot():
 
     plt.savefig(results_folder + "/analysis.png")
 
+def save_results():
+    average = int(np.average(best_fitnesses))
+    worst = int(np.max(best_fitnesses))
+    best = int(np.min(best_fitnesses))
+    std = int(np.std(best_fitnesses))
+
+    best_at_iter = []
+    for epoch in range(0, epochs_num):
+        best_at_iter.append(results[0][1][epoch])
+
+    with open(results_folder + "/analysis.txt", "w") as f:
+        json.dump({
+            "params": params,
+            "average": average,
+            "std": std,
+            "worst": worst,
+            "best": best,
+            "best_arr": best_fitnesses,
+            "best_at_iter_first_experiment": best_at_iter
+        }, f, indent=2)
+
 plot()
-
-average = int(np.average(best_fitnesses))
-worst = int(np.max(best_fitnesses))
-best = int(np.min(best_fitnesses))
-std = int(np.std(best_fitnesses))
-
-with open(results_folder + "/analysis.txt", "w") as f:
-    json.dump({
-        "params": params,
-        "average": average,
-        "std": std,
-        "worst": worst,
-        "best": best,
-    }, f, indent=2)
+save_results()

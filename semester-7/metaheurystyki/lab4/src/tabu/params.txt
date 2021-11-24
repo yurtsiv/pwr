@@ -1,4 +1,4 @@
-iter : 500000
-n_size : 500
+iter : 1000000
+n_size : 100
 tabu_size : 200
 mutation_type : Inverse
