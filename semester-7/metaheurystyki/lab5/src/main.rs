@@ -13,6 +13,7 @@ pub mod random;
 pub mod greedy;
 pub mod tabu;
 pub mod sa;
+pub mod ga_sa;
 
 use crate::fitness::*;
 use crate::print::*;
@@ -28,7 +29,14 @@ fn main() {
                 // "greedy" => greedy::greedy_simulation(&problem, params),
                 "ga" => ga::run::run_ga(&problem, params),
                 "tabu" => tabu::run::run_tabu(&problem, params),
-                "sa" => sa::run::run_sa(&problem, params),
+                // "sa" => sa::run::run_sa(&problem, params),
+                "ga_sa" =>
+                    ga_sa::run::run_ga_sa(
+                        &problem,
+                        params, // ga sa params
+                        args.get(4).unwrap(), // sa params
+                        args.get(5).unwrap() // ga sa params
+                    ),
                 _ => {
                     panic!("Unknow algorithm.")
                 }

@@ -1,4 +1,4 @@
-iter : 166666
+iter : 1000
 n_size : 60
 start_temp : 50
 mutation : Inverse

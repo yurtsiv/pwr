@@ -1,0 +1,2 @@
+run_sa_each_iter : 2000
+run_sa_for_ind : 15

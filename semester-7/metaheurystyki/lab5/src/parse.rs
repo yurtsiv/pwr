@@ -10,6 +10,10 @@ fn parse_uint(s: Option<&str>) -> u32 {
   s.unwrap().trim().parse().unwrap()
 }
 
+fn parse_usize(s: Option<&str>) -> usize {
+  s.unwrap().trim().parse().unwrap()
+}
+
 fn parse_float(s: Option<&str>) -> f32 {
   s.unwrap().trim().parse().unwrap()
 }
@@ -21,6 +25,12 @@ pub fn parse_int_param(s: Option<&str>) -> i32 {
 }
 
 pub fn parse_uint_param(s: Option<&str>) -> u32 {
+  let mut line = s.unwrap().split(" : ");
+  line.next();
+  parse_uint(line.next())
+}
+
+pub fn parse_usize_param(s: Option<&str>) -> u32 {
   let mut line = s.unwrap().split(" : ");
   line.next();
   parse_uint(line.next())

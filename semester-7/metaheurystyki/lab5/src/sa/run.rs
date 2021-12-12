@@ -8,16 +8,12 @@ use super::neighbours::*;
 use super::params::*;
 use super::cooling::*;
 
-pub fn run_sa(problem: &Problem, params_str: &String) -> Population {
-  let mut params = SAParams::parse(params_str);
-  params.print();
-
-  let mut curr_ind = gen_random_individual(problem, &mut params.rng);
+pub fn run_sa(problem: &Problem, params: &mut SAParams, start_ind: Individual) -> (Individual, f32) {
+  let mut curr_ind = start_ind;
   let mut curr_fit = calc_fitness(&curr_ind, problem);
   let mut best_ind = None;
 
   let mut best_fit = curr_fit;
-  let mut worst_fit = curr_fit;
 
   let mut temperature = params.start_temp;
 
@@ -25,7 +21,7 @@ pub fn run_sa(problem: &Problem, params_str: &String) -> Population {
     let (best_neighbour, neighbour_fit) = get_best_neighbour(
       &curr_ind,
       problem,
-      &mut params
+      params
     );
 
     if neighbour_fit <= curr_fit {
@@ -41,20 +37,8 @@ pub fn run_sa(problem: &Problem, params_str: &String) -> Population {
       curr_fit = neighbour_fit;
     }
 
-    if neighbour_fit > worst_fit {
-      worst_fit = neighbour_fit;
-    }
-
-    temperature = next_temperature(i as f32, &params);
-
-
-    print!("\n{}", i);
-    // Best fit, current fit, worst,
-    print!("\n{},{},{}", best_fit, curr_fit, worst_fit);
+    temperature = next_temperature(i as f32, params);
   }
 
-  print!("\nBest.fit:{}", best_fit);
-  print_individual(&best_ind.unwrap(), problem);
-
-  vec![]
+  (best_ind.unwrap(), best_fit)
 }

@@ -1,4 +1,4 @@
-epochs : 100000
+epochs : 20000
 population : 100
 selection : Tournament
 selection_size : 5
