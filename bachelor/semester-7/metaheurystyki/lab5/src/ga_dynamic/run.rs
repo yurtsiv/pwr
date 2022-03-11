@@ -5,20 +5,17 @@ use crate::mutation::*;
 use crate::fitness::*;
 use crate::ga::crossover::*;
 use crate::types::*;
-use crate::sa;
+use crate::ga::params::*;
 use super::params::*;
+use super::dynamic_func::*;
 
-pub fn run_ga_sa(
-  problem: &Problem,
-  ga_sa_params_str: &String,
-  ga_params_str: &String,
-  sa_params_str: &String,
-) -> Population {
+pub fn run_ga_dynamic(problem: &Problem, params_str: &String, ga_params_str: &String) -> Population {
   let mut the_best_fit = f32::MAX;
   let mut the_best_ind: Option<Individual> = None;
 
-  let mut params = GASAParams::parse(ga_params_str, sa_params_str, ga_sa_params_str);
-  params.print();
+  let mut params = GADynamicParams::parse(ga_params_str, params_str);
+
+  params.ga.print();
 
   let mut curr_pop: Vec<(Individual, f32)> =
     init::gen_init_population(problem, params.ga.population_size, &mut params.ga.rng)
@@ -28,20 +25,18 @@ pub fn run_ga_sa(
 
   let mut fit_sum: f32 = curr_pop.iter().map(|x| x.1).sum();
 
+  let mut overall_fit = 0f32;
+
   for epoch in 0..params.ga.epochs {
+    params.ga.mutation_chance = next_value(epoch as f32, &params);
+
     let mut best_epoch_fit = f32::MAX;
     let mut worst_epoch_fit = 0f32;
-
-    if epoch > 0 && epoch % params.run_sa_each_iter == 0 {
-      for i in 0..params.run_sa_for_ind {
-        curr_pop[i as usize] = sa::run::run_sa(problem, &mut params.sa, curr_pop[i as usize].0.clone());
-      }
-    }
 
     let mut next_pop: Vec<(Individual, f32)> = Vec::new();
 
     while next_pop.len() != (params.ga.population_size as usize) {
-      let (ind1_idx, ind2_idx)  = selection::select_two_indexes(&curr_pop, &mut params.ga, 0f32);
+      let (ind1_idx, ind2_idx)  = selection::select_two_indexes(&curr_pop, &mut params.ga, overall_fit);
 
       let mut ind1 = &mut curr_pop[ind1_idx].0.clone();
 

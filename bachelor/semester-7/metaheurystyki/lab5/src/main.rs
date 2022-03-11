@@ -14,6 +14,7 @@ pub mod greedy;
 pub mod tabu;
 pub mod sa;
 pub mod ga_sa;
+pub mod ga_dynamic;
 
 use crate::fitness::*;
 use crate::print::*;
@@ -34,9 +35,11 @@ fn main() {
                     ga_sa::run::run_ga_sa(
                         &problem,
                         params, // ga sa params
-                        args.get(4).unwrap(), // sa params
-                        args.get(5).unwrap() // ga sa params
+                        args.get(4).unwrap(), // ga params
+                        args.get(5).unwrap() // sa params
                     ),
+                "ga_dynamic" =>
+                    ga_dynamic::run::run_ga_dynamic(&problem, params, args.get(4).unwrap()),
                 _ => {
                     panic!("Unknow algorithm.")
                 }

@@ -40,5 +40,5 @@ pub fn run_sa(problem: &Problem, params: &mut SAParams, start_ind: Individual) -
     temperature = next_temperature(i as f32, params);
   }
 
-  (best_ind.unwrap(), best_fit)
+  (best_ind.unwrap_or(curr_ind), best_fit)
 }

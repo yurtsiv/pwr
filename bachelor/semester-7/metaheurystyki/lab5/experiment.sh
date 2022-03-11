@@ -1,8 +1,8 @@
-exp=1.1
+exp=1.11
 algorithm="ga_sa"
 analysis=$algorithm
 
-if [ "$algorithm" = "ga_sa" ]
+if [ "$algorithm" = "ga_sa" ] || [ "$algorithm" = "ga_dynamic" ]
 then
   analysis="ga"
 fi
@@ -23,7 +23,7 @@ cp src/$algorithm/params.txt results/experiment$exp/params.txt
 cp src/ga/params.txt results/experiment$exp/ga_params.txt
 cp src/sa/params.txt results/experiment$exp/sa_params.txt
 
-for problem in "A-n32-k5" "A-n39-k5" "A-n45-k6" "A-n48-k7" "A-n54-k7" "A-n60-k9"
+for problem in  "A-n32-k5" "A-n39-k5" "A-n45-k6" "A-n48-k7" "A-n54-k7" "A-n60-k9" "A-n80-k10"
 do
   results_dir=results/experiment$exp/$problem
 

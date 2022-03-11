@@ -1,8 +1,8 @@
 epochs : 20000
 population : 100
 selection : Tournament
-selection_size : 5
+selection_size : 12
 crossover : PartiallyMapped
 crossover_chance : 0.8
 mutation : Swap
-muattion_chance : 0.16
+muattion_chance : 0.45
