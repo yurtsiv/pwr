@@ -5,7 +5,13 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+#include "fs.cpp"
+
 using namespace std;
+
+void parse_package(char *buf)
+{
+}
 
 int main()
 {
@@ -33,7 +39,7 @@ int main()
   cout << "Socket binded" << endl;
 
   int bytes_read;
-  char buf[512];
+  char buf[65507];
   struct sockaddr_in client_addr;
   socklen_t slen = sizeof(client_addr);
 
@@ -43,7 +49,8 @@ int main()
     if (bytes_read > 0)
     {
       cout << "Received from address: " << inet_ntoa(client_addr.sin_addr) << endl;
-      cout << buf << endl;
+      int i = *((int*)buf);
+      cout << i << endl;
     }
   } while (bytes_read >= 0);
 

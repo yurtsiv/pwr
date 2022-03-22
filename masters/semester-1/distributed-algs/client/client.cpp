@@ -27,12 +27,13 @@ int main()
   server_addr.sin_addr.s_addr = htons(INADDR_ANY);
   server_addr.sin_port = htons(5001);
 
-  string hello = "hello from client";
+  char hello[65507] = {123, 100};
 
-  int len = sendto(sockfd, (const char *)hello.c_str(), strlen(hello.c_str()), 0,
-                  (const struct sockaddr *)&server_addr, sizeof(server_addr));
+  int len = sendto(sockfd, &hello, sizeof(hello), 0,
+                   (const struct sockaddr *)&server_addr, sizeof(server_addr));
 
-  if (len < 0) {
+  if (len < 0)
+  {
     cout << "Failed to send packet" << endl;
   }
 
