@@ -27,7 +27,7 @@ int main()
   server_addr.sin_addr.s_addr = htons(INADDR_ANY);
   server_addr.sin_port = htons(5001);
 
-  char hello[65507] = {123, 100};
+  char hello[65507] = {(char)12345, char(987)};
 
   int len = sendto(sockfd, &hello, sizeof(hello), 0,
                    (const struct sockaddr *)&server_addr, sizeof(server_addr));
