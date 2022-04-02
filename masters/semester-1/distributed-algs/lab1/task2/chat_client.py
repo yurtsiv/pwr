@@ -18,8 +18,11 @@ def main(stdscr, stub, username):
     USERNAME_COLOR = curses.color_pair(1)
 
     chat_win = curses.newwin(curses.LINES - 2, curses.COLS, 0, 0)
-    msg_input_win = curses.newwin(1, curses.COLS, curses.LINES - 1, 1)
+    msg_input_win = curses.newwin(1, curses.COLS - 2, curses.LINES - 1, 2)
     textbox = Textbox(msg_input_win, insert_mode=True)
+
+    stdscr.addstr(curses.LINES - 1, 0, ">")
+    stdscr.refresh()
 
     lock = threading.Lock()
 
@@ -48,6 +51,10 @@ def main(stdscr, stub, username):
             os._exit(0)
 
         if message != "":
+            with lock:
+                msg_input_win.clear()
+                msg_input_win.refresh()
+
             stub.SendNote(
                 proto.Note(
                     name=username,
@@ -55,13 +62,9 @@ def main(stdscr, stub, username):
                 )
             )
 
-            with lock:
-                msg_input_win.clear()
-                msg_input_win.refresh()
-
 def connect():
-    channel = grpc.insecure_channel('localhost:50051')
-    grpc.channel_ready_future(channel).result(timeout=15)
+    channel = grpc.insecure_channel('localhost:6000')
+    grpc.channel_ready_future(channel).result(timeout=10)
     stub = pb2_grpc.ChatServerStub(channel)
     return stub
 

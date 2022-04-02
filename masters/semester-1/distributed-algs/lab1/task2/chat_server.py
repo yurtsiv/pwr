@@ -9,7 +9,7 @@ from concurrent import futures
 class ChatServicer(pb2_grpc.ChatServerServicer):
     def __init__(self):
         self.messages = [
-            proto.Note(name="server", message="server")
+            proto.Note(name="(system)", message="Welcome!")
         ]
 
     def ChatStream(self, request, context):
@@ -30,7 +30,7 @@ class ChatServicer(pb2_grpc.ChatServerServicer):
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     pb2_grpc.add_ChatServerServicer_to_server(ChatServicer(), server)
-    port = 50051
+    port = 6000
     server.add_insecure_port(f'[::]:{port}')
     server.start()
     print(f"Server started on port {port}. Press Ctrl+C to stop")
