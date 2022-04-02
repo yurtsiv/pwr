@@ -18,7 +18,7 @@ def main(stdscr, stub, username):
     stdscr.clear()
     USERNAME_COLOR = curses.color_pair(1)
 
-    chat_win = curses.newwin(curses.LINES - 2, curses.COLS, 0, 0)
+    chat_pad = curses.newpad(10000, curses.COLS)
     msg_input_win = curses.newwin(1, curses.COLS - 2, curses.LINES - 1, 2)
     textbox = Textbox(msg_input_win, insert_mode=True)
 
@@ -28,13 +28,14 @@ def main(stdscr, stub, username):
     lock = threading.Lock()
 
     def redraw_messages(messages):
-        chat_win.clear()
+        chat_pad.clear()
 
         for m in messages:
-            chat_win.addstr("\n" + m.name, USERNAME_COLOR)
-            chat_win.addstr(": " + m.message)
+            chat_pad.addstr("\n" + m.name, USERNAME_COLOR)
+            chat_pad.addstr(": " + m.message)
 
-        chat_win.refresh()
+        p_lines, _ = chat_pad.getyx()
+        chat_pad.refresh(p_lines - curses.LINES + 2, 0, 0, 0, curses.LINES - 2, curses.COLS)
 
     def receive_messages():
         messages = []
@@ -63,13 +64,11 @@ def main(stdscr, stub, username):
                 )
             )
 
-
 def connect():
     channel = grpc.insecure_channel('localhost:6000')
     grpc.channel_ready_future(channel).result(timeout=10)
     stub = pb2_grpc.ChatServerStub(channel)
     return stub
-
 
 try:
     print("Connecting to the server...")
