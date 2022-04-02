@@ -1,14 +1,15 @@
 import sys
 sys.path.append("proto")
 
-import os
-import threading
-import curses
-from curses.textpad import Textbox
-from curses import wrapper
-import grpc
-import proto.chat_pb2_grpc as pb2_grpc
 import proto.chat_pb2 as proto
+import proto.chat_pb2_grpc as pb2_grpc
+import grpc
+from curses import wrapper
+from curses.textpad import Textbox
+import curses
+import threading
+import os
+
 
 def main(stdscr, stub, username):
     curses.noecho()
@@ -62,17 +63,21 @@ def main(stdscr, stub, username):
                 )
             )
 
+
 def connect():
     channel = grpc.insecure_channel('localhost:6000')
     grpc.channel_ready_future(channel).result(timeout=10)
     stub = pb2_grpc.ChatServerStub(channel)
     return stub
 
+
 try:
     print("Connecting to the server...")
     stub = connect()
-    print("Username: ", end="")
-    username = input()
-    wrapper(main, stub, username)
 except Exception as e:
     print("Failed to connect")
+    sys.exit()
+else:
+    print("Username: ", end="")
+    username = input()
+    wrapper(main, stub, "username")
