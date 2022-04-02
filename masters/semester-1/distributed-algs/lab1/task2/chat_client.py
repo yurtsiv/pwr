@@ -1,76 +1,75 @@
-from email import message
 import sys
-from tkinter import CURRENT
-from typing import Text
-
-from matplotlib.pyplot import text
 sys.path.append("proto")
 
+import os
 import threading
 import curses
-from curses.textpad import Textbox, rectangle
+from curses.textpad import Textbox
 from curses import wrapper
 import grpc
 import proto.chat_pb2_grpc as pb2_grpc
 import proto.chat_pb2 as proto
 
-
-def connect():
-    channel = grpc.insecure_channel('localhost:50051')
-    stub = pb2_grpc.ChatServerStub(channel)
-    return stub
-
-def main(stdscr):
-    stdscr.clear()
+def main(stdscr, stub, username):
+    curses.noecho()
     curses.init_pair(1, curses.COLOR_BLUE, curses.COLOR_BLACK)
-    USERNAME_COLOR = curses.color_pair(1)
     stdscr.nodelay(True)
-
-    stdscr.addstr("Connecting to the server...")
-    stub = connect()
     stdscr.clear()
-    stdscr.refresh()
+    USERNAME_COLOR = curses.color_pair(1)
 
-    chat_pad = curses.newwin(curses.LINES - 2, curses.COLS, 0, 0)
-    msg_input_win = curses.newwin(1, curses.COLS, curses.LINES - 1, 0)
-    textbox = Textbox(msg_input_win)
+    chat_win = curses.newwin(curses.LINES - 2, curses.COLS, 0, 0)
+    msg_input_win = curses.newwin(1, curses.COLS, curses.LINES - 1, 1)
+    textbox = Textbox(msg_input_win, insert_mode=True)
 
-    def redraw(messages):
-        chat_pad.clear()
-        chat_pad.refresh()
+    lock = threading.Lock()
+
+    def redraw_messages(messages):
+        chat_win.clear()
 
         for m in messages:
-            chat_pad.addstr("\n" + m.name, USERNAME_COLOR)
-            chat_pad.addstr(": " + m.message)
+            chat_win.addstr("\n" + m.name, USERNAME_COLOR)
+            chat_win.addstr(": " + m.message)
 
-        # chat_pad.refresh(0, 0, 0, 0, curses.LINES - 2, curses.COLS)
-        chat_pad.refresh()
+        chat_win.refresh()
 
     def receive_messages():
         messages = []
         for message in stub.ChatStream(proto.Empty()):
             messages.append(message)
-            redraw(messages)
+            with lock:
+                redraw_messages(messages)
 
-    def listen_textbox():
-        while True:
-            textbox.edit()
-            text = textbox.gather()
+    threading.Thread(target=receive_messages).start()
+
+    while True:
+        textbox.edit()
+        message = str(textbox.gather()).strip()
+        if message == "!quit":
+            os._exit(0)
+
+        if message != "":
             stub.SendNote(
                 proto.Note(
-                    name="Test",
-                    message=text
+                    name=username,
+                    message=message
                 )
             )
-            msg_input_win.clear()
-            msg_input_win.refresh()
 
-    redraw([])
-    r = threading.Thread(target=receive_messages)
-    l = threading.Thread(target=listen_textbox)
-    r.start()
-    l.start()
-    l.join()
-    r.join()
+            with lock:
+                msg_input_win.clear()
+                msg_input_win.refresh()
 
-wrapper(main)
+def connect():
+    channel = grpc.insecure_channel('localhost:50051')
+    grpc.channel_ready_future(channel).result(timeout=15)
+    stub = pb2_grpc.ChatServerStub(channel)
+    return stub
+
+try:
+    print("Connecting to the server...")
+    stub = connect()
+    print("Username: ", end="")
+    username = input()
+    wrapper(main, stub, username)
+except Exception as e:
+    print("Failed to connect")
