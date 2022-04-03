@@ -5,16 +5,13 @@ import socket
 import sys
 
 from httpcore import request
+from numpy import isin
 from serialization import *
 
 TOKEN = 1000
 sock = None
-port = int(sys.argv[1])
+port = 3000  # int(sys.argv[1])
 server = '0.0.0.0'
-
-
-def packet_type_prefix(type):
-    return type.split('_')[0]
 
 
 def connect():
@@ -22,13 +19,19 @@ def connect():
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 
+response_decode_handlers = {
+    PACKETS["open_response"]: decode_open_response,
+    PACKETS["read_response"]: decode_read_response,
+    PACKETS["write_response"]: decode_write_response
+}
+
+
 def decode_response(packet_type, body):
-    if packet_type == PACKETS["open_response"]:
-        return decode_open_response(body)
-    elif packet_type == PACKETS["read_response"]:
-        return decode_read_response(body)
+    handler = response_decode_handlers.get(packet_type)
+    if handler:
+        return handler(body)
     else:
-        raise ArgumentError("Invalid packet received")
+        raise Exception(f"No decode handler for {PACKETS_INV[packet_type]}")
 
 
 def do_request(packet_type, request_body):
@@ -43,18 +46,18 @@ def do_request(packet_type, request_body):
     sock.sendto(packet, (server, port))
 
     signal.signal(signal.SIGALRM, no_answer)
-    signal.alarm(5)
+    signal.alarm(20)
 
     while True:
         buffer, _ = sock.recvfrom(port)
-        response_packet_type, response_packet_id, rest = decode_response_header(
+        response_packet_type, response_packet_id, body = decode_response_header(
             buffer)
 
         if response_packet_id == packet_id:
             if response_packet_type == PACKETS["unauthorized_response"]:
                 raise AuthenticationError("Invalid authorization token")
 
-            return decode_response(response_packet_type, rest)
+            return decode_response(response_packet_type, body)
 
 
 def request(packet_type, request_body):
@@ -76,7 +79,7 @@ def open(file_path, flags):
         encode_open_request(file_path, flags)
     )
 
-    if response is IOError:
+    if isinstance(response, Exception):
         raise response
 
     return File(response)
@@ -91,7 +94,14 @@ class File:
                            encode_read_request(self.file_id)
                            )
 
-        if response is IOError:
+        if isinstance(response, Exception):
             raise response
 
         return response
+
+    def write(self, data):
+        response = request(
+            "write_request", encode_write_request(self.file_id, data))
+
+        if isinstance(response, Exception):
+            raise response

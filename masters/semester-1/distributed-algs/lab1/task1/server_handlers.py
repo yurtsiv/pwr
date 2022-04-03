@@ -16,3 +16,10 @@ def read_file(file_id):
         return file.read()
     else:
         raise IOError("File not opened")
+
+def write_file(file_id, data):
+    if opened_files.get(file_id):
+        file = opened_files[file_id]
+        file.write(data)
+    else:
+        raise IOError("File not opened")
