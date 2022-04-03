@@ -10,6 +10,13 @@ import curses
 import threading
 import os
 
+port = 0
+try:
+    port = int(sys.argv[1])
+except Exception:
+    print("Please, pass a port number")
+    sys.exit()
+
 
 def main(stdscr, stub, username):
     curses.noecho()

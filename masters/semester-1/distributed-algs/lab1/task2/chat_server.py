@@ -6,6 +6,13 @@ import proto.chat_pb2_grpc as pb2_grpc
 import grpc
 from concurrent import futures
 
+port = 0
+try:
+    port = int(sys.argv[1])
+except Exception:
+    print("Please, pass a port number")
+    sys.exit()
+
 class ChatServicer(pb2_grpc.ChatServerServicer):
     def __init__(self):
         self.messages = [
@@ -30,7 +37,6 @@ class ChatServicer(pb2_grpc.ChatServerServicer):
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     pb2_grpc.add_ChatServerServicer_to_server(ChatServicer(), server)
-    port = 6000
     server.add_insecure_port(f'[::]:{port}')
     server.start()
     print(f"Server started on port {port}. Press Ctrl+C to stop")
