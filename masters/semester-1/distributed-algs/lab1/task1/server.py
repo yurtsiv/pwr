@@ -1,13 +1,15 @@
 import socket
+import sys
 from serialization import *
 import server_handlers as handlers
 
-port = 3000
+port = int(sys.argv[1])
+secret_num = int(sys.argv[2])
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind(('0.0.0.0', port))
 
-SERVER_SECRET = 1000
+print("Server is running")
 
 while True:
     buffer, addr = sock.recvfrom(PACKET_SIZE)
@@ -23,7 +25,7 @@ while True:
 
         sock.sendto(response_header + response_body, addr)
 
-    if secret != SERVER_SECRET:
+    if secret != secret_num:
         sock.sendto(
             encode_response_header(
                 PACKETS["unauthorized_response"], packet_id),

@@ -2,17 +2,24 @@ from multiprocessing import AuthenticationError
 import random
 import signal
 import socket
-import sys
 
 from httpcore import request
-from numpy import isin
-from pexpect import ExceptionPexpect
 from serialization import *
 
-TOKEN = 1000
+secret_num = None
+server_addr = None
+server_port = None
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-port = 3000  # int(sys.argv[1])
-server = '0.0.0.0'
+
+def connect(addr, port, secret):
+    global server_addr
+    global secret_num
+    global server_port
+
+    server_addr = addr
+    server_port = port
+    secret_num = secret
+
 
 response_decode_handlers = {
     PACKETS["open_response"]: decode_open_response,
@@ -40,21 +47,21 @@ def do_request(packet_type, request_body):
         raise TimeoutError("Connection timed out")
 
     packet_id = random.randint(1, 1000)
-    header = encode_request_header(TOKEN, PACKETS[packet_type], packet_id)
+    header = encode_request_header(secret_num, PACKETS[packet_type], packet_id)
     packet = header + request_body
-    sock.sendto(packet, (server, port))
+    sock.sendto(packet, (server_addr, server_port))
 
     signal.signal(signal.SIGALRM, no_answer)
     signal.alarm(20)
 
     while True:
-        buffer, _ = sock.recvfrom(port)
+        buffer, _ = sock.recvfrom(server_port)
         response_packet_type, response_packet_id, body = decode_response_header(
             buffer)
 
         if response_packet_id == packet_id:
             if response_packet_type == PACKETS["unauthorized_response"]:
-                raise AuthenticationError("Invalid authorization token")
+                raise AuthenticationError("Invalid auth token")
 
             return decode_response(response_packet_type, body)
 

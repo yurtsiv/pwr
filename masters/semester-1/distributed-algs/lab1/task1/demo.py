@@ -1,25 +1,49 @@
-import os
+import sys
 import file
 
-f1 = file.open("test.txt", "w+")
-f1.write("Some text")
-f1.seek(0)
-print(f1.read())
-f1.write(" Some new text")
-f1.seek(10)
-print(f1.read(5))
-file.chmod("test.txt", 666)
-file.rename("test.txt", "test2.txt")
+file.connect(
+    sys.argv[1],
+    int(sys.argv[2]),
+    int(sys.argv[3])
+)
 
 try:
-    file.open("test.txt", "w+")
+    file.unlink("test2.txt")
+except:
+    pass
+
+f1 = file.open("test.txt", "w+")
+f1.write("Initial text")
+f1.seek(0)
+print(f1.read())
+
+f1.write(" Next text")
+f1.seek(13)
+print(f1.read(5))
+
+file.chmod("test.txt", 777)
+
+file.rename("test.txt", "test2.txt")
+f1.seek(0)
+# still works after renaming
+print(f1.read())
+
+file.unlink("test2.txt")
+
+try:
+    # can't open unexisting file
+    file.open("unexisting.txt", "r")
 except Exception as e:
     print(e)
 
-f2 = file.open("test3.txt", "w+")
-f2.write("File to delete")
-file.unlink("test3.txt")
 try:
-    f2.read()
+    # renaming unexisting file
+    file.rename("renmae.txt", "test.txt")
+except Exception as e:
+    print(e)
+
+try:
+    # chmod-ing unexisting file
+    file.chmod("chmod.txt", 666)
 except Exception as e:
     print(e)

@@ -1,7 +1,6 @@
 from argparse import ArgumentError
-import chunk
 
-PACKET_SIZE = 4096
+PACKET_SIZE = 8192
 
 PACKETS = {
     "open_request": 1,
@@ -88,7 +87,7 @@ def encode_open_response(error, file_id):
     if error:
         return f"Error: {error}".encode('utf-8')
 
-    return file_id.encode('utf-8')
+    return str(file_id).encode('utf-8')
 
 
 def decode_open_response(str):
@@ -106,7 +105,7 @@ def encode_read_request(file_id, size):
 
 def decode_read_request(str):
     chunks = str.split('\\')
-    return chunks[0], int(chunks[1])
+    return int(chunks[0]), int(chunks[1])
 
 
 def encode_read_response(error, file_data):
@@ -131,7 +130,7 @@ def encode_write_request(file_id, data):
 
 def decode_write_request(str):
     chunks = str.split('\\')
-    return chunks[0], '\\'.join(chunks[1:])
+    return int(chunks[0]), '\\'.join(chunks[1:])
 
 
 def encode_write_response(error):
@@ -154,7 +153,7 @@ def encode_lseek_request(file_id, pos, how):
 
 def decode_lseek_request(str):
     chunks = str.split('\\')
-    return chunks[0], int(chunks[1]), int(chunks[2])
+    return int(chunks[0]), int(chunks[1]), int(chunks[2])
 
 
 encode_lseek_response = encode_basic_response
