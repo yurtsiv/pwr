@@ -6,6 +6,7 @@ import sys
 
 from httpcore import request
 from numpy import isin
+from pexpect import ExceptionPexpect
 from serialization import *
 
 TOKEN = 1000
@@ -23,7 +24,8 @@ response_decode_handlers = {
     PACKETS["open_response"]: decode_open_response,
     PACKETS["read_response"]: decode_read_response,
     PACKETS["write_response"]: decode_write_response,
-    PACKETS["lseek_response"]: decode_lseek_response
+    PACKETS["lseek_response"]: decode_lseek_response,
+    PACKETS["chmod_response"]: decode_chmod_response
 }
 
 
@@ -84,6 +86,16 @@ def open(file_path, flags):
         raise response
 
     return File(response)
+
+
+def chmod(file_path, mod):
+    if sock is None:
+        connect()
+
+    response = request("chmod_request", encode_chmod_request(file_path, mod))
+
+    if isinstance(response, Exception):
+        raise response
 
 
 class File:

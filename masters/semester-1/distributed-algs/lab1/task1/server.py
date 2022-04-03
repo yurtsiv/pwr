@@ -68,3 +68,12 @@ while True:
         except Exception as e:
             print("LSEEK", e)
             respond(encode_lseek_response(str(e)))
+    elif packet_type == PACKETS["chmod_request"]:
+        file_path, mod = decode_chmod_request(body)
+
+        try:
+            handlers.chmod(file_path, mod)
+            respond(encode_chmod_response(None))
+        except Exception as e:
+            print("CHMOD", e)
+            respond(encode_chmod_response(str(e)))

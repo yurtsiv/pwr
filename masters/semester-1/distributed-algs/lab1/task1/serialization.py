@@ -19,13 +19,28 @@ PACKETS = {
     "rename_response": 13,
     "unauthorized_response": 14,
     "lseek_request": 15,
-    "lseek_response": 16
+    "lseek_response": 16,
+    "chmod_request": 17,
+    "chmod_response": 18
 }
 
 PACKETS_INV = dict((v, k) for k, v in PACKETS.items())
 
+
 def packet_type_prefix(type):
     return type.split('_')[0]
+
+
+def encode_no_body_response(error):
+    if error:
+        return f"Error: {error}".encode('utf-8')
+
+    return "Success".encode('utf-8')
+
+
+def decode_no_body_response(str):
+    if str.startswith("Error"):
+        return IOError(str)
 
 # HEADERS
 
@@ -113,11 +128,13 @@ def decode_write_request(str):
     chunks = str.split('\\')
     return chunks[0], '\\'.join(chunks[1:])
 
+
 def encode_write_response(error):
     if error:
         return f"Error: {error}".encode('utf-8')
 
     return "Success".encode('utf-8')
+
 
 def decode_write_response(str):
     if str.startswith("Error"):
@@ -129,16 +146,24 @@ def decode_write_response(str):
 def encode_lseek_request(file_id, pos, how):
     return f"{file_id}\\{str(pos)}\\{str(how)}".encode('utf-8')
 
+
 def decode_lseek_request(str):
     chunks = str.split('\\')
     return chunks[0], int(chunks[1]), int(chunks[2])
 
-def encode_lseek_response(error):
-    if error:
-        return f"Error: {error}".encode('utf-8')
+encode_lseek_response = encode_no_body_response
+decode_lseek_response = decode_no_body_response
 
-    return "Success".encode('utf-8')
+# CHMOD
 
-def decode_lseek_response(str):
-    if str.startswith("Error"):
-        return IOError("lseek failed. " + str)
+
+def encode_chmod_request(file_path, mod):
+    return f"{file_path}\\{str(mod)}".encode('utf-8')
+
+
+def decode_chmod_request(str):
+    chunks = str.split('\\')
+    return chunks[0], int(chunks[1])
+
+encode_chmod_response = encode_no_body_response
+decode_chmod_response = decode_no_body_response
