@@ -86,3 +86,12 @@ while True:
         except Exception as e:
             print("UNLINK", e)
             respond(encode_unlink_response(str(e)))
+    elif packet_type == PACKETS["rename_request"]:
+        old_path, new_path = decode_rename_request(body)
+
+        try:
+            handlers.rename(old_path, new_path)
+            respond(encode_rename_response(None))
+        except Exception as e:
+            print("RENAME", e)
+            respond(encode_rename_response(str(e)))

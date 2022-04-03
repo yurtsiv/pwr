@@ -45,3 +45,6 @@ def chmod(file_path, mod):
 
 def unlink(file_path):
     os.unlink(file_path)
+
+def rename(old_path, new_path):
+    os.rename(old_path, new_path)

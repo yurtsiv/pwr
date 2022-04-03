@@ -20,7 +20,8 @@ response_decode_handlers = {
     PACKETS["write_response"]: decode_write_response,
     PACKETS["lseek_response"]: decode_lseek_response,
     PACKETS["chmod_response"]: decode_chmod_response,
-    PACKETS["unlink_response"]: decode_unlink_response
+    PACKETS["unlink_response"]: decode_unlink_response,
+    PACKETS["rename_response"]: decode_rename_response
 }
 
 
@@ -92,6 +93,15 @@ def unlink(file_path):
 
     if isinstance(response, Exception):
         raise response
+
+
+def rename(old_path, new_path):
+    response = request(
+        "rename_request", encode_rename_request(old_path, new_path))
+
+    if isinstance(response, Exception):
+        raise response
+
 
 class File:
     def __init__(self, file_id):
