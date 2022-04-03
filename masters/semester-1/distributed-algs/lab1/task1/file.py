@@ -10,22 +10,17 @@ from pexpect import ExceptionPexpect
 from serialization import *
 
 TOKEN = 1000
-sock = None
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 port = 3000  # int(sys.argv[1])
 server = '0.0.0.0'
-
-
-def connect():
-    global sock
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
 
 response_decode_handlers = {
     PACKETS["open_response"]: decode_open_response,
     PACKETS["read_response"]: decode_read_response,
     PACKETS["write_response"]: decode_write_response,
     PACKETS["lseek_response"]: decode_lseek_response,
-    PACKETS["chmod_response"]: decode_chmod_response
+    PACKETS["chmod_response"]: decode_chmod_response,
+    PACKETS["unlink_response"]: decode_unlink_response
 }
 
 
@@ -74,9 +69,6 @@ def request(packet_type, request_body):
 
 
 def open(file_path, flags):
-    if sock is None:
-        connect()
-
     response = request(
         "open_request",
         encode_open_request(file_path, flags)
@@ -89,14 +81,17 @@ def open(file_path, flags):
 
 
 def chmod(file_path, mod):
-    if sock is None:
-        connect()
-
     response = request("chmod_request", encode_chmod_request(file_path, mod))
 
     if isinstance(response, Exception):
         raise response
 
+
+def unlink(file_path):
+    response = request("unlink_request", encode_unlink_request(file_path))
+
+    if isinstance(response, Exception):
+        raise response
 
 class File:
     def __init__(self, file_id):

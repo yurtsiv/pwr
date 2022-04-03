@@ -21,7 +21,9 @@ PACKETS = {
     "lseek_request": 15,
     "lseek_response": 16,
     "chmod_request": 17,
-    "chmod_response": 18
+    "chmod_response": 18,
+    "unlink_request": 19,
+    "unlink_response": 20
 }
 
 PACKETS_INV = dict((v, k) for k, v in PACKETS.items())
@@ -167,3 +169,14 @@ def decode_chmod_request(str):
 
 encode_chmod_response = encode_no_body_response
 decode_chmod_response = decode_no_body_response
+
+# UNLINK
+
+def encode_unlink_request(file_path):
+    return file_path.encode('utf-8')
+
+def decode_unlink_request(str):
+    return str
+
+encode_unlink_response = encode_no_body_response
+decode_unlink_response = decode_no_body_response

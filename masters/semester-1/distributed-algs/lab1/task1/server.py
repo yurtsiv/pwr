@@ -63,7 +63,7 @@ while True:
         file_id, pos, how = decode_lseek_request(body)
 
         try:
-            handlers.lseek_file(file_id, pos, how)
+            handlers.lseek(file_id, pos, how)
             respond(encode_lseek_response(None))
         except Exception as e:
             print("LSEEK", e)
@@ -77,3 +77,12 @@ while True:
         except Exception as e:
             print("CHMOD", e)
             respond(encode_chmod_response(str(e)))
+    elif packet_type == PACKETS["unlink_request"]:
+        file_path = decode_unlink_request(body)
+
+        try:
+            handlers.unlink(file_path)
+            respond(encode_unlink_response(None))
+        except Exception as e:
+            print("UNLINK", e)
+            respond(encode_unlink_response(str(e)))

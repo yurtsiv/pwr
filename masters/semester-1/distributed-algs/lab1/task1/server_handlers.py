@@ -31,7 +31,7 @@ def write_file(file_id, data):
         raise IOError("File not opened")
 
 
-def lseek_file(file_id, pos, how):
+def lseek(file_id, pos, how):
     if opened_files.get(file_id):
         file = opened_files[file_id]
         os.lseek(file.fileno(), pos, how)
@@ -41,3 +41,7 @@ def lseek_file(file_id, pos, how):
 
 def chmod(file_path, mod):
     os.chmod(file_path, mod)
+
+
+def unlink(file_path):
+    os.unlink(file_path)
