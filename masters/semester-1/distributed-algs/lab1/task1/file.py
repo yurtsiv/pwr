@@ -22,7 +22,8 @@ def connect():
 response_decode_handlers = {
     PACKETS["open_response"]: decode_open_response,
     PACKETS["read_response"]: decode_read_response,
-    PACKETS["write_response"]: decode_write_response
+    PACKETS["write_response"]: decode_write_response,
+    PACKETS["lseek_response"]: decode_lseek_response
 }
 
 
@@ -102,6 +103,13 @@ class File:
     def write(self, data):
         response = request(
             "write_request", encode_write_request(self.file_id, data))
+
+        if isinstance(response, Exception):
+            raise response
+
+    def lseek(self, pos, how):
+        response = request(
+            "lseek_request", encode_lseek_request(self.file_id, pos, how))
 
         if isinstance(response, Exception):
             raise response

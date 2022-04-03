@@ -1,3 +1,6 @@
+import os
+
+
 opened_files = {}
 
 def open_file(file_path, flags):
@@ -21,5 +24,12 @@ def write_file(file_id, data):
     if opened_files.get(file_id):
         file = opened_files[file_id]
         file.write(data)
+    else:
+        raise IOError("File not opened")
+
+def lseek_file(file_id, pos, how):
+    if opened_files.get(file_id):
+        file = opened_files[file_id]
+        os.lseek(file.fileno(), pos, how)
     else:
         raise IOError("File not opened")

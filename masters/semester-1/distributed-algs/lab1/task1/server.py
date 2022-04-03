@@ -59,3 +59,12 @@ while True:
         except Exception as e:
             print("WRITE", e)
             respond(encode_write_response(str(e)))
+    elif packet_type == PACKETS["lseek_request"]:
+        file_id, pos, how = decode_lseek_request(body)
+
+        try:
+            handlers.lseek_file(file_id, pos, how)
+            respond(encode_lseek_response(None))
+        except Exception as e:
+            print("LSEEK", e)
+            respond(encode_lseek_response(str(e)))

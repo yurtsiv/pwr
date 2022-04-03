@@ -17,7 +17,9 @@ PACKETS = {
     "unlink_response": 11,
     "rename_request": 12,
     "rename_response": 13,
-    "unauthorized_response": 14
+    "unauthorized_response": 14,
+    "lseek_request": 15,
+    "lseek_response": 16
 }
 
 PACKETS_INV = dict((v, k) for k, v in PACKETS.items())
@@ -120,3 +122,23 @@ def encode_write_response(error):
 def decode_write_response(str):
     if str.startswith("Error"):
         return IOError("Failed to write to file. " + str)
+
+# LSEEK
+
+
+def encode_lseek_request(file_id, pos, how):
+    return f"{file_id}\\{str(pos)}\\{str(how)}".encode('utf-8')
+
+def decode_lseek_request(str):
+    chunks = str.split('\\')
+    return chunks[0], int(chunks[1]), int(chunks[2])
+
+def encode_lseek_response(error):
+    if error:
+        return f"Error: {error}".encode('utf-8')
+
+    return "Success".encode('utf-8')
+
+def decode_lseek_response(str):
+    if str.startswith("Error"):
+        return IOError("lseek failed. " + str)
