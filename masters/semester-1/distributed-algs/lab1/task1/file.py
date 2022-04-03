@@ -124,7 +124,7 @@ class File:
         if isinstance(response, Exception):
             raise response
 
-    def lseek(self, pos, how):
+    def seek(self, pos, how = 0):
         response = request(
             "lseek_request", encode_lseek_request(self.file_id, pos, how))
 

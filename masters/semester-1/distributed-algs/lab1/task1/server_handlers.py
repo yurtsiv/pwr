@@ -34,7 +34,7 @@ def write_file(file_id, data):
 def lseek(file_id, pos, how):
     if opened_files.get(file_id):
         file = opened_files[file_id]
-        os.lseek(file.fileno(), pos, how)
+        file.seek(pos, how)
     else:
         raise IOError("File not opened")
 

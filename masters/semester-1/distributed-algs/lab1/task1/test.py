@@ -1,10 +1,10 @@
+import os
 import file
 
-# f = file.open("test.txt", "a+")
-# f.lseek(0, 0)
-# f.write("new text")
-# print(f.read())
-# file.chmod("test.txt", 666)
-# file.unlink("test.txt")
-
-file.rename("test2.txt", "../test2.txt")
+f = file.open("test.txt", "w+")
+f.write("Some text")
+f.seek(0)
+print(f.read())
+f.write("Some new text")
+f.seek(5)
+print(f.read())
