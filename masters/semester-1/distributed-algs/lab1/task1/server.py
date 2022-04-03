@@ -41,10 +41,10 @@ while True:
                 encode_open_response(str(e), None)
             )
     elif packet_type == PACKETS["read_request"]:
-        file_id = decode_read_request(body)
+        file_id, size = decode_read_request(body)
 
         try:
-            data = handlers.read_file(file_id)
+            data = handlers.read_file(file_id, size)
             print("READING", data)
             respond(encode_read_response(None, data))
         except Exception as e:

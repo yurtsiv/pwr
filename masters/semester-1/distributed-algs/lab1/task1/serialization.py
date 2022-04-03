@@ -100,12 +100,13 @@ def decode_open_response(str):
 # READ
 
 
-def encode_read_request(file_id):
-    return f"{file_id}".encode('utf-8')
+def encode_read_request(file_id, size):
+    return f"{file_id}\\{size}".encode('utf-8')
 
 
 def decode_read_request(str):
-    return str
+    chunks = str.split('\\')
+    return chunks[0], int(chunks[1])
 
 
 def encode_read_response(error, file_data):

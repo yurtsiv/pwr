@@ -107,9 +107,9 @@ class File:
     def __init__(self, file_id):
         self.file_id = file_id
 
-    def read(self):
+    def read(self, size=-1):
         response = request("read_request",
-                           encode_read_request(self.file_id)
+                           encode_read_request(self.file_id, size)
                            )
 
         if isinstance(response, Exception):
@@ -124,7 +124,7 @@ class File:
         if isinstance(response, Exception):
             raise response
 
-    def seek(self, pos, how = 0):
+    def seek(self, pos, how=0):
         response = request(
             "lseek_request", encode_lseek_request(self.file_id, pos, how))
 

@@ -15,10 +15,10 @@ def open_file(file_path, flags):
         return file_path
 
 
-def read_file(file_id):
+def read_file(file_id, size):
     if opened_files.get(file_id):
         file = opened_files[file_id]
-        return file.read()
+        return file.read(size)
     else:
         raise IOError("File not opened")
 
