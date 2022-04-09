@@ -8,16 +8,17 @@ var x{ i in 1..n } >= 0;
 
 minimize obj: sum{i in 1..n} c[i] * x[i];
 
-subject to s{i in 1..n}: sum{j in 1..n} A[i, j] * x[i] = b[i];
+subject to s{i in 1..n}: sum{j in 1..n} A[i, j] * x[j] = b[i];
 
 solve;
 
-param error := sqrt(sum{i in 1..n} (1 - x[i]) ** 2) / sqrt(n);
+param error := sqrt(sum{i in 1..n} (x[i] - 1) ** 2) / sqrt(1);
 
+display x;
 display error;
 
 data;
 
-param n := 10000;
+param n := 8;
 
 end;
