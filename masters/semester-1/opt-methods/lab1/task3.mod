@@ -1,3 +1,6 @@
+# Stepan Yurtsiv 246437
+# Lista 1, zad. 3
+
 var material_1 >= 2000, <= 6000;
 var material_2 >= 3000, <= 5000;
 var material_3 >= 4000, <= 7000;
@@ -44,7 +47,7 @@ maximize obj:
   A_final_product * 3 +
   B_final_product * 2.5 +
   C_final_product * 0.5 +
-  D_final_product * 0.6 +
+  D_final_product * 0.6 -
   # Destroyed leftover cost
   A_leftover_1_destroy * 0.1 -
   A_leftover_2_destroy * 0.1 -
@@ -58,9 +61,9 @@ maximize obj:
   material_3 * 1;
 
 # Can't use more material than available
-subject to mat_1: A_material_1 + B_material_1 + C_material_1 == material_1;
-subject to mat_2: A_material_2 + B_material_2 + D_material_2 == material_2;
-subject to mat_3: A_material_3 + B_material_3 == material_3;
+subject to mat_1: A_material_1 + B_material_1 + C_material_1 <= material_1;
+subject to mat_2: A_material_2 + B_material_2 + D_material_2 <= material_2;
+subject to mat_3: A_material_3 + B_material_3 <= material_3;
 
 # Constraints for A
 subject to A_material: A_total_qty == A_material_1 + A_material_2 + A_material_3;

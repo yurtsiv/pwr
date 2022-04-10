@@ -1,0 +1,343 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+
+\title{Metody optymalizacji}
+\author{Stepan Yurtsiv, 246437}
+\date{11 kwietnia 2022r.}
+
+\begin{document}
+\maketitle
+
+\section{Wstęp}
+
+Celem danej listy zadań jest rozwiązanie wybranych problemów, które można przekształcić do problemów
+programowania liniowego, a póżniej rozwiązać ich za pomocą pakietu GLPK (GNU Linear Programmin Kit).
+W poniżych sekcjach predstawiono definicje oraz rozwiązania optymalne zadań.
+
+
+\section{Niedokładność algorytmów LP}
+
+Celem danego zadania jest pokazanie, że algorytmy LP mogą dawać niedokłande
+wyniki dla źle uwaruknowanych zadań, np. jeżeli macierz ${A}$ jest macierzą Hilberta.
+
+\subsection{Model}
+
+Funkcja celu
+
+\[\min \bm{c}^T\bm{x}\]
+przy warunkach
+
+\[A\bm{x} = \bm{b}, \bm{x \geq 0}\]
+gdzie
+\[a_{ij} = \frac{1}{i + j - 1}, i, j = 1,\dots,n,\]
+\[c_i = b_i = \sum_{j = 1}^{n} \frac{1}{i + j - 1}, i, j = 1,\dots,n\]
+Wiadomo że rozwiązaniem tego zadania jest wektor $\bm{x}$, $\bm{x_i} = 1, i = 1,\dots,n$
+
+\subsection{Wyniki}
+
+W tabeli poniżej przedstawione są błędy względne wyników dla $n = 2,\dots,10$
+
+\begin{center}
+\begin{tabular}{|c|c|}
+ \hline 
+ $n$ & $\frac{||x - x_0||_2}{||x||_2}$ \\
+ \hline 
+ 2 & 5.6e-16\\
+ \hline
+ 3 & 5.2e-16\\
+ \hline
+ 4 & 5.6e-13\\
+ \hline
+ 5 & 1.2e-11\\
+ \hline
+ 6 & 3.4e-11\\
+ \hline
+ 7 & 2.1e-08\\
+ \hline
+ 8 & 0.725\\
+ \hline
+ 9 & 0.592\\
+ \hline
+ 10 & 0.731\\
+ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Podsumowanie}
+
+Z wyników widać, że GLPK bardzo źle radzi sobie z danym problemem dla $n > 7$. Dla $n \leq 7$ wynik jest prawie dokładny (więcej niż 2 cyfry po przecinku).
+
+
+\section{Problem przemieszczania kamperów}
+
+W danym zadaniu proszono nas o ułożenie optymalnego planu przemieszczania
+nadmiarówych kamperów dla firmy, która operuje w różnych miastach Europy środkowej.
+Minimalizujemy koszt transportu, zależny od odległości pomiędzy miastami oraz typu kampera (\textit{Standard} i \textit{VIP})
+
+\subsection{Model}
+
+Funkcja celu jest następująca:
+
+\[\min \sum_{m_1, m_2 \in M, k \in K} x_{m_1, m_2, k}d_{m_1, m2}c_{k}\]
+gdzie $M$ to zbiór miast, $K=\{Standard, VIP\}$ - typy kamperów, $x_{m_1,m_2,k}$ - liczba kamperów typu $k$ do
+prezemieszczenia z miasta $m_1$ do miasta $m_2$, $d_{m_1, m_2}$ - dystans pomiędzy miastem $m_1$ a $m_2$, $c_{k}$ - mnożnik kosztu
+przemieszczania kampera typu $k$ ($Standard = 1$, $VIP = 1.15$).
+
+Zmienne decyzyjne mają następujące ograniczenia:
+
+\begin{itemize}
+  \item $x_{m_1, m_2, k} \geq 0$, $m_1, m_2 \in M, k \in K$
+  \item $\sum_{m_2 \in M} x_{m_1, m_2, k} = excess_{m_1, k}$, gdzie $m_1 \in M$, $k \in K$, a $excess_{m_1, k}$ - to nadmiar kamperów typu $k$ w mieście $m_1$. To ograniczenie zapewnia, że przemieścimy wszystkie nadmiarowe kampery
+  \item $\sum_{m_1 \in M} x_{m_1, m_2, s} \geq deficit_{m_2, s}$, gdzie $m_2 \in M$, $s$ - to typ kampera, którym można zamienić każdy inny typ (w typm przypadku $s = VIP$), a $deficit_{m_2, s}$ - to niedobór kamperów typu $s$ w mieście $m_2$. Dane ograniczenie pozwala na przemieszczenie większej liczby $VIP$ kamperów, aniż jest ich nideobór w danym mieście.
+  \item $\sum_{m_1 \in M, k \in K} x_{m_1, m_2, k} = \sum_{k \in K} deficit_{m_2, k}$, gdzie $m_2 \in M$. Dane ograniczenie zapewnia zerowy niedobór we wszystkich miastach.
+\end{itemize}
+
+\subsection{Wyniki}
+
+Po zaimplementowaniu powyższego modelu w \texttt{GNU MathProg} z wypełnionymi danymi ($M$, $excess$, $deficit$), udało się znaleźć następujące
+rozwiązanie:
+
+\texttt{
+\\
+Move 14 Standard campers from Warszawa to Gdansk\\
+Move 2 VIP campers from Gdansk to Gdansk\\
+Move 4 Standard campers from Szczecin to Gdansk\\
+Move 8 Standard campers from Szczecin to Berlin\\
+Move 4 VIP campers from Szczecin to Berlin\\
+Move 4 VIP campers from Wroclaw to Warszawa\\
+Move 2 VIP campers from Wroclaw to Wroclaw\\
+Move 4 VIP campers from Wroclaw to Krakow\\
+Move 6 Standard campers from Krakow to Wroclaw\\
+Move 4 Standard campers from Krakow to Koszyce\\
+Move 2 VIP campers from Rostok to Berlin\\
+Move 2 VIP campers from Rostok to Rostok\\
+Move 3 VIP campers from Lipsk to Berlin\\
+Move 3 VIP campers from Lipsk to Lipsk\\
+Move 4 VIP campers from Lipsk to Praga\\
+Move 3 Standard campers from Praga to Berlin\\
+Move 7 Standard campers from Praga to Brno\\
+Move 2 VIP campers from Brno to Brno\\
+Move 4 VIP campers from Bratyslawa to Bratyslawa\\
+Move 4 VIP campers from Bratyslawa to Budapeszt\\
+Move 4 VIP campers from Koszyce to Krakow\\
+Move 4 VIP campers from Budapeszt to Budapeszt\\
+Overall cost: 19999.7\\}
+
+
+* Przemieszczenie z miasta do tego samego miasta oznacza zastapienie standardowych kamperów kamperami typu VIP.
+
+\subsection{Całkowitoliczbowe zmienne}
+
+Po ograniczeniu zmiennych decyzyjnych do liczb całkowitych, wynik się nie zmienił.
+
+\section{Problem optymalnej produkcji}
+
+W danym problemie musimy ułożyć optymalny plan produkcyjny czterech mieszanek, dwie z których są produktami
+podstawowymi, powstającymi jako mieszanki trzech surowców, a dwie inne wymagają pewnego surowca oraz odpadów z produkcji pierwszych dwóch.
+
+\subsection{Model}
+
+\textbf{Zmienne decyzyjne:}
+
+$m_1, m_2, m_3$ - ilość surowca 1, 2 i 3 do zakupu
+
+$A, B, C, D$ - wyprodukowana ilość mieszanek do sprzedaży
+
+$A_t, B_t$ - ilość mieszanek $A$ i $B$ razem z wszystkimi odpadami
+
+$A_{m_1}, A_{m_2}, A_{m_3}$ - ilość $m_1$,$m_2$ i $m_3$ przeznaczona na produkcję $A$
+
+$A_{l_1}, A_{l_2}, A_{l_3}$ - ilość odpadów 1, 2 i 3 przy proudkcji $A$
+
+$A_{l_1d}, A_{l_2d}, A_{l_3d}$ - ilość odpadów 1, 2 i 3 (z produkcji $A$) do likwidacji
+
+$A_{l_1C}, A_{l_2C}, A_{l_3C}$ - ilość odpadów 1, 2 i 3 (z produkcji $A$) preznaczonych na proudkcję $C$
+
+
+$B_{m_1}, B_{m_2}, B_{m_3}$ - ilość $m_1$,$m_2$ i $m_3$ przeznaczona na produkcję $B$
+
+$B_{l_1}, B_{l_2}, B_{l_3}$ - ilość odpadów 1, 2 i 3 przy proudkcji $B$
+
+$B_{l_1d}, B_{l_2d}, B_{l_3d}$ - ilość odpadów 1, 2 i 3 (z produkcji $B$) do likwidacji
+
+$B_{l_1D}, B_{l_2D}, B_{l_3D}$ - ilość odpadów 1, 2 i 3 (z produkcji $B$) preznaczonych na proudkcję $D$
+
+$C_{m_1}$ - ilość $m_1$ preznaczona na proudkcję $C$
+
+$D_{m_2}$ - ilość $m_2$ preznaczona na proudkcję $D$
+\\
+\\
+\textbf{Funkcja celu:}
+
+\[\max (3A + 2.5B + 0.5C + 0.6D\]
+\[- (0.1A_{l_1d} + 0.1A_{l_2d} + 0.2A_{l_3d} + 0.05B_{l_1d} + 0.05B_{l_2d} + 0.4B_{l_3d} + 2.1m_1 + 1.6m_2 + m_3))\]
+\\
+\\
+\textbf{Ograniczenia:}
+
+\begin{itemize}
+  \item wszystkie zmienne decyzyjne są większe lub równe 0
+  \item $2000 \leq m_1 \leq 6000$
+  \item $3000 \leq m_2 \leq 5000$
+  \item $4000 \leq m_3 \leq 7000$
+  \item $A_{m_1} + B_{m_1} + C_{m_1} \leq m_1$ - nie można zużyć więcej surowca 1 niż jest dostępnego
+  \item $A_{m_2} + B_{m_2} + D_{m_2} \leq m_2$ - analigocznie dla surowca 2
+  \item $A_{m_3} + B_{m_3} \leq m_3$ - analigocznie dla surowca 3
+  \item $A_{m_1} + A_{m_2} + A_{m_3} = A_t$ - ilość mieszanki razem z odpadami to suma surowców wejściowych
+  \item $A_{m_1} \geq 0.2A_t$ - ilość surowca 1 musi być co najmniej $20\%$
+  \item $A_{m_2} \geq 0.4A_t$ - ilość surowca 2 musi być co najmniej $40\%$
+  \item $A_{m_3} \leq 0.1A_t$ - ilość surowca 3 musi być co najwyżej $10\%$
+  \item $A_{l_1} = 0.1A_{m_1}$ - ilość odpadów od surowca 1 to $10\%$
+  \item $A_{l_2} = 0.2A_{m_2}$ - ilość odpadów od surowca 2 to $20\%$
+  \item $A_{l_3} = 0.4A_{m_3}$ - ilość odpadów od surowca 3 to $40\%$
+  \item $A_{l_1} = A_{l_1d} + A_{l_1C}$ - ilość odpadu 1 to suma ilości do likwidacji oraz ilości na produkcję $C$ 
+  \item $A_{l_2} = A_{l_2d} + A_{l_2C}$ - analigocznie dla odpadu 2
+  \item $A_{l_3} = A_{l_3d} + A_{l_3C}$ - analogicznie dla odpadu 3
+  \item $A = A_t - A_{l_1} - A_{l_2} - A_{l_3}$ - produkt końcowy to suma mieszanek minus odpady
+
+  \item $B_{m_1} + B_{m_2} + B_{m_3} = B_t$ - ilość mieszanki razem z odpadami to suma surowców wejściowych
+  \item $B_{m_1} \geq 0.2B_t$ - ilość surowca 1 musi być co najmniej $20\%$
+  \item $B_{m_3} \leq 0.3B_t$ - ilość surowca 3 musi być co najwyżej $30\%$
+  \item $B_{l_1} = 0.2B_{m_1}$ - ilość odpadów od surowca 1 to $20\%$
+  \item $B_{l_2} = 0.2B_{m_2}$ - ilość odpadów od surowca 2 to $20\%$
+  \item $B_{l_3} = 0.5B_{m_3}$ - ilość odpadów od surowca 3 to $50\%$
+  \item $B_{l_1} = B_{l_1d} + B_{l_1D}$ - ilość odpadu 1 to suma ilości do likwidacji oraz ilości na produkcję $D$ 
+  \item $B_{l_2} = B_{l_2d} + B_{l_2D}$ - analigocznie dla odpadu 2
+  \item $B_{l_3} = B_{l_3d} + B_{l_3D}$ - analogicznie dla odpadu 3
+  \item $B = B_t - B_{l_1} - B_{l_2} - B_{l_3}$ - produkt końcowy to suma mieszanek minus odpady
+
+  \item $C = C_{m_1} + A_{l_1C} + A_{l_2C} + A_{l_3C}$ - produkt końcowy to suma surwca 1 oraz odpadów od produkcji $A$
+  \item $C_{m_1} = 0.2C$ - ilość surowca 1 musi stanowić dokładnie $20\%$ mieszanki
+
+  \item $D = D_{m_2} + B_{l_1D} + B_{l_2D} + B_{l_3D}$ - produkt końcowy to suma surwca 2 oraz odpadów od produkcji $B$
+  \item $D_{m_2} = 0.3D$ - ilość surowca 2 musi stanowić dokładnie $30\%$ mieszanki
+\end{itemize}
+
+\subsection{Wyniki}
+
+Po zaimplementowaniu modelu, otrzymałem następujący wynik:
+
+\texttt{
+\\
+--- Total earnings ---\\\\
+5598\\\\
+--- Products proudced ---\\\\
+Product A: 9646.112601\\
+Product B: 0.000000\\
+Product C: 2520.107239\\
+Product D: 0.000000\\\\
+--- Materials to buy ---\\\\
+Material 1: 6000.000000\\
+Material 2: 5000.000000\\
+Material 3: 4000.000000\\\\
+--- Materials distribution ---\\\\
+For product A:\\\\
+  Material 1: 5495.978552\\
+  Material 2: 5000.000000\\
+  Material 3: 1166.219839\\\\
+For product B:\\\\
+  Material 1: 0.000000\\
+  Material 2: 0.000000\\
+  Material 3: 0.000000\\\\
+For product C:\\\\
+  Material 1: 504.021448\\\\
+For product D:\\\\
+  Material 2: 0.000000\\\\
+--- Leftovers distribution ---\\\\
+From A:\\\\
+  1:\\\\
+     overall:       549.597855\\
+     for product C: 549.597855\\
+     to destroy:    0.000000\\\\
+  2:\\\\
+     overall:       1000.000000\\
+     for product C: 1000.000000\\
+     to destroy:    0.000000\\\\
+  3:\\\\
+     overall:       466.487936\\
+     for product C: 466.487936\\
+     to destroy:    0.000000\\\\
+From B:\\\\
+  1:\\\\
+     overall:       0.000000\\
+     for product D: 0.000000\\
+     to destroy:    0.000000\\\\
+  2:\\\\
+     overall:       0.000000\\
+     for product D: 0.000000\\
+     to destroy:    0.000000\\\\
+  3:\\\\
+     overall:       0.000000\\
+     for product D: 0.000000\\
+     to destroy:    0.000000\\}
+
+\subsection{Podsumowanie}
+
+Produkowanie $B$ i $D$ nie opłaca się, a surowiec 3 nie zostaje całkiem zużyty, więc ten minimum w $4000$ jest za wysoki.
+
+\section{Problem planu zajęć}
+
+W danym zadaniu musimy ułożyć plan zajęć dla studenta, uwzględniając jego preferencje.
+
+\subsection{Model}
+
+\textbf{Funkcja celu:}
+
+
+\[\max \sum_{n \in N, s \in S} x_{n,s}p_{n,s}\]
+\\
+gdzie $N=\{1,2,3,4\}$ - numery grup ćwiczeniowych, $S=\{Algebra, Analiza, \\Fizyka, ChemiaOrg, ChemiaMin\}$ - przedmioty,
+$x_{n,s} \in \{0, 1\}$ - zmienna decyzyjna, mówiąca czy grupa ćwiczeniowa $n$ z przedmiotu $s$ została wybrana, $p_{n,s} \in \{0..10\}$ - jak bardzo preferowana jest grupa $n$ z przedmiotu $s$ (predefiniowane).
+\\
+\\
+\textbf{Ograniczenia:}
+
+\begin{itemize}
+  \item $\sum_{n \in N} x_{n, s} = 1$, $s \in S$ - można wybrać tylko jedną grupę dla danego przedmiotu
+  \item $x_{1,Algebra} + x_{1,Analiza} \leq 1$ - nie można wybrać tych zajęć na raz
+  \item $x_{1,ChemiaMin} + x_{1,ChemiaOrg} + x_{2,ChemiaMin} \leq 1$ - nie można wybrać tych zajęć na raz
+  \item $x_{1,Fizyka} + x_{2,Algebra} + x_{2,Analiza} + x_{2,Fizyka} \leq 1$ - nie można wybrać tych zajęć na raz
+  \item $x_{1,Algebra} + x_{1,Analiza} \leq 1$ - nie można wybrać tych zajęć na raz
+  \item $x_{3,Algebra} + x_{3, Analiza} + x_{4,Algebra} \leq 1$ - nie można wybrać tych zajęć na raz
+  \item $x_{4,ChemiaMin} + x_{4,ChemiaOrg} \leq 1$ - nie można wybrać tych zajęć na raz
+  \item $x_{1,Algebra}d_{Algebra} + x_{1,Analiza}d_{Analiza} + x_{1,ChemiaMin}d_{ChemiaMin} + x_{1,ChemiaOrg}d_{ChemiaOrg} + x_{2,ChemiaMin}d_{ChemiaMin} + x_{2,ChemiaOrg}d_{ChemiaOrg} \leq 4$, d - czas trwania ćwieczeń dla poszczególnych predmiotów. Ograniczenie na nie więcej niż 4 godziny ćwiczeń w poniedziałek
+  \item $x_{1,Fizyka}d_{Fizyka} + x_{2,Algebra}d_{Algebra} + x_{2,Analiza}d_{Analiza} + x_{2,Fizyka}d_{Fizyka} \leq 4$ - analogicznie dla wtorku
+  \item $x_{3,Algebra}d_{Algebra} + x_{3,Analiza}d_{Analiza} + x_{4,Algebra}d_{Algebra} \leq 4$ - analogicznie dla środy
+  \item $x_{3,Fizyka}d_{Fizyka} + x_{3,ChemiaMin}d_{ChemiaMin} + x_{4,Analiza}d_{Analiza} + x_{4,Fizyka}d_{Fizyka} \leq 4$ - analogicznie dla czwartku
+  \item $x_{3,ChemiaOrg}d_{ChemiaOrg} + x_{4,ChemiaMin}d_{ChemiaMin} + x_{4,ChemiaOrg}d_{ChemiaOrg} \leq 4$ - analogicznie dla piątku
+  \item $x_{4,ChemiaMin} + x_{4,ChemiaOrg} + x_{3,ChemiaOrg} \leq 1$ - jest możliwość wyjścia na obiad w piątek (w inne dni zawsze jest możliwość)
+  \item $x_{1,Algebra} + x_{1,Analiza} + x_{3,Algebra} + x_{3,Analiza} + x_{4,Algebra} + x_{3, Analiza} + x_{4,Algebra} \leq 1$ - da się trenować 2 razy w tygodniu (dla $= 0$ nie ma rozwiązań)
+\end{itemize}
+
+\subsection{Wyniki}
+
+Po implementacji powyższego modelu otrzyałem następujący plan optymalny:
+
+\texttt{\\
+Algebra   grupa 3\\
+Analiza   grupa 2\\
+Fizyka    grupa 4\\
+ChemiaMin grupa 1\\
+ChemiaOrg grupa 2\\
+Suma preferencji: 37\\\\
+}
+\\
+Rozwiązań pozwalających ćwiczyć 3 razy w tygodniu nie istnieje.
+Powyższy plan nie jest zgrupowany w 3 dniach (pn., wt., cz.) i też nie wsyzstkie zajęcia odpowiadają preferencjom
+nie mniejszym niż 5. Po dodaniu odpowiednich ograniczeń, udało się znaleźć plan, odpowiadający tym założeniom:
+
+\texttt{\\
+Algebra grupa 1\\
+Analiza grupa 4\\
+Fizyka grupa 2\\
+ChemiaMin grupa 3\\
+ChemiaOrg grupa 2\\
+Suma preferencji: 28\\
+}
+
+
+\end{document}

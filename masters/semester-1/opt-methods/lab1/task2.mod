@@ -1,27 +1,36 @@
+# Stepan Yurtsiv 246437
+# Lista 1, zad. 2
+
 set cities;
 set campers;
-set shared_campers;
+set universal_campers;
 
 param cost_multipliers{campers} >= 0;
 param distances{cities, cities} >= 0;
 param deficit{cities, campers} >= 0;
 param excess{cities, campers} >= 0;
 
-var x{cities, cities, campers} >= 0;
+var x{cities, cities, campers} >= 0, integer;
 
 minimize obj: sum{source_city in cities, target_city in cities, camper in campers}
   x[source_city, target_city, camper] * distances[source_city, target_city] * cost_multipliers[camper];
 
+# move all excessive campers
 subject to move_everything{source_city in cities, camper in campers}:
   sum{target_city in cities} x[source_city, target_city, camper] == excess[source_city, camper];
 
-subject to satisfy_vip_deficit{target_city in cities, shared_camper in shared_campers}:
+# allow substituting Standard campers with VIP
+subject to universal_camper{target_city in cities, shared_camper in universal_campers}:
   sum{source_city in cities} x[source_city, target_city, shared_camper] >= deficit[target_city, shared_camper];
 
-subject to staisfy_overall_deficit{target_city in cities}:
+# satisfy all deficit
+subject to overall_deficit{target_city in cities}:
   sum{source_city in cities, camper in campers} x[source_city, target_city, camper] == sum{camper in campers}deficit[target_city, camper];
 
 solve;
+
+printf "Overall cost: %f\n", sum{source_city in cities, target_city in cities, camper in campers}
+  x[source_city, target_city, camper] * distances[source_city, target_city] * cost_multipliers[camper];
 
 for {source_city in cities} {
   for {target_city in cities} {
@@ -37,8 +46,8 @@ set cities := Warszawa Gdansk Szczecin Wroclaw Krakow Berlin Rostok Lipsk Praga 
 
 set campers := Standard VIP;
 
-# campers than can be used as any others
-set shared_campers := VIP;
+# campers than can substitute any others
+set universal_campers := VIP;
 
 param cost_multipliers :=
   Standard 1.0
