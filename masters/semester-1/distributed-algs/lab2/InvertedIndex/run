@@ -1,0 +1,3 @@
+#!/bin/bash
+
+rm -rf output/ && hadoop com.sun.tools.javac.Main InvertedIndex.java && jar cf iv.jar InvertedIndex*.class && hadoop jar iv.jar InvertedIndex input/ output/
