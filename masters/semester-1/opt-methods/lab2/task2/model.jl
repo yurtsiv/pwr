@@ -12,10 +12,10 @@ model = Model(GLPK.Optimizer)
 @variable(model, x[1:n,1:m], Bin)
 
 # minimalizujemy czas wykonaia progragmu
-@objective(model, Min, sum(x[i,j] * t[i, j] for i in 1:n, j in 1:m))
+@objective(model, Min, sum(x[i,j] * t[i, j] for i in I, j in 1:m))
 
 # zapewnia użycie dokładnie jednego podprogramu dla obliczania danej funkcji
-@constraint(model, [i = 1:n], sum(x[i,j] for j in 1:m) == 1)
+@constraint(model, [i in I], sum(x[i,j] for j in 1:m) == 1)
 
 # ograniczenie pamięciowe
 @constraint(model, sum(x[i, j] * r[i, j] for i in 1:n, j in 1:m) <= M)
