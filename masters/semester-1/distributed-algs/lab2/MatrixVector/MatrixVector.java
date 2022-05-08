@@ -12,7 +12,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.*;
 import org.apache.hadoop.mapreduce.lib.output.*;
 
-public class MatrixMatrix {
+public class MatrixVector {
 
   public static class Map
        extends Mapper<Object, Text, Text, Text>{
@@ -20,8 +20,7 @@ public class MatrixMatrix {
     public void map(Object key, Text value, Context context
                     ) throws IOException, InterruptedException {
       Configuration config = context.getConfiguration();
-      int m = Integer.parseInt(config.get("m")); // rows in A
-      int p = Integer.parseInt(config.get("p")); // columns in B
+      int rows = Integer.parseInt(config.get("rows")); // rows in A
 
       String line = value.toString();
       // [A|B, i, j, (A|B)ij]
@@ -31,14 +30,12 @@ public class MatrixMatrix {
       Text outputValue = new Text();
 
       if (lineChunks[0].equals("A")) {
-        for (int k = 0; k < p; k++) {
-          outputKey.set(lineChunks[1] + "," + k);
-          outputValue.set("A," + lineChunks[2] + "," + lineChunks[3]);
-          context.write(outputKey, outputValue);
-        }
+        outputKey.set(lineChunks[1]);
+        outputValue.set("A," + lineChunks[2] + "," + lineChunks[3]);
+        context.write(outputKey, outputValue);
       } else {
-        for (int i = 0; i < m; i++) {
-          outputKey.set(i + "," + lineChunks[2]);
+        for (int i = 0; i < rows; i++) {
+          outputKey.set(Integer.toString(i));
           outputValue.set("B," + lineChunks[1] + "," + lineChunks[3]);
           context.write(outputKey, outputValue);
         }
@@ -66,10 +63,10 @@ public class MatrixMatrix {
         }
       }
 
-      int n = Integer.parseInt(context.getConfiguration().get("n"));
+      int rows = Integer.parseInt(context.getConfiguration().get("rows"));
       float result = 0.0f;
 
-      for (int j = 0; j < n; j++) {
+      for (int j = 0; j < rows; j++) {
         float m_ij = hashA.containsKey(j) ? hashA.get(j) : 0.0f;
         float n_jk = hashB.containsKey(j) ? hashB.get(j) : 0.0f;
         result += m_ij * n_jk;
@@ -83,14 +80,12 @@ public class MatrixMatrix {
 
   public static void main(String[] args) throws Exception {
     Configuration config = new Configuration();
-    // A is an m x n matrix; B is an n x p matrix.
-    config.set("m", "2");
-    config.set("n", "2");
-    config.set("p", "2");
+    // Rows in a vector
+    config.set("rows", "2");
 
     @SuppressWarnings("deprecation")
-    Job job = new Job(config, "MatrixMatrix");
-    job.setJarByClass(MatrixMatrix.class);
+    Job job = new Job(config, "MatrixVector");
+    job.setJarByClass(MatrixVector.class);
     job.setOutputKeyClass(Text.class);
     job.setOutputValueClass(Text.class);
     job.setMapperClass(Map.class);
