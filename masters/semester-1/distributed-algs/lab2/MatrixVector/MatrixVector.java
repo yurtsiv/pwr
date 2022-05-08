@@ -81,7 +81,7 @@ public class MatrixVector {
   public static void main(String[] args) throws Exception {
     Configuration config = new Configuration();
     // Rows in a vector
-    config.set("rows", "2");
+    config.set("rows", "1000");
 
     @SuppressWarnings("deprecation")
     Job job = new Job(config, "MatrixVector");

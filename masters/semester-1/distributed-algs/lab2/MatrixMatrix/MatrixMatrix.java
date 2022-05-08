@@ -84,9 +84,9 @@ public class MatrixMatrix {
   public static void main(String[] args) throws Exception {
     Configuration config = new Configuration();
     // A is an m x n matrix; B is an n x p matrix.
-    config.set("m", "2");
-    config.set("n", "2");
-    config.set("p", "2");
+    config.set("m", "100");
+    config.set("n", "1000");
+    config.set("p", "200");
 
     @SuppressWarnings("deprecation")
     Job job = new Job(config, "MatrixMatrix");

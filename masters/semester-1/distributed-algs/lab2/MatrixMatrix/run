@@ -1,3 +1,3 @@
 #!/bin/bash
 
-rm -rf output/ && hadoop com.sun.tools.javac.Main MatrixMatrix.java && jar cf iv.jar MatrixMatrix*.class && hadoop jar iv.jar MatrixMatrix input/ output/
+rm -rf output/ && hadoop com.sun.tools.javac.Main MatrixMatrix.java && jar cf iv.jar MatrixMatrix*.class && hadoop jar iv.jar MatrixMatrix $1 output/

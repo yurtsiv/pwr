@@ -25,7 +25,8 @@ public class InvertedIndex {
 
       Text file = new Text(fileName);
 
-      StringTokenizer itr = new StringTokenizer(value.toString());
+      String line = value.toString().replaceAll("[^a-zA-Z]", " ").toLowerCase();
+      StringTokenizer itr = new StringTokenizer(line);
       while (itr.hasMoreTokens()) {
         String word = itr.nextToken().trim();
 
