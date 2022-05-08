@@ -1,0 +1,222 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+
+\title{Metody optymalizacji}
+\author{Stepan Yurtsiv, 246437}
+\date{9 maja 2022r.}
+
+\begin{document}
+\maketitle
+
+\section{Zadanie 1}
+
+Celem danego zadania jest wyznaczenie serwerów, z których należy odczytać dane o określonych cechach,
+aby zminimalizować czas.
+
+\subsection{Model}
+
+\textbf{Funkcja celu:}
+
+\begin{center}
+	min \textbf{$\displaystyle\sum_{j \in [n]} x_j * T_j$}
+\end{center}
+gdzie
+
+\begin{itemize}
+    \item $n$ - liczba serwerów
+    \item $T_j$ - czas odczytu danych z serwera $j \in [n]$
+    \item $x_j$ - zmienna binarna określająca, czy serwer $j$ powinien zostać przeszukany, $x_j \in \{0, 1\}$, $j \in [n]$
+\end{itemize}
+\textbf{Ograniczenia:}
+
+\begin{itemize}
+    \item {$\forall{i \in [m]}\displaystyle\sum_{j \in [n]} Q_{ij} * x_j \geq 1$}, gdzie $m$ - liczba cech, a $Q_{ij}$ określa, czy dane cechy $i$ są na serwerze $j$. Dane ograniczenie zapewnia, że dane każdej cechy zostaną przeczytane co najmniej raz.
+\end{itemize}
+
+\subsection{Wyniki}
+
+Zdefiniowano następujący egzemplarz problemu
+
+\begin{center}
+\begin{tabular}{|c|c|}
+  \hline
+  Serwer & Czas odczytu \\
+  \hline
+  1 & 4 \\
+  \hline
+  2 & 2 \\
+  \hline
+  3 & 5 \\
+  \hline
+  4 & 1 \\
+  \hline
+  5 & 6 \\
+  \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+  \hline
+  Cecha / Serwer & 1 & 2 & 3 & 4 & 5 \\
+  \hline
+  1 & 0 & 0 & 0 & 0 & 1 \\
+  \hline
+  2 & 1 & 1 & 1 & 1 & 0 \\
+  \hline
+  3 & 1 & 0 & 0 & 1 & 0 \\
+  \hline
+  4 & 0 & 1 & 1 & 1 & 0 \\
+  \hline
+  5 & 1 & 0 & 0 & 0 & 0 \\
+  \hline
+  6 & 0 & 0 & 0 & 1 & 0 \\
+  \hline
+  7 & 0 & 0 & 1 & 1 & 0 \\
+  \hline
+\end{tabular}
+\end{center}
+Dla tych danych optymalnym rozwiązaniem jest pobranie danych z serwerów 1, 4 i 5. Sumaryczny czas wyniesie 11 jednostek.
+
+ 
+% \section{Zadanie 2}
+
+
+% Zadanie polegało na zminimalizowaniu czasu wykonania funkcji dla zadanej ilości komórek pamięci.
+
+% \subsection{Model}
+
+% Zdefiniujmy:
+
+% \begin{itemize}
+%     \item $m$ - liczba funkcji
+%     \item $n$ - liczba podprogramów
+%     \item $M$ - liczba dostępnych komórek pamięci
+%     \item $T_{ij}$ - czas obliczenia funkcji dla podprogramu, gdzie $i \in \{|m|\}$ i $j \in \{|n|\}$
+%     \item $R_{ij}$ - liczba wymaganych komórek pamięci  do wykonania podprogramu, gdzie $i \in \{|m|\}$ i $ j \in \{|n|\}$
+%     \item $I$ - zbiór funkcji do obliczenia, gdzie $I \subseteq \{|m|\}$
+%     \item $S_{ij}$ - zmienna binarna określająca, czy podprogram zostanie wykonany, gdzie $S_{ij} \in \{0, 1\}$, $i \in \{|m|\}$ i $ j \in \{|n|\}$
+% \end{itemize}
+
+% \subsubsection*{Funkcja celu}
+
+% \begin{center}
+% 	min \textbf{$\displaystyle\sum_{i \in \{|m|\}, j \in \{|n|\}} S_{ij} * T_{ij}$}
+% \end{center}
+
+% \subsubsection*{Ograniczenia}
+
+% \begin{itemize}
+%     \item Cały program zajmuję maksymalnie $M$ komórek pamięci:
+    
+%     \begin{center}
+%     	{$\displaystyle\sum_{i \in \{|m|\}, j \in \{|n|\}} S_{ij} * R_{ij} \leq M$}
+%     \end{center}
+    
+%     \item Każda zadana funkcja musi być przypisana do podprogramu:
+    
+%     \begin{center}
+%     	{$\forall{i \in I}\displaystyle\sum_{j \in \{|n|\}} S_{ij} = 1$}
+%     \end{center}
+    
+% \end{itemize}
+
+% \subsection{Wyniki}
+
+% Dla $I = [1, 2, 3]$, $R$ podanego w figurze \ref{fig:03_res_r} oraz $T$ w figurze \ref{fig:03_res_t} zminimalizowano funkcję kosztu i otrzymano wyniki zilustrowane na rysunku \ref{fig:04_res}.
+
+% \begin{figure}[H]
+% 	\centering 
+% 	\includegraphics[width=1.0\textwidth]{Figures/res_03_r.png}
+% 	\caption{Ilość wymaganych komórek pamięci do wykonania podprogramów}
+% 	\label{fig:03_res_r}
+% \end{figure}  
+
+% \begin{figure}[H]
+% 	\centering 
+% 	\includegraphics[width=1.0\textwidth]{Figures/res_03_t.png}
+% 	\caption{Czas wykonania podprogramów}
+% 	\label{fig:03_res_t}
+% \end{figure} 
+
+
+% \begin{figure}[H]
+% 	\centering 
+% 	\includegraphics{Figures/res_04.png}
+% 	\caption{Wyniki dla problemu obliczania funkcji}
+% 	\label{fig:04_res}
+% \end{figure}  
+
+% \section{Zadanie 3}
+
+% Zadanie polegało na stworzeniu harmonogramu wykonywania zadań na procesorach.
+
+% \subsection{Model}
+
+% Zdefiniujmy:
+% \begin{itemize}
+%     \item $n$ - liczba zadań do wykonania
+%     \item $Z$ - zbiór zadań do wykonania, gdzie $Z \in \{|n|\}$
+%     \item $m$ - liczba procesorów
+%     \item $M$ - zbór procesorów, gdzie $M \in \{|m|\}$
+%     \item $T_{ij}$ - czas wymagany na zadanie, gdzie $i \in Z$ i $j \in M$
+%     \item $P_{ijk}$ - jedna z możliwych permutacji kolejności zadań, gdzie $i \in M,\\ j, k \in Z, j \neq i$
+%     \item $R_{P_{ijk}}$ - zmienna binarna określająca czy permutacja należy do rozwiązania
+%     \item $S_{ij}$ - czas rozpoczęcia zadania na procesorze, gdzie $i \in Z$ i $j \in M$
+%     \item $C_{max}$ - czas zakończenia ostatniego zadania na ostatnim procesorze
+    
+% \end{itemize}
+
+% \subsubsection*{Funkcja celu}
+
+% \begin{center}
+% 	min $C_{max}$
+% \end{center}
+
+% \subsubsection*{Ograniczenia}
+
+% \begin{itemize}
+%     \item Każdy procesor może wykonywać w danym momencie tylko jedno zadanie:
+%         \begin{center}
+%         	$\forall{(i \in M, j, k \in Z, j \neq i)} S_{ji} - S_{ki} \geq T_{ki} $
+%         	, jeżeli 
+%         	$ R_{P_{ijk}} = 0 $ \\ 
+%         	$\forall{(i \in M, j, k \in Z, j \neq i)} S_{ki} - S_{ji} \geq T_{ji} $
+%             , jeżeli 
+%             $ R_{P_{ijk}} = 1 $
+%         \end{center}
+%     \item Każdy zadanie musi być wykonane najpierw na procesorze $i$ zanim zostanie wykonane na procesorze $i + 1$:
+%     \begin{center}
+%     	$\forall{(i \in \{|m-1|\}, j \in Z)} S_{ji+1} \leq S_{ji} + T_{ji} $
+%     \end{center}
+    
+%     \item $C_{max}$ to czas zakończenia ostatniego zadania na ostatnim procesorze:
+%     \begin{center}
+%     	$\forall{(i \in Z)} S_{in}  \leq S_{ji} + T_{ji} \leq C_{max}$
+%     \end{center}
+% \end{itemize}
+
+% \subsection{Wyniki}
+
+% Dla zilustrowanego na figurze \ref{fig:05_res} egzemplarzu problemu użyto modelu w celu zminimalizowania czasu ukończenia ostatniego zadania. Otrzymano permutację $\pi = \{3, 2, 1, 4\}$, dla której $C_{max} = 16$. Dodatkowo na rysunku \ref{fig:06_res} zobrazowany został diagram gantta dla otrzymanego harmonogramu.
+
+
+% \begin{figure}[H]
+% 	\centering 
+% 	\includegraphics{Figures/res_05.png}
+% 	\caption{Macierz zawierająca czasy wykonania zadań na procesorach}
+% 	\label{fig:05_res}
+% \end{figure} 
+
+% \begin{figure}[H]
+% 	\centering 
+% 	\includegraphics[width=1.0\textwidth]{Figures/res_06.png}
+% 	\caption{Diagram gantta dla utworzonej permutacji}
+% 	\label{fig:06_res}
+% \end{figure} 
+
+\end{document}
