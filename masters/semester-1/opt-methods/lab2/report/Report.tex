@@ -1,5 +1,6 @@
 \documentclass[12pt, a4paper]{article}
-\usepackage{bm, float, amsmath}
+\usepackage{bm, float,amsmath,graphicx}
+\graphicspath{ {./images/} }
 \usepackage[T1]{fontenc}
 \usepackage[polish]{babel}
 \usepackage[utf8]{inputenc}
@@ -184,87 +185,83 @@ Otrzymano następujące rozwiązanie optymalne:
 \end{center}
 \end{table}
 
-% \begin{figure}[H]
-% 	\centering 
-% 	\includegraphics[width=1.0\textwidth]{Figures/res_03_t.png}
-% 	\caption{Czas wykonania podprogramów}
-% 	\label{fig:03_res_t}
-% \end{figure} 
+\section{Zadanie 3}
 
+Dane zadanie polega na stworzeniu harmonogramu wynonania zdań na procesorach.
 
-% \begin{figure}[H]
-% 	\centering 
-% 	\includegraphics{Figures/res_04.png}
-% 	\caption{Wyniki dla problemu obliczania funkcji}
-% 	\label{fig:04_res}
-% \end{figure}  
+\subsection{Model}
 
-% \section{Zadanie 3}
-
-% Zadanie polegało na stworzeniu harmonogramu wykonywania zadań na procesorach.
-
-% \subsection{Model}
-
-% Zdefiniujmy:
-% \begin{itemize}
-%     \item $n$ - liczba zadań do wykonania
-%     \item $Z$ - zbiór zadań do wykonania, gdzie $Z \in \{|n|\}$
-%     \item $m$ - liczba procesorów
-%     \item $M$ - zbór procesorów, gdzie $M \in \{|m|\}$
-%     \item $T_{ij}$ - czas wymagany na zadanie, gdzie $i \in Z$ i $j \in M$
-%     \item $P_{ijk}$ - jedna z możliwych permutacji kolejności zadań, gdzie $i \in M,\\ j, k \in Z, j \neq i$
-%     \item $R_{P_{ijk}}$ - zmienna binarna określająca czy permutacja należy do rozwiązania
-%     \item $S_{ij}$ - czas rozpoczęcia zadania na procesorze, gdzie $i \in Z$ i $j \in M$
-%     \item $C_{max}$ - czas zakończenia ostatniego zadania na ostatnim procesorze
+Niech:
+\begin{itemize}
+    \item $n$ - liczba procesorów
+    \item $m$ - liczba zadań do wykonania
+    \item $T_{ji}$ - czas wykonania zadania $j$ na procesorze $i$
+    \item $O_{jik}$ - zmienna pomocnicza binarna, wyznaczająca kolejność zadań. $O_{jik} = 1$ ozanacza że zadanie $i$ zaczyna się szybciej od zadania $k$ na procesorze $j$
+    \item $S_{ji}$ - czas rozpoczęcia zadania $i$ na procesorze $j$
+    \item $C_{max}$ - czas zakończenia wszystkich zadań
     
-% \end{itemize}
+\end{itemize}
 
-% \subsubsection*{Funkcja celu}
+\subsubsection*{Funkcja celu:}
 
-% \begin{center}
-% 	min $C_{max}$
-% \end{center}
+\begin{center}
+	min $C_{max}$
+\end{center}
 
-% \subsubsection*{Ograniczenia}
+\subsubsection*{Ograniczenia:}
 
-% \begin{itemize}
-%     \item Każdy procesor może wykonywać w danym momencie tylko jedno zadanie:
-%         \begin{center}
-%         	$\forall{(i \in M, j, k \in Z, j \neq i)} S_{ji} - S_{ki} \geq T_{ki} $
-%         	, jeżeli 
-%         	$ R_{P_{ijk}} = 0 $ \\ 
-%         	$\forall{(i \in M, j, k \in Z, j \neq i)} S_{ki} - S_{ji} \geq T_{ji} $
-%             , jeżeli 
-%             $ R_{P_{ijk}} = 1 $
-%         \end{center}
-%     \item Każdy zadanie musi być wykonane najpierw na procesorze $i$ zanim zostanie wykonane na procesorze $i + 1$:
-%     \begin{center}
-%     	$\forall{(i \in \{|m-1|\}, j \in Z)} S_{ji+1} \leq S_{ji} + T_{ji} $
-%     \end{center}
+\begin{itemize}
+    \item Wsyzstkie zadania muszą być zakończone przed zakończenim ostatniego
+    \begin{center}
+    	$\forall{(i \in [m])} S_{ni} + T_{ni} \leq C_{max}$
+    \end{center}
+
+    \item Każdy procesor może wykonywać tylko jedno zadania naraz
+        \begin{center}
+        	$\forall{(j \in [n], i, k \in [m])} S_{jk} \geq S_{ji} + T_{ji} $
+            , jeżeli 
+            $ O_{jik} = 1 $
+        	$\forall{(j \in [n], i, k \in [m])} S_{ji} \geq S_{jk} + T_{jk} $
+        	, jeżeli 
+        	$ O_{jik} = 0 $ \\ 
+        \end{center}
+    \item Wykonanie zadania może się zacząć tylko po jego zakończeniu na poprzednim procesorze
+    \begin{center}
+    	$\forall{(i \in [m], j \in [n - 1])} S_{(j + 1)i} \geq S_{ji} + T_{ji} $
+    \end{center}
     
-%     \item $C_{max}$ to czas zakończenia ostatniego zadania na ostatnim procesorze:
-%     \begin{center}
-%     	$\forall{(i \in Z)} S_{in}  \leq S_{ji} + T_{ji} \leq C_{max}$
-%     \end{center}
-% \end{itemize}
+\end{itemize}
 
-% \subsection{Wyniki}
+\subsection{Wyniki}
 
-% Dla zilustrowanego na figurze \ref{fig:05_res} egzemplarzu problemu użyto modelu w celu zminimalizowania czasu ukończenia ostatniego zadania. Otrzymano permutację $\pi = \{3, 2, 1, 4\}$, dla której $C_{max} = 16$. Dodatkowo na rysunku \ref{fig:06_res} zobrazowany został diagram gantta dla otrzymanego harmonogramu.
+Zdefiniowano następujący egzemplarz problemu: $n = 3$
 
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+  \hline
+  Procesor / Zadanie & 1 & 2 & 3 & 4 \\
+  \hline
+  1 & 1 & 2 & 4 & 4 \\
+  \hline
+  2 & 3 & 1 & 2 & 4 \\
+  \hline
+  3 & 4 & 2 & 1 & 3 \\
+  \hline
+\end{tabular} 
+\caption{Czas wykonania zadań na każdmy z procesorów}
+\end{center}
+\end{table}
 
-% \begin{figure}[H]
-% 	\centering 
-% 	\includegraphics{Figures/res_05.png}
-% 	\caption{Macierz zawierająca czasy wykonania zadań na procesorach}
-% 	\label{fig:05_res}
-% \end{figure} 
+Optymalnym jest następujący harmonogram:
 
-% \begin{figure}[H]
-% 	\centering 
-% 	\includegraphics[width=1.0\textwidth]{Figures/res_06.png}
-% 	\caption{Diagram gantta dla utworzonej permutacji}
-% 	\label{fig:06_res}
-% \end{figure} 
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[scale=0.5]{Gantt}
+  \end{center}
+\end{figure}
+
+$C_{max} = 15$
 
 \end{document}
+
