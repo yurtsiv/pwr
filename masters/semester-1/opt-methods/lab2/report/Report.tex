@@ -1,6 +1,5 @@
 \documentclass[12pt, a4paper]{article}
-\usepackage{amsmath}
-\usepackage{bm}
+\usepackage{bm, float, amsmath}
 \usepackage[T1]{fontenc}
 \usepackage[polish]{babel}
 \usepackage[utf8]{inputenc}
@@ -41,10 +40,11 @@ gdzie
 
 Zdefiniowano następujący egzemplarz problemu
 
+\begin{table}[H]
 \begin{center}
 \begin{tabular}{|c|c|}
   \hline
-  Serwer & Czas odczytu \\
+  Serwer & Czas \\
   \hline
   1 & 4 \\
   \hline
@@ -57,8 +57,11 @@ Zdefiniowano następujący egzemplarz problemu
   5 & 6 \\
   \hline
 \end{tabular}
+\caption{Czas odczytu danych dla każdego serwera}
 \end{center}
+\end{table}
 
+\begin{table}[H]
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|c|}
   \hline
@@ -79,62 +82,107 @@ Zdefiniowano następujący egzemplarz problemu
   7 & 0 & 0 & 1 & 1 & 0 \\
   \hline
 \end{tabular}
+\caption{Obecność danych cech na każdym serwerze}
 \end{center}
+\end{table}
+
 Dla tych danych optymalnym rozwiązaniem jest pobranie danych z serwerów 1, 4 i 5. Sumaryczny czas wyniesie 11 jednostek.
 
  
-% \section{Zadanie 2}
+\section{Zadanie 2}
+
+Zadanie 2 polega na ułożeniu sekwencyjnego programu, skaładającego się z określonego zbioru funkcji $I$. Należy
+dobrać odpowiednie podprogramy, aby cały program zajmował nie więcej niż $M$ komórek pamięci, a czas jego wykonaia był minimalny.
 
 
-% Zadanie polegało na zminimalizowaniu czasu wykonania funkcji dla zadanej ilości komórek pamięci.
+\subsection{Model}
 
-% \subsection{Model}
+\textbf{Funkcja celu:}
 
-% Zdefiniujmy:
+\begin{center}
+	min \textbf{$\displaystyle\sum_{i \in I, j \in [m]} x_{ij} * T_{ij}$}
+\end{center}
+gdzie
 
-% \begin{itemize}
-%     \item $m$ - liczba funkcji
-%     \item $n$ - liczba podprogramów
-%     \item $M$ - liczba dostępnych komórek pamięci
-%     \item $T_{ij}$ - czas obliczenia funkcji dla podprogramu, gdzie $i \in \{|m|\}$ i $j \in \{|n|\}$
-%     \item $R_{ij}$ - liczba wymaganych komórek pamięci  do wykonania podprogramu, gdzie $i \in \{|m|\}$ i $ j \in \{|n|\}$
-%     \item $I$ - zbiór funkcji do obliczenia, gdzie $I \subseteq \{|m|\}$
-%     \item $S_{ij}$ - zmienna binarna określająca, czy podprogram zostanie wykonany, gdzie $S_{ij} \in \{0, 1\}$, $i \in \{|m|\}$ i $ j \in \{|n|\}$
-% \end{itemize}
+\begin{itemize}
+    \item $m$ - liczba podprogramów do obliczenia funkcji
+    \item $I$ - zbiór funkcji do policzenia. $i \in I \leq n$, gdzie $n$ to liczba wszystkich możliwych funkcji
+    \item $T_{ij}$ - czas działania podgprogramu $j$ dla funkcji $i$
+    \item $x_{ij}$ - zmienna binarna określająca, czy podprogram $j$ zostanie użyty do policzenia funkcji $i$. $x_{ij} \in \{0, 1\}$, $i \in I$, $j \in [m]$
+\end{itemize}
+\textbf{Ograniczenia:}
 
-% \subsubsection*{Funkcja celu}
+\begin{itemize}
+    \item {$\displaystyle\sum_{i \in I, j \in [m]} x_{ij} * R_{ij} \leq M$}, gdzie $R_{ij}$ to ilość pamięci, wymagana przez podprogram $j$. Dane ograniczenie zapewnia, że cały program zużywa maksymalnie $M$ komórek pamięci
+    \item {$\forall{i \in I}\displaystyle\sum_{j \in [m]} x_{ij} = 1$} - zapewnia wybranie dokładnie jednego podgprogramu dla danej funkcji
+\end{itemize}
 
-% \begin{center}
-% 	min \textbf{$\displaystyle\sum_{i \in \{|m|\}, j \in \{|n|\}} S_{ij} * T_{ij}$}
-% \end{center}
+\subsection{Wyniki}
 
-% \subsubsection*{Ograniczenia}
+Zdefiniowano następujący egzemplarz problemu:
+$I = \{1, 2, 4\}$, $M = 15$
 
-% \begin{itemize}
-%     \item Cały program zajmuję maksymalnie $M$ komórek pamięci:
-    
-%     \begin{center}
-%     	{$\displaystyle\sum_{i \in \{|m|\}, j \in \{|n|\}} S_{ij} * R_{ij} \leq M$}
-%     \end{center}
-    
-%     \item Każda zadana funkcja musi być przypisana do podprogramu:
-    
-%     \begin{center}
-%     	{$\forall{i \in I}\displaystyle\sum_{j \in \{|n|\}} S_{ij} = 1$}
-%     \end{center}
-    
-% \end{itemize}
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+  \hline
+  Funkcja / Podprogram & 1 & 2 & 3 & 4 \\
+  \hline
+  1 & 3 & 2 & 1 & 9 \\
+  \hline
+  2 & 1 & 2 & 3 & 5 \\
+  \hline
+  3 & 4 & 5 & 2 & 8 \\
+  \hline
+  4 & 1 & 8 & 2 & 8 \\
+  \hline
+\end{tabular} 
+\caption{Wymgania pamięciowe}
+\end{center}
+\end{table}
 
-% \subsection{Wyniki}
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+  \hline
+  Funkcja / Podprogram & 1 & 2 & 3 & 4 \\
+  \hline
+  1 & 4 & 6 & 9 & 2 \\
+  \hline
+  2 & 10 & 8 & 7 & 5 \\
+  \hline
+  3 & 3 & 5 & 2 & 1 \\
+  \hline
+  4 & 15 & 2 & 8 & 3 \\
+  \hline
+\end{tabular} 
+\caption{Wymagania czasowe}
+\end{center}
+\end{table}
 
-% Dla $I = [1, 2, 3]$, $R$ podanego w figurze \ref{fig:03_res_r} oraz $T$ w figurze \ref{fig:03_res_t} zminimalizowano funkcję kosztu i otrzymano wyniki zilustrowane na rysunku \ref{fig:04_res}.
+Otrzymano następujące rozwiązanie optymalne:
 
-% \begin{figure}[H]
-% 	\centering 
-% 	\includegraphics[width=1.0\textwidth]{Figures/res_03_r.png}
-% 	\caption{Ilość wymaganych komórek pamięci do wykonania podprogramów}
-% 	\label{fig:03_res_r}
-% \end{figure}  
+\begin{itemize}
+    \item Czas wykonania programu: 13
+    \item Zużycie pamięci: 15
+\end{itemize}
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+  \hline
+  Funkcja / Podprogram & 1 & 2 & 3 & 4 \\
+  \hline
+  1 & & x & &  \\
+  \hline
+  2 &  &  & & x \\
+  \hline
+  4 &  & x &  &  \\
+  \hline
+\end{tabular} 
+\caption{Których podprogramów użyć}
+\end{center}
+\end{table}
 
 % \begin{figure}[H]
 % 	\centering 

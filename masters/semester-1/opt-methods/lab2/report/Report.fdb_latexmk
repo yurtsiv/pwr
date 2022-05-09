@@ -1,6 +1,6 @@
 # Fdb version 3
-["pdflatex"] 1652051837 "/home/stepy/Dev/pwr/masters/semester-1/opt-methods/lab2/report/Report.tex" "Report.pdf" "Report" 1652051837
-  "/home/stepy/Dev/pwr/masters/semester-1/opt-methods/lab2/report/Report.tex" 1652051837 6692 e470327466c4bbe495ce09f13bf926c6 ""
+["pdflatex"] 1652054656 "/home/stepy/Dev/pwr/masters/semester-1/opt-methods/lab2/report/Report.tex" "Report.pdf" "Report" 1652054656
+  "/home/stepy/Dev/pwr/masters/semester-1/opt-methods/lab2/report/Report.tex" 1652054655 7472 413baf30f12c77841be0d22f70b11386 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1640600964 2971 def0b6c1f0b107b3b936def894055589 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1640600964 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1640600964 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -62,13 +62,14 @@
   "/usr/share/texmf-dist/tex/latex/base/fontenc.sty" 1640600964 4946 461cc78f6f26901410d9f1d725079cc6 ""
   "/usr/share/texmf-dist/tex/latex/base/inputenc.sty" 1640600964 5049 969aec05d5f39c43f8005910498fcf90 ""
   "/usr/share/texmf-dist/tex/latex/base/size12.clo" 1640600964 8449 bc7344e882df4d7e51c046514dee83e4 ""
+  "/usr/share/texmf-dist/tex/latex/float/float.sty" 1640600964 6749 16d2656a1984957e674b149555f1ea1d ""
   "/usr/share/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def" 1640600964 29971 0fb19a39718d289d512ef2f074f16cc2 ""
   "/usr/share/texmf-dist/tex/latex/tools/bm.sty" 1640600964 13197 df0fe9a9695763546b59e02a008447b3 ""
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1640600964 39911 2da6c67557ec033436fe5418a70a8a61 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1649609814 4243317 6cd4c1d3b72728bfa7db8ef2e14c0430 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1649609812 2920107 ee87025810f2f53e74bbfb68f2093de8 ""
-  "Report.aux" 1652051837 425 245ee29bf3ccdcbb1f3b5d3d7660772b "pdflatex"
-  "Report.tex" 1652051837 6692 e470327466c4bbe495ce09f13bf926c6 ""
+  "Report.aux" 1652054656 1377 89a72276014a2eb9d2e58993f10095b3 "pdflatex"
+  "Report.tex" 1652054655 7472 413baf30f12c77841be0d22f70b11386 ""
   (generated)
   "Report.aux"
   "Report.log"
