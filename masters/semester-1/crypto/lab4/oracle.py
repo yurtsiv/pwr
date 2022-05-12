@@ -14,20 +14,23 @@ class Oracle:
         keystore.entries['aeskey'].decrypt(keystore_pass)
         self.key = keystore.entries['aeskey']._key
         self.iv = 0
+    
+    def reset_iv(self):
+        self.iv = 0
 
     def encrypt(self, mode, m):
+        return self._get_enc_func(mode)(m)
+
+    def _get_enc_func(self, mode):
         if not mode in SUPPORTED_MODES:
             raise "Unsupported mode"
 
-        encrypt = None
         if mode == AES.MODE_ECB:
-            encrypt = self._encrypt_ecb
+            return self._encrypt_ecb
         elif mode == AES.MODE_CBC:
-            encrypt = self._encrypt_cbc
-        else:
-            encrypt = self._encrypt_gcm
-
-        return encrypt(m)
+            return self._encrypt_cbc
+        elif mode == AES.MODE_GCM:
+            return self._encrypt_gcm
 
     def _encrypt_ecb(self, m):
         cipher = AES.new(self.key, AES.MODE_ECB)
@@ -47,5 +50,4 @@ class Oracle:
     def challenge(self, mode, m1, m2):
         b = random.randint(0, 1)
         m = m1 if b == 0 else m2
-        cipher = AES.new(self.key, mode)
-        return cipher.encrypt(m)
+        return self._get_enc_func(mode)(m)
