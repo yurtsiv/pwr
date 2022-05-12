@@ -1,3 +1,5 @@
+# Stepan Yurtsiv, 246437
+
 using JuMP
 using GLPK
 

@@ -1,3 +1,5 @@
+# Stepan Yurtsiv, 246437
+
 # czas potrzebny na przeszukanie danych na każdym z serwerów
 T = [4, 2, 5, 1, 6]
 

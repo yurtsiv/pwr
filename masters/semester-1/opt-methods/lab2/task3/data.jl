@@ -1,3 +1,5 @@
+# Stepan Yurtsiv, 246437
+
 # czasy wykonania zadań (wiersz - procesor, kolumna - zadanie)
 T = [
   1 2 4 4

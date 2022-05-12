@@ -1,3 +1,5 @@
+# Stepan Yurtsiv, 246437
+
 # wymagania pamięciowe j-tego podprogramu obliczania funkcji i (i - wiersz, j - kolumna)
 r = [
   3 2 1 9

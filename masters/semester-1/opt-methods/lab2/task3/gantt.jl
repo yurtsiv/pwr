@@ -1,3 +1,5 @@
+# Stepan Yurtsiv, 246437
+
 using Crayons
 
 function gantt_chart(T, durations, end_time)
