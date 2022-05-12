@@ -17,12 +17,12 @@ public class PrintKey {
   public static void main(String[] args) throws Exception {
     KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
   
-    char[] password = "password".toCharArray();
+    char[] password = args[2].toCharArray();
 
     FileInputStream fis = null;
 
     try {
-      fis = new FileInputStream("/home/stepy/.keystore");
+      fis = new FileInputStream(args[0]);
       ks.load(fis, password);
     } finally {
       if (fis != null) {
@@ -30,7 +30,7 @@ public class PrintKey {
       }
     }
 
-    KeyStore.Entry entry = ks.getEntry("mykey", new KeyStore.PasswordProtection(password));
+    KeyStore.Entry entry = ks.getEntry(args[1], new KeyStore.PasswordProtection(password));
 
     //Assign the entry as our secret key for later retrieval.
     javax.crypto.SecretKey key = ((KeyStore.SecretKeyEntry) entry).getSecretKey();
