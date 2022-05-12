@@ -2,7 +2,7 @@
 
 # czasy wykonania zadań (wiersz - procesor, kolumna - zadanie)
 T = [
-  1 2 4 4
-  3 1 2 4
-  4 2 1 3
+  4 1 3 1
+  4 2 1 2
+  4 5 3 3
 ]
