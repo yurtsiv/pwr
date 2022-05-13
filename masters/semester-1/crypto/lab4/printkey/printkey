@@ -1,3 +1,0 @@
-#!/bin/bash
-
-java PrintKey $2 $3 $4
