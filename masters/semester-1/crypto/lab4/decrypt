@@ -1,0 +1,15 @@
+#!/bin/bash
+
+keystore=$1
+in_file=$2
+out_file=$3
+
+echo "Keystore password: "
+read -s password
+echo
+
+key=$(python3 print_key.py $keystore $password)
+
+iv=$(echo $password | openssl md5)
+
+openssl enc -d -aes-128-cbc -K $key -iv $iv -in $in_file -out $out_file
