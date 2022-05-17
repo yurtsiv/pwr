@@ -27,7 +27,7 @@ Wielokąt prosty to taki wielokąt, którego boki się nie przecinają oraz twor
 
 \begin{figure}[H]
   \begin{center}
-  \includegraphics[scale=0.5]{Nieprosty}
+  \includegraphics[scale=0.4]{Nieprosty}
   \caption{Przykłady wielokątów nieprostych}
   \label{fig:wielokat_nieprosty}
   \end{center}
@@ -35,12 +35,12 @@ Wielokąt prosty to taki wielokąt, którego boki się nie przecinają oraz twor
 
 \subsubsection*{Wielokąt monotoniczny}
 
-Wielokąt monotoniczny to taki wielokąt, dla którego możemy podać prostą $L$, taką że każda prosta prostopadła do niej przecina wielokąt w najwyżej dwóch punktach (silna monotoniczność). Słabą monotonicznością nazywamy przypadek, gdy wielokąt posiada również krawędzie
+Wielokąt monotoniczny to taki wielokąt, dla którego możemy podać prostą $L$, taką że każda prosta prostopadła do niej przecina wielokąt w co najwyżej dwóch punktach (silna monotoniczność). Słabą monotonicznością nazywamy przypadek, gdy wielokąt posiada również krawędzie
 prostopadłe do $L$. Na rysunku \ref{fig:wielokat_monotoniczny} dwa górne wielokąty są monotoniczne. Zielone proste mają jedno przecięcie z wielokątem, niebieskie – dwa, czerwone – trzy i więcej.
 
 \begin{figure}[H]
   \begin{center}
-  \includegraphics[scale=0.3]{Monotonic}
+  \includegraphics[scale=0.24]{Monotonic}
   \caption{Monotoniczność wielokątów (źródło: Wikipedia)}
   \label{fig:wielokat_monotoniczny}
   \end{center}
@@ -53,14 +53,42 @@ Podaj efektywny alogrytm do sprawdzenia czy dany $n$ kąt prosty jest monotonicz
  
 \section*{Algorytm}
 
-Rozważmy instację problemu, przedstawioną na rysunku 
+Dowolny wielokąt i prostą $L$ możemy odpowiednio obrócić tak, żeby prosta $L$ była pionową oraz zostały zachowane wszystkie odległości między wierzchołkami wielokąta a prostą.
 
 \begin{figure}[H]
   \begin{center}
-  \includegraphics[scale=0.3]{Sample1}
-  \caption{Monotoniczność wielokątów (źródło: Wikipedia)}
-  \label{fig:instancja_1}
+  \includegraphics[scale=0.7]{Sample}
+  \caption{Egzemplarz problemu}
+  \label{fig:sample}
   \end{center}
 \end{figure}
+
+Żeby sprawdzić, czy dany $n$-kąt prosty jest monotoniczny względem prostej pionowej $L$, można zastosować następujący algorytm:
+
+\begin{enumerate}
+    \item Szukamy najwyższego punktu $p$ ($p_7$ na rysunku \ref{fig:sample} )
+    \item Idziemy po kolejnych punktach w dół dopóki nie będzie kroku w góre, tzn. współrzędna $y$ punktu $q$ jest większa od $y$ poprzedniego punktu ($q = p_3$). Kierunek przechodzenia po punktach nie ma znaczenia, byle by był taki sam cały czas.
+    \item Od punktu $q$ idziemy w góre, dopóki nie będzie kroku w dół
+    \item Niech $m$ będzie liczbą odwiedzonych punktów w krokach 2 i 3. Jeśli $n = m$, to wielokąt jest monotoniczny względem prostej $L$ (słabo lub silnie).
+\end{enumerate}
+
+Jeżeli chcemy rozróżnić słabą monotoniczność od silnej, to wystarczy po drodze sprawdzić, czy istnieją sąsiadujące wierzchołki o takiej
+samej współrzędnej $y$.
+
+\subsection*{Analiza poprawności algorytmu}
+
+Jeżeli $m < n$, to istnieje prosta pozioma, prostopadła do $L$, która przecina boki $(p_{m-1}, p_{m})$ oraz $(p_{m-2}, p_{m-1})$. A ponieważ przechodzenie po punktach zaczyna się od punktu najwyższego (czyli $y$ punktu $p_m$ jest mniejszy lub równy od $y$ punktu $p$), to wiemy
+że na przeciwnej stronie wielokąta musi być jeszcze jeden bok, przecinający się z tą samą prostą poziomą, co znaczy że są 3 punkty przecięcia, a więc wielokąt nie jest monotoniczny. Jeżeli $m = n$, to takich przypadków nie istnieje.
+
+
+\subsection*{Złożoność obliczeniowa}
+
+Złożoności różnych etapów algorytmu:
+\begin{itemize}
+    \item Obrócenie wielokąta: $O(n)$
+    \item Szukanie najwyższego punktu (krok 1, przeszukiwanie binarne): $O(log(n))$
+    \item Przejście przez wierzchołki (krok 2 i 3): $O(n)$
+\end{itemize}
+Otóż złożoność całego algorytmu jest $O(n)$.
 
 \end{document}
