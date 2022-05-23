@@ -1,6 +1,6 @@
 # Fdb version 3
-["pdflatex"] 1653340722 "/home/stepy/Dev/pwr/masters/semester-1/geometry/opracowanie1/Opracowanie1.tex" "Opracowanie1.pdf" "Opracowanie1" 1653340723
-  "/home/stepy/Dev/pwr/masters/semester-1/geometry/opracowanie1/Opracowanie1.tex" 1653340722 4064 b5d79edf3b8a4fffd066030347858ac2 ""
+["pdflatex"] 1653343922 "/home/stepy/Dev/pwr/masters/semester-1/geometry/opracowanie1/Opracowanie1.tex" "Opracowanie1.pdf" "Opracowanie1" 1653343922
+  "/home/stepy/Dev/pwr/masters/semester-1/geometry/opracowanie1/Opracowanie1.tex" 1653343922 4099 51c2f62729d74ce926c236b8051ddfb1 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1640600964 2971 def0b6c1f0b107b3b936def894055589 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1640600964 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1640600964 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -83,8 +83,8 @@
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1640600964 39911 2da6c67557ec033436fe5418a70a8a61 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1649609814 4243317 6cd4c1d3b72728bfa7db8ef2e14c0430 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1649609812 2920107 ee87025810f2f53e74bbfb68f2093de8 ""
-  "Opracowanie1.aux" 1653340723 837 eccb42498b080f8119bf764a285914a6 "pdflatex"
-  "Opracowanie1.tex" 1653340722 4064 b5d79edf3b8a4fffd066030347858ac2 ""
+  "Opracowanie1.aux" 1653343922 837 eccb42498b080f8119bf764a285914a6 "pdflatex"
+  "Opracowanie1.tex" 1653343922 4099 51c2f62729d74ce926c236b8051ddfb1 ""
   "images//Monotonic.png" 1652733716 35218 a0a6043b62f210b01689695311b49a18 ""
   "images//Nieprosty.png" 1652734698 21743 b22cfedb77bcef37c62b6c5b46d9d5b3 ""
   "images//Prosty.png" 1652734634 46996 4d8d2e3df2521bf17d759483a72a8933 ""

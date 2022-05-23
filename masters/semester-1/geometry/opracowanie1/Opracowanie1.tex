@@ -67,13 +67,13 @@ Dowolny wielokąt i prostą $L$ możemy odpowiednio obrócić tak, żeby prosta 
 
 \begin{enumerate}
     \item Szukamy najwyższego punktu $p$ ($p_7$ na rysunku \ref{fig:sample} )
-    \item Idziemy po kolejnych punktach w dół dopóki nie będzie kroku w góre, tzn. współrzędna $y$ punktu $q$ jest większa od $y$ poprzedniego punktu ($q = p_3$). Kierunek przechodzenia po punktach nie ma znaczenia, byle by był taki sam cały czas.
-    \item Od punktu $q$ idziemy w góre, dopóki nie będzie kroku w dół
-    \item Niech $m$ będzie liczbą odwiedzonych punktów w krokach 2 i 3. Jeśli $n = m$, to wielokąt jest monotoniczny względem prostej $L$ (słabo lub silnie).
+    \item Idziemy po kolejnych punktach w dół dopóki współrzędna $y$ danego punktu jest większa od $y$ następnego punktu (punkt końcowy $q = p_3$). Możemy poruszać się zgodnie z ruchem
+    wskazówek zegara lub w przeciwnym kierunku, nie ma to znaczenia.
+    \item Od punktu $q$ idziemy w góre, dopóki współrzędna $y$ danego punktu jest mniejszy od $y$ następnego punktu.
+    \item Niech $m$ będzie liczbą odwiedzonych punktów w krokach 2 i 3. Jeśli $n = m$, to wielokąt jest silnie monotoniczny względem prostej $L$
 \end{enumerate}
 
-Jeżeli chcemy rozróżnić słabą monotoniczność od silnej, to wystarczy po drodze sprawdzić, czy istnieją sąsiadujące wierzchołki o takiej
-samej współrzędnej $y$.
+Jeżeli chcemy też uwzględnić słabą monotoniczność, to wystarczy przyjąć w korokach 2 i 3 że $y$ danego punktu może też być równy $y$ punktu następnego.
 
 \subsection*{Analiza poprawności algorytmu}
 
@@ -83,7 +83,7 @@ Jeżeli $m < n$, to istnieje prosta pozioma, prostopadła do $L$, która przecin
 
 \subsection*{Złożoność obliczeniowa}
 
-Złożoności różnych etapów algorytmu:
+Złożoności wszystkich etapów algorytmu:
 \begin{itemize}
     \item Obrócenie wielokąta: $O(n)$
     \item Szukanie najwyższego punktu (krok 1, przeszukiwanie binarne): $O(log(n))$
