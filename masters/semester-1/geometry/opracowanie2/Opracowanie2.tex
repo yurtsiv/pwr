@@ -14,7 +14,7 @@
 \section*{Zadanie}
 
 Niech $S'$ będzie zbiorem środków okręgów jednostkowych ze zbioru $S$. Pokaż, że okrąg z $S$ pojawia się na brzegu otoczki wypukłej wtedy i tylko wtedy, gdy jego środek
-leży na brzegu otoczki wypukłej $S'$. Podaj algorytm obliczania otoczki wypukłej $S$ pracujący w czasie $O(nlog(n))$ (zadanie 26 na liście).
+leży na brzegu otoczki wypukłej $S'$. Podaj algorytm obliczania otoczki wypukłej $S$ pracujący w czasie $O(n\log n)$ (zadanie 26 na liście).
 
 
 \section*{Rozwiązanie}
@@ -37,7 +37,8 @@ częszcią $S$ lub ten okrąg musiałby mieć większy promień od innych okręg
 
 Żeby znaleźć otoczkę wypukłą $S$, wystarczy najpierw stworzyć otoczkę wypukłą $S'$ dla zbioru
 środków okręgów, następnie z każdego punktu otoczki $S'$ poprowadzić proste prostopadłe do wychodzących
-z tego punktu odcinków i znaleźć punkty przecięcia z okręgiem. Te punkty będą tworzyć otoczkę wypukłą $S$ (rysunek \ref{fig:img2}).
+z tego punktu odcinków i znaleźć punkty przecięcia z okręgiem. Te punkty będą definiować łuk który jest częszcią otoczki $S$ (rysunek \ref{fig:img2}).
+W zadaniu 25 udowodniliśmy, że każdy okrąg może występować na brzegu otoczki wypukłej co najwyżej raz, więc mamy gwarancję, że znaleziony łuk jest tylko jeden dla danego koła.
 
 \begin{figure}[H]
   \begin{center}
@@ -48,7 +49,7 @@ z tego punktu odcinków i znaleźć punkty przecięcia z okręgiem. Te punkty b�
 \end{figure}
 
 Mamy efektywne algorytmy do obliczania otoczki wypukłęj dla $n$ punktów. Jednym
-z nich jest algorytm Grahama, którego złożoność obliczeniowa jest $O(nlog(n))$.
-Ponieważ rozszerzenie otoczki wypukłej $S'$ do $S$ ma złożoność $O(n)$, to cały algorytm jest $O(nlog(n))$.
+z nich jest algorytm Grahama, którego złożoność obliczeniowa jest $O(n\log n)$.
+Ponieważ rozszerzenie otoczki wypukłej $S'$ do $S$ ma złożoność $O(n)$, to cały algorytm jest $O(n\log n)$.
 
 \end{document}

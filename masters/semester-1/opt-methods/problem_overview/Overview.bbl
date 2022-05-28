@@ -1,0 +1,36 @@
+\begin{thebibliography}{1}
+
+\bibitem{akwu2018motion}
+AD~Akwu and O~Oyewumi.
+\newblock Motion planning in certain lexicographic product graphs.
+\newblock {\em International J. Math. Combin}, pages 146--153, 2018.
+
+\bibitem{deb2014motion}
+Biswajit Deb and Kalpesh Kapoor.
+\newblock Motion planning in cartesian product graphs.
+\newblock {\em Discussiones Mathematicae Graph Theory}, 34(2):207--221, 2014.
+
+\bibitem{goldreich1984shortest}
+Oded Goldreich.
+\newblock Shortest move-sequence in the generalized 15-puzzle is np-hard.
+\newblock {\em Manuscript, Laboratory for Computer Science, MIT}, 1, 1984.
+
+\bibitem{kornhauser1984coordinating}
+Daniel~Martin Kornhauser, Gary Miller, and Paul Spirakis.
+\newblock Coordinating pebble motion on graphs, the diameter of permutation
+  groups, and applications.
+\newblock Master's thesis, M. I. T., Dept. of Electrical Engineering and
+  Computer Science, 1984.
+
+\bibitem{365740}
+C.H. Papadimitriou, P.~Raghavan, M.~Sudan, and H.~Tamaki.
+\newblock Motion planning on a graph.
+\newblock In {\em Proceedings 35th Annual Symposium on Foundations of Computer
+  Science}, pages 511--520, 1994.
+
+\bibitem{wilson1974graph}
+Richard~M Wilson.
+\newblock Graph puzzles, homotopy, and the alternating group.
+\newblock {\em Journal of Combinatorial Theory, Series B}, 16(1):86--96, 1974.
+
+\end{thebibliography}
