@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/Arch Linux) (preloaded format=pdflatex 2022.4.10)  16 MAY 2022 22:13
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/Arch Linux) (preloaded format=pdflatex 2022.4.10)  25 MAY 2022 22:58
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**/home/stepy/Dev/pwr/masters/semester-1/opt-methods/lab2/report/Report.tex
-(/home/stepy/Dev/pwr/masters/semester-1/opt-methods/lab2/report/Report.tex
+**/home/stepy/Dev/pwr/masters/semester-1/geometry/opracowanie2/Opracowanie2.tex
+(/home/stepy/Dev/pwr/masters/semester-1/geometry/opracowanie2/Opracowanie2.tex
 LaTeX2e <2021-11-15> patch level 1
 L3 programming layer <2021-11-22> (/usr/share/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2021/10/04 v1.4n Standard LaTeX document class
@@ -134,23 +134,23 @@ Package: inputenc 2021/02/14 v1.3d Input encoding file
 File: l3backend-pdftex.def 2021-12-14 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count272
 \l__pdf_internal_box=\box54
-) (./Report.aux)
-\openout1 = `Report.aux'.
+) (./Opracowanie2.aux)
+\openout1 = `Opracowanie2.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
  (/usr/share/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count273
@@ -193,28 +193,34 @@ Package grfext Info: Graphics extension search list:
 (grfext)             \AppendGraphicsExtensions on input line 504.
  (/usr/share/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
-)) [1
+))
+<./images//Img1.jpg, id=1, 422.32782pt x 283.81032pt>
+File: ./images//Img1.jpg Graphic file (type jpg)
+<use ./images//Img1.jpg>
+Package pdftex.def Info: ./images//Img1.jpg  used on input line 30.
+(pdftex.def)             Requested size: 274.50983pt x 184.47452pt.
+ [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4]
-<./images//Gantt.png, id=29, 719.68875pt x 94.3525pt>
-File: ./images//Gantt.png Graphic file (type png)
-<use ./images//Gantt.png>
-Package pdftex.def Info: ./images//Gantt.png  used on input line 260.
-(pdftex.def)             Requested size: 359.84349pt x 47.17612pt.
- [5 <./images//Gantt.png>] (./Report.aux) ) 
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+<./images//Img2.jpg, id=15, 438.13687pt x 276.28218pt>
+File: ./images//Img2.jpg Graphic file (type jpg)
+<use ./images//Img2.jpg>
+Package pdftex.def Info: ./images//Img2.jpg  used on input line 45.
+(pdftex.def)             Requested size: 284.78558pt x 179.58128pt.
+ [2 <./images//Img1.jpg>] [3 <./images//Img2.jpg>] (./Opracowanie2.aux) ) 
 Here is how much of TeX's memory you used:
- 4058 strings out of 478353
- 64253 string characters out of 5854635
- 385288 words of memory out of 5000000
- 22121 multiletter control sequences out of 15000+600000
- 419471 words of font info for 70 fonts, out of 8000000 for 9000
+ 4074 strings out of 478353
+ 64578 string characters out of 5854635
+ 376323 words of memory out of 5000000
+ 22138 multiletter control sequences out of 15000+600000
+ 418358 words of font info for 68 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 60i,8n,67p,352b,277s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm2074.pfb>
-Output written on Report.pdf (5 pages, 167085 bytes).
+ 60i,7n,67p,297b,279s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm2074.pfb>
+Output written on Opracowanie2.pdf (3 pages, 143883 bytes).
 PDF statistics:
- 93 PDF objects out of 1000 (max. 8388607)
- 56 compressed objects within 1 object stream
+ 57 PDF objects out of 1000 (max. 8388607)
+ 33 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 

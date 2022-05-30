@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/Arch Linux) (preloaded format=pdflatex 2022.4.10)  16 MAY 2022 22:13
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/Arch Linux) (preloaded format=pdflatex 2022.4.10)  24 MAY 2022 00:12
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**/home/stepy/Dev/pwr/masters/semester-1/opt-methods/lab2/report/Report.tex
-(/home/stepy/Dev/pwr/masters/semester-1/opt-methods/lab2/report/Report.tex
+**/home/stepy/Dev/pwr/masters/semester-1/geometry/opracowanie1/Opracowanie1.tex
+(/home/stepy/Dev/pwr/masters/semester-1/geometry/opracowanie1/Opracowanie1.tex
 LaTeX2e <2021-11-15> patch level 1
 L3 programming layer <2021-11-22> (/usr/share/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2021/10/04 v1.4n Standard LaTeX document class
@@ -134,23 +134,23 @@ Package: inputenc 2021/02/14 v1.3d Input encoding file
 File: l3backend-pdftex.def 2021-12-14 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count272
 \l__pdf_internal_box=\box54
-) (./Report.aux)
-\openout1 = `Report.aux'.
+) (./Opracowanie1.aux)
+\openout1 = `Opracowanie1.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
  (/usr/share/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count273
@@ -193,28 +193,55 @@ Package grfext Info: Graphics extension search list:
 (grfext)             \AppendGraphicsExtensions on input line 504.
  (/usr/share/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
-)) [1
+))
+<./images//Prosty.png, id=1, 1114.1625pt x 482.80376pt>
+File: ./images//Prosty.png Graphic file (type png)
+<use ./images//Prosty.png>
+Package pdftex.def Info: ./images//Prosty.png  used on input line 22.
+(pdftex.def)             Requested size: 445.6571pt x 193.11807pt.
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4]
-<./images//Gantt.png, id=29, 719.68875pt x 94.3525pt>
-File: ./images//Gantt.png Graphic file (type png)
-<use ./images//Gantt.png>
-Package pdftex.def Info: ./images//Gantt.png  used on input line 260.
-(pdftex.def)             Requested size: 359.84349pt x 47.17612pt.
- [5 <./images//Gantt.png>] (./Report.aux) ) 
+Overfull \hbox (55.6571pt too wide) in paragraph at lines 22--23
+ [] 
+ []
+
+<./images//Nieprosty.png, id=3, 622.325pt x 249.93375pt>
+File: ./images//Nieprosty.png Graphic file (type png)
+<use ./images//Nieprosty.png>
+Package pdftex.def Info: ./images//Nieprosty.png  used on input line 30.
+(pdftex.def)             Requested size: 248.92558pt x 99.97173pt.
+[1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./images//Prosty.png>]
+<./images//Monotonic.png, id=15, 803.0pt x 1135.24126pt>
+File: ./images//Monotonic.png Graphic file (type png)
+<use ./images//Monotonic.png>
+Package pdftex.def Info: ./images//Monotonic.png  used on input line 43.
+(pdftex.def)             Requested size: 192.72394pt x 272.46347pt.
+ [2 <./images//Nieprosty.png> <./images//Monotonic.png>]
+<./images//Sample.jpg, id=22, 350.81062pt x 355.3275pt>
+File: ./images//Sample.jpg Graphic file (type jpg)
+<use ./images//Sample.jpg>
+Package pdftex.def Info: ./images//Sample.jpg  used on input line 60.
+(pdftex.def)             Requested size: 245.56575pt x 248.72754pt.
+ [3 <./images//Sample.jpg>]
+Overfull \hbox (14.18417pt too wide) in paragraph at lines 89--90
+[]\T1/cmr/m/n/12 Szukanie naj-wy»-szego punktu (krok 1, prze-szu-ki-wa-nie bi-narne): $\OML/cmm/m/it/12 O\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 log\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 n\OT1/cmr/m/n/12 ))$ 
+ []
+
+[4] (./Opracowanie1.aux) ) 
 Here is how much of TeX's memory you used:
- 4058 strings out of 478353
- 64253 string characters out of 5854635
- 385288 words of memory out of 5000000
- 22121 multiletter control sequences out of 15000+600000
+ 4101 strings out of 478353
+ 65251 string characters out of 5854635
+ 377339 words of memory out of 5000000
+ 22163 multiletter control sequences out of 15000+600000
  419471 words of font info for 70 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 60i,8n,67p,352b,277s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm2074.pfb>
-Output written on Report.pdf (5 pages, 167085 bytes).
+ 60i,7n,67p,392b,279s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm2074.pfb>
+Output written on Opracowanie1.pdf (4 pages, 237130 bytes).
 PDF statistics:
- 93 PDF objects out of 1000 (max. 8388607)
- 56 compressed objects within 1 object stream
+ 85 PDF objects out of 1000 (max. 8388607)
+ 48 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 21 words of extra memory for PDF output out of 10000 (max. 10000000)
 
