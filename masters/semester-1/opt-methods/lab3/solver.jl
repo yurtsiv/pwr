@@ -2,14 +2,14 @@
 using JuMP
 using GLPK
 
-include("parser.jl")
+# include("parser.jl")
 
 function solve(problem)
   # liczba maszyn
   machine_count, 
   # liczba zadań
   job_count, 
-  # koszt wykonywania zadań na danej maszynie
+  # zysk z wykonywania zadań na danej maszynie
   costs,
   # czas wykonywania zadań na danej maszynie
   required_resources,
@@ -20,19 +20,24 @@ function solve(problem)
   J = 1:job_count
   M_temp = [i for i in M]
   J_temp = [j for j in J]
+
   # graf pełny dwudzielny reprezentujaćy połaćzenie maszyna-zadanie
   G = [(i, j) for i in M for j in J]
 
   # rozwiązanie końcowe
   F = []
 
+  iterations = 0
+
   while length(J_temp) > 0
-    print("\nITER\n")
+    print("\nITERATION\n")
+    iterations += 1
+
     model = Model(GLPK.Optimizer)
 
     @variable(model, x[M, J] >= 0)
 
-    @objective(model, Min, sum(costs[i, j] * x[i, j] for (i, j) in G))
+    @objective(model, Max, sum(costs[i, j] * x[i, j] for (i, j) in G))
 
     for j in J_temp
       edges = [e for e in G if e[2] == j]
@@ -49,7 +54,6 @@ function solve(problem)
     optimize!(model)
 
     solution = value.(x)
-    print(solution)
 
     # usuwamy krawędzie które nie zostały wybrane
     filter!(((i, j),) -> solution[i, j] != 0, G)
@@ -61,12 +65,14 @@ function solve(problem)
         # usuwamy zrobione zadania
         filter!(x -> x != j, J_temp)
         # dodajemy krawędź do wyniku końcowego
-        push!(F, (j, j))
+        push!(F, (i, j))
         # zmniejszamy dostępny czas danej maszyny
         machine_resources[i] -= required_resources[i, j]
       end
     end
 
+    # usuwamy maszyny których stopień wierszchołka w grafie jest 1
+    # lub stopień 2 i co najmniej jedno przypisane zadanie
     filter!(M_temp) do i
       d = length([e for e in G if e[1] == i])
       at_least_one_job_assigned = sum([solution[i, j] for j in J_temp]) >= 1
@@ -76,9 +82,5 @@ function solve(problem)
     end
   end
 
-  return F
+  return F, iterations
 end
-
-problems = parse_file("./data/gap1.txt")
-solution = solve(problems[1])
-print(solution)

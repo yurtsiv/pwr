@@ -1,0 +1,83 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage{bm,float,amsmath,graphicx,algorithm,algpseudocodex}
+\graphicspath{ {./images/} }
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+
+\title{Metody optymalizacji}
+\author{Stepan Yurtsiv, 246437}
+\date{9 maja 2022r.}
+
+\begin{document}
+\maketitle
+
+\section*{Zadanie}
+
+Celem niniejszego zadania jest zaimplementowanie algorytmu
+aproksymacyjnego opartego na programowaniu liniowym dla
+uogólnionego zagadnienia przydziału (ang. the generalized assignment problem)
+
+\section*{Algorytm}
+
+\textbf{Oznaczenia:}
+\begin{itemize}
+  \item $M = [m]$ - zbiór maszyn
+  \item $J = [n]$ - zbiór zadań
+  \item $T = \{T_i: i \in M\}$ - zbiór ograniczeń dla maszyn, $T_i$ - maksymalny czas działania $i$-tej maszyny
+  \item $c = \{c_{ij}: i \in M, j \in J\}$ - macierz kosztów, $c_{ij}$ - koszt wykonania $j$-tego zadania na $i$-tej maszynie
+  \item $p = \{p_{ij}: i \in M, j \in J\}$ - macierz czasów wykonania zadań, $p_{ij}$ - czas wykonania $j$-tego zadania na $i$-tej maszynie
+\end{itemize}
+
+Uogólnione zagadnienie przedziału polega na przypisaniu zbiorowi maszyn
+$M$ zadań ze zbioru $J$ tak, żeby zmaksymalizować zyski z wykonania wszystkich
+zadań. Dodatkowo są ograniczenia w postaci maksymalengo czasu przez który może
+działać dana maszyna.
+
+Rozwiązanie problemu sprowadza się do stworzenia grafu dwudzielnego
+$G$, gdzie jedna grupa wierszchołków reprezentuje zbiór maszyn $M$, a inna
+zbiór zadań $J$. Na początku mamy doczynienia z grafem pełnym, gdzie krawędź $(i, j)$ reprezentuje
+przydział $i$-tej maszyny do $j$-tego zadania. Zbiór krawędzi
+grafu $G$ oznaczamy przez $E$. W poszczególnych iteracjach
+algorytmu \ref{alg} jest tworzony podgraf grafu $G$ oznaczany jako $F$, w którym
+każdemu zadaniu jest przypisana dokładnie jedna maszyna.
+
+Do rozwiązania podproblemu w każdej iteracji zastosujemy model (oznaczany jako $LP_{ga}$) z następującą 
+funkcją celu:
+
+\begin{center}
+	max \textbf{$\displaystyle\sum_{e=(i,j) \in E} c_{ij} \cdot x_{ij}$}
+\end{center}
+gdzie $x_{ij}$ oznacza, czy $j$-te zadanie zostało przypisane do wykonania
+na $i$-tej maszynie.
+Ograniczenia do zmiennych decyzyjnych są następujące:
+
+\begin{itemize}
+  \item $\forall{j \in J} \displaystyle\sum_{e \in \delta(j)} x_e = 1$ - każde zadanie musi być przypisane dokładnie jednej maszynie
+  \item $\forall{i \in M} \displaystyle\sum_{e \in \delta(i)} p_e \cdot x_e \leq T_i$ - czas wykonaia wszystkich zadań, przypisanych maszynie $i$ nie może
+przekroczyć jej maksymalny czas dostępności
+  \item $x_{ij} \geq 0$ - każda zmienna jest nieujmena
+\end{itemize}
+
+Algorytm \ref{alg} zapewnia, że każda maszyna jest używana
+nie więcej niż dwukrotność jej dozwolonej dostępności.
+
+\begin{algorithm}
+\caption{}\label{alg}
+\begin{enumerate}
+  \item Inicjalizacja $E(F) \gets \emptyset$, $M' \gets M$ 
+  \item While $J \neq \emptyset$ do
+  \begin{enumerate}
+    \item Znajdź optymalne rozwiązanie dopuszczalne bazowe $x$ do $LP_{ga}$
+    i usuń wszystkie zmienne $x_{ij} = 0$
+    \item Jeśli zmienna $x_{ij} = 1$, to zaktualizuj $F \gets F \cup \{(i, j)\}$
+    , $J \gets J \setminus \{j\}$, $T_i \gets T_i - p_{ij}$
+    \item (\textbf{Relaksacja}) Jeśli maszyna $i$ ma $d(i) = 1$ lub maszyna
+    $i$ ma $d(i) = 2$ oraz $\displaystyle\sum_{j \in J} x_{ij} \geq 1$, to zaktualizuj $M' \gets M \setminus \{i\}$
+  \end{enumerate}
+  \item return $F$
+\end{enumerate}
+\end{algorithm}
+
+\end{document}
+
