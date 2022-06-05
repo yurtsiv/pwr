@@ -30,14 +30,13 @@ function solve(problem)
   iterations = 0
 
   while length(J_temp) > 0
-    print("\nITERATION\n")
     iterations += 1
 
     model = Model(GLPK.Optimizer)
 
     @variable(model, x[M, J] >= 0)
 
-    @objective(model, Max, sum(costs[i, j] * x[i, j] for (i, j) in G))
+    @objective(model, Min, sum(costs[i, j] * x[i, j] for (i, j) in G))
 
     for j in J_temp
       edges = [e for e in G if e[2] == j]
