@@ -1,6 +1,6 @@
 # Fdb version 3
-["pdflatex"] 1654376322 "/home/stepy/Dev/pwr/masters/semester-1/opt-methods/lab3/report/Report.tex" "Report.pdf" "Report" 1654376323
-  "/home/stepy/Dev/pwr/masters/semester-1/opt-methods/lab3/report/Report.tex" 1654376322 3497 08700403e43406ac14035350b7af5f2f ""
+["pdflatex"] 1654465374 "/home/stepy/Dev/pwr/masters/semester-1/opt-methods/lab3/report/Report.tex" "Report.pdf" "Report" 1654465374
+  "/home/stepy/Dev/pwr/masters/semester-1/opt-methods/lab3/report/Report.tex" 1654465373 7072 f25a119ebe9a6258a50fc53b14b1d864 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1640600964 2971 def0b6c1f0b107b3b936def894055589 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1640600964 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1640600964 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -157,13 +157,14 @@
   "/usr/share/texmf-dist/tex/latex/tabto-ltx/tabto.sty" 1640601337 7571 bbe73377bcd3b71daa9dc07c784655b3 ""
   "/usr/share/texmf-dist/tex/latex/tikzmark/tikzlibrarytikzmark.code.tex" 1640564798 23403 72615fe0861f8ca6039ac4255f7754fe ""
   "/usr/share/texmf-dist/tex/latex/tools/bm.sty" 1640600964 13197 df0fe9a9695763546b59e02a008447b3 ""
+  "/usr/share/texmf-dist/tex/latex/tools/longtable.sty" 1640600964 12892 3ffe092fc7f5d1cb9866f1bcb071d0d6 ""
   "/usr/share/texmf-dist/tex/latex/varwidth/varwidth.sty" 1640601337 10894 d359a13923460b2a73d4312d613554c8 ""
   "/usr/share/texmf-dist/tex/latex/xcolor/xcolor.sty" 1640600964 56029 3f7889dab51d620aa43177c391b7b190 ""
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1640600964 39911 2da6c67557ec033436fe5418a70a8a61 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1649609814 4243317 6cd4c1d3b72728bfa7db8ef2e14c0430 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1649609812 2920107 ee87025810f2f53e74bbfb68f2093de8 ""
-  "Report.aux" 1654376323 260 e23840fe7cd9bbb12bdb55fc276ca08f "pdflatex"
-  "Report.tex" 1654376322 3497 08700403e43406ac14035350b7af5f2f ""
+  "Report.aux" 1654465374 485 7fc0eaafdbcab4c5f44f5c5641445c70 "pdflatex"
+  "Report.tex" 1654465373 7072 f25a119ebe9a6258a50fc53b14b1d864 ""
   (generated)
   "Report.aux"
   "Report.log"

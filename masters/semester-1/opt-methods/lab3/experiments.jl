@@ -5,7 +5,7 @@ include("solver.jl")
 
 files_num = 12
 
-print("Problem,time,iterations,usage_ratio_per_machine,total_allowed_machine_usage,total_machine_usage,total_machine_usage_ratio")
+print("file,problem,time,iterations,usage_ratio_per_machine,total_allowed_machine_usage,total_machine_usage,total_machine_usage_ratio")
 
 for i in 1:files_num
   problems = parse_file("./data/gap$i.txt")
@@ -36,9 +36,11 @@ for i in 1:files_num
       push!(machine_usages,round(ratio, digits=1))
     end
 
-    total_usage_ratio = total_usage / total_allowed_usage
+    total_usage_ratio = round(total_usage / total_allowed_usage, digits=2)
     machine_usages_str = join(machine_usages, " ")
 
-    print("\nProblem $j in file $i,$(time * 1000),$iterations,$machine_usages_str,$total_allowed_usage,$total_usage,$total_usage_ratio")
+    # print("\ngap$i,$j,$(time * 1000),$iterations,$machine_usages_str,$total_allowed_usage,$total_usage,$total_usage_ratio")
+    print("\n\\hline")
+    print("\ngap$i & $j & $(round(time * 1000, digits=2)) & $iterations & $total_allowed_usage & $total_usage & $total_usage_ratio \\\\")
   end
 end

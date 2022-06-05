@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/Arch Linux) (preloaded format=pdflatex 2022.4.10)  4 JUN 2022 22:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/Arch Linux) (preloaded format=pdflatex 2022.4.10)  5 JUN 2022 23:42
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -391,27 +391,45 @@ Package: xparse 2021-11-12 L3 Experimental document command parser
 \c@algpx@indentCount=\count311
 \c@algpx@justUsedIndentCount=\count312
 \algpx@boxedStringBox=\box67
+) (/usr/share/texmf-dist/tex/latex/tools/longtable.sty
+Package: longtable 2021-09-01 v4.17 Multi-page Table package (DPC)
+\LTleft=\skip66
+\LTright=\skip67
+\LTpre=\skip68
+\LTpost=\skip69
+\LTchunksize=\count313
+\LTcapwidth=\dimen264
+\LT@head=\box68
+\LT@firsthead=\box69
+\LT@foot=\box70
+\LT@lastfoot=\box71
+\LT@gbox=\box72
+\LT@cols=\count314
+\LT@rows=\count315
+\c@LT@tables=\count316
+\c@LT@chunks=\count317
+\LT@p@ftn=\toks37
 ) (/usr/share/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
 ) (/usr/share/texmf-dist/tex/generic/babel/babel.sty
 Package: babel 2021/11/29 3.67 The Babel package
-\babel@savecnt=\count313
-\U@D=\dimen264
+\babel@savecnt=\count318
+\U@D=\dimen265
 \l@unhyphenated=\language87
  (/usr/share/texmf-dist/tex/generic/babel/txtbabel.def)
 \bbl@readstream=\read3
-\bbl@dirlevel=\count314
+\bbl@dirlevel=\count319
  (/usr/share/texmf-dist/tex/generic/babel-polish/polish.ldf
 Language: polish 2005/03/31 v1.2l Polish support from the babel system
 Package babel Info: Making " an active character on input line 83.
-\pl@left=\dimen265
-\pl@down=\dimen266
-\pl@right=\dimen267
-\pl@temp=\dimen268
+\pl@left=\dimen266
+\pl@down=\dimen267
+\pl@right=\dimen268
+\pl@temp=\dimen269
 )) (/usr/share/texmf-dist/tex/latex/base/inputenc.sty
 Package: inputenc 2021/02/14 v1.3d Input encoding file
-\inpenc@prehook=\toks37
-\inpenc@posthook=\toks38
+\inpenc@prehook=\toks38
+\inpenc@posthook=\toks39
 ) (./Report.aux)
 \openout1 = `Report.aux'.
 
@@ -431,17 +449,17 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 12.
 LaTeX Font Info:    ... okay on input line 12.
  (/usr/share/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count315
-\scratchdimen=\dimen269
-\scratchbox=\box68
-\nofMPsegments=\count316
-\nofMParguments=\count317
-\everyMPshowfont=\toks39
-\MPscratchCnt=\count318
-\MPscratchDim=\dimen270
-\MPnumerator=\count319
-\makeMPintoPDFobject=\count320
-\everyMPtoPDFconversion=\toks40
+\scratchcounter=\count320
+\scratchdimen=\dimen270
+\scratchbox=\box73
+\nofMPsegments=\count321
+\nofMParguments=\count322
+\everyMPshowfont=\toks40
+\MPscratchCnt=\count323
+\MPscratchDim=\dimen271
+\MPnumerator=\count324
+\makeMPintoPDFobject=\count325
+\everyMPtoPDFconversion=\toks41
 ) (/usr/share/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
  (/usr/share/texmf-dist/tex/generic/infwarerr/infwarerr.sty
@@ -467,20 +485,25 @@ Package grfext Info: Graphics extension search list:
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 )) [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] (./Report.aux) ) 
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2]
+Overfull \hbox (33.09969pt too wide) in alignment at lines 91--215
+ [] [] [] [] [] [] [] 
+ []
+
+[3] [4] (./Report.aux) ) 
 Here is how much of TeX's memory you used:
- 16066 strings out of 478353
- 317480 string characters out of 5854635
- 616223 words of memory out of 5000000
- 33868 multiletter control sequences out of 15000+600000
+ 16173 strings out of 478353
+ 318993 string characters out of 5854635
+ 695120 words of memory out of 5000000
+ 33972 multiletter control sequences out of 15000+600000
  418696 words of font info for 69 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  99i,6n,103p,513b,308s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm2074.pfb>
-Output written on Report.pdf (2 pages, 148126 bytes).
+Output written on Report.pdf (4 pages, 156885 bytes).
 PDF statistics:
- 79 PDF objects out of 1000 (max. 8388607)
- 49 compressed objects within 1 object stream
+ 85 PDF objects out of 1000 (max. 8388607)
+ 53 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 
