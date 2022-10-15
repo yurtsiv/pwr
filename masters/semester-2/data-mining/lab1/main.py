@@ -30,4 +30,5 @@ def gen_word_clouds():
 # Task 7
 # print(most_relevant_chapters("vernon", tf_idf_weights))
 
+# Task 8
 print(random_paragraph(book_path))

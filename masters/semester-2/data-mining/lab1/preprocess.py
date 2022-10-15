@@ -4,11 +4,13 @@ from string import punctuation
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem.porter import PorterStemmer
+from nltk.stem import WordNetLemmatizer
 import nltk
 
 nltk.download('stopwords')
 nltk.download('punkt')
-
+nltk.download('wordnet')
+nltk.download('omw-1.4')
 
 ignored_tokens = set.union(
     set(stopwords.words('english')),
@@ -29,11 +31,12 @@ def count_occurences(words):
     return occurences
 
 def get_words(filepath):
-    stemmer = PorterStemmer()
+    # stemmer =  PorterStemmer()
+    lemmatizer = WordNetLemmatizer()
 
     with open(filepath, encoding="UTF-8") as f:
         text = f.read()
-        return [stemmer.stem(token.lower()) for token in word_tokenize(
+        return [lemmatizer.lemmatize(token.lower()) for token in word_tokenize(
             text) if not token in ignored_tokens]
 
 def do_preprocess(filepath):
