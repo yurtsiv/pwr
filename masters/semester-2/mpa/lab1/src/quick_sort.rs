@@ -12,7 +12,7 @@ fn _quick_sort(arr: &mut [u32], low: isize, high: isize, comp: &mut u32) {
 }
 
 fn partition(arr: &mut [u32], low: isize, high: isize, comp: &mut u32) -> isize {
-    let pivot_idx = ((high as f32 + low as f32) / 2f32).floor() as usize;
+    let pivot_idx = low as usize;
 
     let mut i = low - 1;
     let mut j = high + 1;
