@@ -1,49 +1,55 @@
-% Use this editor as a MiniZinc scratch book
-array[1..5, 1..5] of var 1..5: pieces;
-array[1..5, 1..5, 1..4] of var {0, 1}: orient;
+array[1..15, 1..4] of int: cards =
+  [| 1, 0, 0, 0, % 1:  1 down
+   | 0, 1, 0, 0, % 2:  1 left
+   | 0, 0, 1, 0, % 3:  1 up
+   | 0, 0, 0, 1, % 4:  1 right
 
-constraint forall(p in 1..5) (
-  count_eq(pieces, p) = 5
+   | 1, 0, 1, 0, % 5:  2 down
+   | 0, 1, 0, 1, % 6:  2 left
+
+   | 1, 1, 0, 0, % 7:  3 down
+   | 0, 1, 1, 0, % 8:  3 left
+   | 0, 0, 1, 1, % 9:  3 up
+   | 1, 0, 0, 1, % 10: 3 right
+
+   | 1, 1, 0, 1, % 11: 4 down
+   | 1, 1, 1, 0, % 12: 4 left
+   | 0, 1, 1, 1, % 13: 4 up
+   | 1, 0, 1, 1  % 14: 4 right
+
+   | 1, 1, 1, 1  % 15: 5 down
+   |];
+
+array[1..5, 1..5] of var 1..15: board;
+
+constraint forall(x in 1..5) (
+  cards[board[x, 1], 2] == 0 /\
+  cards[board[x, 5], 4] == 0
 );
 
-constraint forall(x in {1, 5}, y in 1..5) (
-  pieces[x,y] < 5
+constraint forall(y in 1..5) (
+  cards[board[1, y], 3] == 0 /\
+  cards[board[5, y], 1] == 0
 );
 
-constraint forall(x in 1..5, y in {1, 5}) (
-  pieces[x,y] < 5
+constraint sum(x in 1..5, y in 1..5)(if board[x, y] in 1..4 then 1 else 0 endif) == 5;
+constraint sum(x in 1..5, y in 1..5)(if board[x, y] in 5..6 then 1 else 0 endif) == 5;
+constraint sum(x in 1..5, y in 1..5)(if board[x, y] in 7..10 then 1 else 0 endif) == 5;
+constraint sum(x in 1..5, y in 1..5)(if board[x, y] in 11..14 then 1 else 0 endif) == 5;
+constraint sum(x in 1..5, y in 1..5)(if board[x, y] == 15 then 1 else 0 endif) == 5;
+
+constraint forall(x in 1..5) (
+  cards[board[x, 1], 4] == cards[board[x, 2], 2] /\
+  cards[board[x, 2], 4] == cards[board[x, 3], 2] /\
+  cards[board[x, 3], 4] == cards[board[x, 4], 2] /\
+  cards[board[x, 4], 4] == cards[board[x, 5], 2]
 );
 
-constraint forall(x in {1, 5}, y in {1, 5}) (
-  pieces[x,y] < 4
+constraint forall(y in 1..5) (
+  cards[board[1, y], 1] == cards[board[2, y], 3] /\
+  cards[board[2, y], 1] == cards[board[3, y], 3] /\
+  cards[board[3, y], 1] == cards[board[4, y], 3] /\
+  cards[board[4, y], 1] == cards[board[5, y], 3]
 );
-
-constraint forall(x in 1..5, y in 1..5) (
-  if pieces[x,y] == 1 then (
-    exists(i in 1..4) (orient[x, y, i] = 1)
-  ) elseif pieces[x,y] == 2 then (
-    (orient[x, y, 1] = 1 /\ orient[x, y, 3] = 1) \/
-    (orient[x, y, 2] = 1 /\ orient[x, y, 4] = 1)  
-  ) elseif pieces[x,y] == 3 then (
-    exists(i in 1..3) (orient[x, y, i] + orient[x, y, i + 1] == 2)
-  ) elseif pieces[x,y] == 4 then (
-    sum([
-      orient[x, y, 1],
-      orient[x, y, 2],
-      orient[x, y, 3],
-      orient[x, y, 4]
-    ]) == 3
-  ) else (
-    forall(i in 1..4) (orient[x, y, i] == 1)
-  )
-  endif
-);
-
-constraint forall(y in {2,4}, o in 1..4) (
-  orient[1, y, o] = orient[2, y, o] /\
-  orient[1, y, o] = orient[1, y + 1, o] /\
-  orient[1, y, o] = orient[1, y - 1, o]
-);
-
 
 solve satisfy;
