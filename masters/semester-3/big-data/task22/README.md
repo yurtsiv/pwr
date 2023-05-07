@@ -1,1 +1,1 @@
-Data source: https://www.kaggle.com/datasets/mczielinski/bitcoin-historical-data
+Data source: https://finance.yahoo.com/quote/BTC-USD/history/?guccounter=1&guce_referrer=aHR0cHM6Ly93d3cuZ29vZ2xlLmNvbS8&guce_referrer_sig=AQAAACSd00rO2uk5yrTG9WGKhYd3QHBL8pYZ5ddZE_VmHSMJYrfpfXgL9iPviZNV1a2RW8kZM_zjMfI0vQOYJ383TPGg4OG9csZroSolmzt3KZB9niK5-Ud95E2orT5iII61e7SMJgLv_ez2J_2Qbz6zE_QEKPPZhrFen2grLdcSLc9_
